@@ -17,25 +17,14 @@ public class Song {
     @ManyToOne
     private Album album;
     @Column
-    private String recordLabel;
-    @Column
     private String artist;
     @Column
-    private LocalDate publishDate;
+    private LocalDate release;
+    @Column
+    private String recording;
 
     //required for Hibernate
-    protected Song() {
+    protected Song() {}
 
-    }
 
-    public Song(String title, String recordLabel, String artist, LocalDate publishDate) {
-        this.title = title;
-        this.recordLabel = recordLabel;
-        this.artist = artist;
-        this.publishDate = publishDate;
-    }
-
-    public Album getAlbum() {
-        return album;
-    }
 }
