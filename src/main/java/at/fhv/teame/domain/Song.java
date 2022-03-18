@@ -17,24 +17,18 @@ public class Song {
     @Column
     private String title;
     @Column
-    private String recordLabel;
-    @Column
     private String artist;
     @Column
-    private LocalDate publishDate;
+    private LocalDate release;
     @Column
-    private String genre;
+    private String recording;
 
     //required for Hibernate
-    protected Song() {
-
-    }
+    protected Song() {}
 
     public Song(String title, String recordLabel, String artist, LocalDate publishDate, String genre) {
         this.title = title;
-        this.recordLabel = recordLabel;
         this.artist = artist;
-        this.publishDate = publishDate;
-        this.genre = genre;
+        this.release = release;
     }
 }
