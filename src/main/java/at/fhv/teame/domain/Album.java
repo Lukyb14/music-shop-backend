@@ -1,14 +1,14 @@
 package at.fhv.teame.domain;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import lombok.Getter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
-@Getter
 public class Album {
     @Id
     @Column
@@ -18,23 +18,24 @@ public class Album {
     @Column
     private String label;
     @Column
-    private String artist;
-    @Column
     private LocalDate release;
-    @Column
-    private int amountOfSongs;
+    @OneToMany(mappedBy = "album")
+    private List<Song> songs;
     @Column
     private String genre;
 
     //required for Hibernate
-    protected Album(){}
+    protected Album(){
+        songs = new java.util.ArrayList<>();
+    }
 
-    public Album (String name, String label, String artist, LocalDate release, int amountOfSongs, String genre){
+    public Album (String name, String label, LocalDate release, List<Song> songs, String genre){
         this.name = name;
         this.label = label;
-        this.artist = artist;
         this.release = release;
-        this.amountOfSongs = amountOfSongs;
+        this.songs = songs;
         this.genre = genre;
     }
+
+
 }

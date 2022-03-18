@@ -3,15 +3,13 @@ package at.fhv.teame.infrastructure;
 import at.fhv.teame.domain.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
 import java.util.List;
 
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
+    @PersistenceUnit
+    private EntityManagerFactory entityManagerFactory;
 
     @Override
     public List<SoundCarrier> getAllSoundCarriers() {

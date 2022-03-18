@@ -1,12 +1,10 @@
 package at.fhv.teame.domain;
 
 import java.math.BigDecimal;
-import lombok.Getter;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
 public class SoundCarrier {
     @Id
     @Column
@@ -31,4 +29,23 @@ public class SoundCarrier {
         this.stock = stock;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public Medium getMedium() {
+        return medium;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public int getStock() {
+        return stock;
+    }
 }

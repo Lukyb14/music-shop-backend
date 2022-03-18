@@ -6,17 +6,17 @@ import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 
 import java.util.List;
 
-public class SearchSoundCarrier implements SearchSoundCarrierService {
-
-
-    private SoundCarrierRepository soundCarrierRepository;
-
-    @Override
-    public List<SoundCarrierDTO> getAllSoundCarriers() {
-
-        List<SoundCarrier> soundCarriers = soundCarrierRepository.getAllSoundCarriers();
-        
-
-        return null;
-    }
-}
+//public class SearchSoundCarrier implements SearchSoundCarrierService {
+//
+//
+//    private SoundCarrierRepository soundCarrierRepository;
+//
+//    @Override
+//    public List<SoundCarrierDTO> getAllSoundCarriers() {
+//
+//        List<SoundCarrier> soundCarriers = soundCarrierRepository.getAllSoundCarriers();
+//
+//
+//        return null;
+//    }
+//}

@@ -6,7 +6,10 @@
     <persistence-unit name="at.fhv.teame">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>at.fhv.teame.Person</class>
+        <!-- Entities -->
+        <class>at.fhv.teame.domain.Album</class>
+        <class>at.fhv.teame.domain.Song</class>
+        <class>at.fhv.teame.domain.SoundCarrier</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
@@ -16,7 +19,7 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
             <property name="show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />
         </properties>
     </persistence-unit>
 </persistence>
