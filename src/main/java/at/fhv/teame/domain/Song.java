@@ -26,5 +26,35 @@ public class Song {
     //required for Hibernate
     protected Song() {}
 
+    public Song(String title, Album album, String artist, LocalDate release, String recording) {
+        this.title = title;
+        this.album = album;
+        this.artist = artist;
+        this.release = release;
+        this.recording = recording;
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public LocalDate getRelease() {
+        return release;
+    }
+
+    public String getRecording() {
+        return recording;
+    }
 }

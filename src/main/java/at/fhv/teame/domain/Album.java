@@ -37,5 +37,27 @@ public class Album {
         this.genre = genre;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public LocalDate getRelease() {
+        return release;
+    }
+
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
 }
