@@ -13,5 +13,13 @@ public class Main {
         for (SoundCarrier s : soundCarrierRepository.allSoundCarriers()) {
             System.out.println(s.getAlbum().getName());
         }
+
+        for (SoundCarrier s : soundCarrierRepository.soundCarriersByAlbumName("Fear of the Dark")) {
+            System.out.println(s.getAlbum().getName());
+        }
+
+        for (SoundCarrier s : soundCarrierRepository.soundCarriersByArtistName("Iron Maiden")) {
+            System.out.println(s.getAlbum().getName());
+        }
     }
 }
