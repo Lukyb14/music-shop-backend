@@ -8,8 +8,7 @@ import java.util.List;
 
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
 
-    @PersistenceUnit
-    private EntityManagerFactory entityManagerFactory;
+    private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
 
     @Override
     public List<SoundCarrier> allSoundCarriers() {

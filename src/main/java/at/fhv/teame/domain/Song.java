@@ -20,18 +20,15 @@ public class Song {
     private String artist;
     @Column
     private LocalDate release;
-    @Column
-    private String recording;
 
     //required for Hibernate
     protected Song() {}
 
-    public Song(String title, Album album, String artist, LocalDate release, String recording) {
+    public Song(String title, String artist, LocalDate release) {
         this.title = title;
-        this.album = album;
+        //this.album = album;
         this.artist = artist;
         this.release = release;
-        this.recording = recording;
     }
 
     public Long getId() {
@@ -42,9 +39,9 @@ public class Song {
         return title;
     }
 
-    public Album getAlbum() {
-        return album;
-    }
+//    public Album getAlbum() {
+//        return album;
+//    }
 
     public String getArtist() {
         return artist;
@@ -52,9 +49,5 @@ public class Song {
 
     public LocalDate getRelease() {
         return release;
-    }
-
-    public String getRecording() {
-        return recording;
     }
 }

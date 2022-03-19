@@ -1,10 +1,10 @@
 package at.fhv.teame.application;
 
-import at.fhv.teame.domain.SoundCarrier;
+import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 
 import java.util.List;
 
 public interface SearchSoundCarrierService {
 
-    List<SoundCarrier> getAllSoundCarriers();
+    List<SoundCarrierDTO> getAllSoundCarriers();
 }
