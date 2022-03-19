@@ -1,17 +1,13 @@
 package at.fhv.teame.domain;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Album {
     @Id
-    @Column
+    @GeneratedValue
     private Long id;
     @Column
     private String name;
@@ -19,7 +15,8 @@ public class Album {
     private String label;
     @Column
     private LocalDate release;
-    @OneToMany(mappedBy = "album")
+    @OneToMany
+    @JoinColumn
     private List<Song> songs;
     @Column
     private String genre;

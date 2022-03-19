@@ -1,25 +1,22 @@
 package at.fhv.teame;
 
-import at.fhv.teame.domain.SoundCarrier;
-import at.fhv.teame.domain.repositories.SoundCarrierRepository;
-import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
+import at.fhv.teame.application.impl.SoundCarrierServiceImpl;
+import at.fhv.teame.sharedlib.rmi.SoundCarrierService;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 public class Main {
     public static void main(String[] args) {
-        SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();
-        for (SoundCarrier s : soundCarrierRepository.allSoundCarriers()) {
-            System.out.println(s.getAlbum().getName());
-        }
-
-        for (SoundCarrier s : soundCarrierRepository.soundCarriersByAlbumName("Fear of the Dark")) {
-            System.out.println(s.getAlbum().getName());
-        }
-
-        for (SoundCarrier s : soundCarrierRepository.soundCarriersByArtistName("Iron Maiden")) {
-            System.out.println(s.getAlbum().getName());
+        try {
+            LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+            SoundCarrierServiceImpl soundCarrierService = SoundCarrierServiceImpl.getInstance();
+            Naming.rebind("rmi://localhost/soundCarrierService", soundCarrierService);
+        } catch (RemoteException | MalformedURLException e) {
+            e.printStackTrace();
         }
     }
 }

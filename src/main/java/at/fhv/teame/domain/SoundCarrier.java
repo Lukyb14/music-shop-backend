@@ -1,8 +1,7 @@
 package at.fhv.teame.domain;
 
-import java.math.BigDecimal;
-
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 public class SoundCarrier {

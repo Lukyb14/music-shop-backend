@@ -3,11 +3,15 @@ package at.fhv.teame.infrastructure;
 import at.fhv.teame.domain.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
 
+    private static HibernateSoundCarrierRepository instance;
     private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
 
     @Override
@@ -33,4 +37,10 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         return query.getResultList();
     }
 
+    public static HibernateSoundCarrierRepository getInstance() {
+        if (instance == null) {
+            instance = new HibernateSoundCarrierRepository();
+        }
+        return instance;
+    }
 }
