@@ -12,7 +12,11 @@ import java.util.List;
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
 
     private static HibernateSoundCarrierRepository instance;
-    private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
+    private final EntityManagerFactory entityManagerFactory;
+
+    private HibernateSoundCarrierRepository() {
+        entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
+    }
 
     @Override
     public List<SoundCarrier> allSoundCarriers() {
