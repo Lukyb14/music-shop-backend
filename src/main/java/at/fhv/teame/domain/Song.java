@@ -1,9 +1,6 @@
 package at.fhv.teame.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -14,6 +11,8 @@ public class Song {
     private Long id;
     @Column
     private String title;
+    @ManyToOne
+    private Album album;
     @Column
     private String artist;
     @Column

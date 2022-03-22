@@ -1,7 +1,6 @@
 package at.fhv.teame;
 
 import at.fhv.teame.application.impl.SoundCarrierServiceImpl;
-import at.fhv.teame.sharedlib.rmi.SoundCarrierService;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -15,6 +14,7 @@ public class Main {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
             SoundCarrierServiceImpl soundCarrierService = SoundCarrierServiceImpl.getInstance();
             Naming.rebind("rmi://localhost/soundCarrierService", soundCarrierService);
+            System.out.println("soundCarrierService bound in registry");
         } catch (RemoteException | MalformedURLException e) {
             e.printStackTrace();
         }

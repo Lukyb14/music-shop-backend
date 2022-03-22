@@ -11,7 +11,14 @@ import at.fhv.teame.sharedlib.rmi.SoundCarrierService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.List;
@@ -26,12 +33,17 @@ class SoundCarrierServiceTest {
     private List<SoundCarrier> soundCarriers;
 
     @BeforeEach
-    void setup() throws RemoteException {
+    void setup() throws IOException {
         soundCarrierService = SoundCarrierServiceImpl.getInstance();
 
         List<Song> songs = List.of(new Song("Fear Is the Key", "Iron Maiden", LocalDate.of(1992, 1, 1)));
         Album album = new Album("Fear of the Dark", "Parlophone Records Ltd", LocalDate.of(1992, 1, 1), songs,"Rock");
         soundCarriers = List.of(new SoundCarrier(album, Medium.CD, new BigDecimal("35.99"), 3));
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("at.fhv.teame");
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createNativeQuery(new String(Files.readAllBytes(Paths.get("src/main/resources/data.sql"))));
+        query.executeUpdate();
     }
 
     @Test

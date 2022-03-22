@@ -15,8 +15,7 @@ public class Album {
     private String label;
     @Column
     private LocalDate release;
-    @OneToMany
-    @JoinColumn
+    @OneToMany(mappedBy = "album")
     private List<Song> songs;
     @Column
     private String genre;

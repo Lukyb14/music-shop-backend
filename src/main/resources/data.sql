@@ -3,12 +3,10 @@ SELECT * FROM album;
 SELECT * FROM song;
 SELECT * FROM soundcarrier;
 
+ */
 DELETE FROM soundcarrier;
 DELETE FROM song;
 DELETE FROM album;
-
-DROP TABLE album_song;
- */
 
 INSERT INTO album (id, genre, label, name, release) VALUES (1, 'Rock', 'Leidseplein Presse B.V.', 'The Razors Edge', '1990-01-01');
 INSERT INTO album (id, genre, label, name, release) VALUES (2, 'Rock', 'Leidseplein Presse B.V.', 'Back In Black', '1980-01-01');
