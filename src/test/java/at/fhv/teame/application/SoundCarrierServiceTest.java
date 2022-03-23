@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SoundCarrierServiceTest {
 
-    private SoundCarrierRepository soundCarrierRepository;
     private SoundCarrierService soundCarrierService;
 
     @BeforeEach

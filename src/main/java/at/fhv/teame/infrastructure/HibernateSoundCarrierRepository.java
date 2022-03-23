@@ -28,7 +28,7 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
-    public List<SoundCarrier> soundCarriersByAlbumName(String albumname) {
+    public List<SoundCarrier> soundCarriersByAlbumName(String albumName, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a WHERE a.name = :albumName", SoundCarrier.class);
         query.setFirstResult((pageNr - 1) * RESULTS_PER_PAGE);
@@ -38,7 +38,7 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
-    public List<SoundCarrier> soundCarriersByArtistName(String artist) {
+    public List<SoundCarrier> soundCarriersByArtistName(String artist, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.artist = :artist", SoundCarrier.class);
         query.setFirstResult((pageNr - 1) * RESULTS_PER_PAGE);
