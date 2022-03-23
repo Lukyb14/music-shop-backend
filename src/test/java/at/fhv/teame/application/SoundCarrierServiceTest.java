@@ -30,33 +30,27 @@ class SoundCarrierServiceTest {
     private SoundCarrierRepository soundCarrierRepository;
     private SoundCarrierService soundCarrierService;
 
-    private List<SoundCarrier> soundCarriers;
-
     @BeforeEach
     void setup() throws IOException {
         soundCarrierService = SoundCarrierServiceImpl.getInstance();
-
-        List<Song> songs = List.of(new Song("Fear Is the Key", "Iron Maiden", LocalDate.of(1992, 1, 1)));
-        Album album = new Album("Fear of the Dark", "Parlophone Records Ltd", LocalDate.of(1992, 1, 1), songs,"Rock");
-        soundCarriers = List.of(new SoundCarrier(album, Medium.CD, new BigDecimal("35.99"), 3));
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("at.fhv.teame");
-        EntityManager em = emf.createEntityManager();
-        Query query = em.createNativeQuery(new String(Files.readAllBytes(Paths.get("src/main/resources/data.sql"))));
-        query.executeUpdate();
     }
 
     @Test
-    void testGetAllSoundCarriers() throws RemoteException {
-        List<SoundCarrierDTO> soundCarrierDTOs = soundCarrierService.allSoundCarriers();
+    void getSoundCarriersByArtist() throws RemoteException {
+        List<SoundCarrierDTO> soundCarrierDTOs = soundCarrierService.soundCarriersByArtistName("Sintellect", 1);
 
-        assertEquals(3, soundCarrierDTOs.size());
+        for (SoundCarrierDTO soundCarrierDTO : soundCarrierDTOs) {
+            System.out.println(soundCarrierDTO.albumName());
+        }
+    }
 
-//        for (int i = 0; i < soundCarriers.size(); i++) {
-//            assertEquals(soundCarriers.get(i).getAlbum().getName(), soundCarrierDTOs.get(i).albumName());
-//            assertEquals(soundCarriers.get(i).getPrice().toString(), soundCarrierDTOs.get(i).price());
-//            assertEquals(soundCarriers.get(i).getMedium().toString(), soundCarrierDTOs.get(i).medium());
-//            assertEquals(soundCarriers.get(i).getStock(), soundCarrierDTOs.get(i).stock());
-//        }
+    @Test
+    void getSoundCarriersByAlbum() throws RemoteException {
+        List<SoundCarrierDTO> soundCarrierDTOS = soundCarrierService.soundCarriersByAlbumName("Beat Break #4", 1);
+
+        for (SoundCarrierDTO soundCarrierDTO : soundCarrierDTOS) {
+            System.out.println(soundCarrierDTO.albumName());
+            System.out.println(soundCarrierDTO.medium());
+        }
     }
 }

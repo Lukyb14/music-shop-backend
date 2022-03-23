@@ -22,13 +22,6 @@ public class SoundCarrierServiceImpl extends UnicastRemoteObject implements Soun
     }
 
     @Override
-    public List<SoundCarrierDTO> allSoundCarriers() throws RemoteException {
-        List<SoundCarrier> soundCarriers = soundCarrierRepository.allSoundCarriers();
-
-        return buildSoundCarrierDtos(soundCarriers);
-    }
-
-    @Override
     public List<SoundCarrierDTO> soundCarriersByAlbumName(String album) throws RemoteException {
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByAlbumName(album);
 
