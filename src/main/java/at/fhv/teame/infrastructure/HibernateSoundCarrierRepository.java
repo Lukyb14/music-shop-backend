@@ -36,7 +36,7 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     @Override
     public List<SoundCarrier> soundCarriersByArtistName(String artist) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.artist = :artist", SoundCarrier.class);
+        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.artist = :artist", SoundCarrier.class);
         query.setParameter("artist", artist);
         return query.getResultList();
     }
