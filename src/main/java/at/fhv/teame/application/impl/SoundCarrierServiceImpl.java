@@ -22,37 +22,42 @@ public class SoundCarrierServiceImpl extends UnicastRemoteObject implements Soun
     }
 
     @Override
-    public List<SoundCarrierDTO> allSoundCarriers() throws RemoteException {
-        List<SoundCarrier> soundCarriers = soundCarrierRepository.allSoundCarriers();
+    public List<SoundCarrierDTO> soundCarriersByAlbumName(String album, int pageNr) throws RemoteException {
+        List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByAlbumName(album, pageNr);
 
         return buildSoundCarrierDtos(soundCarriers);
     }
 
     @Override
-    public List<SoundCarrierDTO> soundCarriersByAlbumName(String album) throws RemoteException {
-        List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByAlbumName(album);
+    public int numberOfSoundCarriersByAlbumName(String album) throws RemoteException {
+        return soundCarrierRepository.numberOfSoundCarriersByAlbumName(album);
+    }
+
+    @Override
+    public List<SoundCarrierDTO> soundCarriersByArtistName(String artist, int pageNr) throws RemoteException {
+        List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByArtistName(artist, pageNr);
 
         return buildSoundCarrierDtos(soundCarriers);
     }
 
     @Override
-    public List<SoundCarrierDTO> soundCarriersByArtistName(String artist) throws RemoteException {
-        List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByArtistName(artist);
+    public List<SoundCarrierDTO> soundCarriersBySongName(String album, int pageNr) throws RemoteException {
+        List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersBySongName(album, pageNr);
 
         return buildSoundCarrierDtos(soundCarriers);
     }
 
     private List<SoundCarrierDTO> buildSoundCarrierDtos(List<SoundCarrier> soundCarriers) {
-        List<SoundCarrierDTO> soundCarrierDTOS = new LinkedList<>();
+        List<SoundCarrierDTO> soundCarrierDtos = new LinkedList<>();
 
         for (SoundCarrier s : soundCarriers) {
-            soundCarrierDTOS.add(SoundCarrierDTO.builder()
+            soundCarrierDtos.add(SoundCarrierDTO.builder()
                     .withSoundCarrierEntity(s.getMedium().toString(), s.getPrice().toString(), s.getStock())
                     .withAlbumEntity(s.getAlbum().getName(), buildSongDtos(s.getAlbum().getSongs()))
                     .build());
         }
 
-        return soundCarrierDTOS;
+        return soundCarrierDtos;
     }
 
     private SongDTO[] buildSongDtos(List<Song> songs) {

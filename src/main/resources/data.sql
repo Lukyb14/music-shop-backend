@@ -2,7 +2,6 @@
 SELECT * FROM album;
 SELECT * FROM song;
 SELECT * FROM soundcarrier;
-
  */
 DELETE FROM soundcarrier;
 DELETE FROM song;

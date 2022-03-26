@@ -1,7 +1,6 @@
 package at.fhv.teame;
 
 import at.fhv.teame.application.impl.SoundCarrierServiceImpl;
-
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
