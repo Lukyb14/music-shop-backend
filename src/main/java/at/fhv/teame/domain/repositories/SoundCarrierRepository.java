@@ -2,6 +2,7 @@ package at.fhv.teame.domain.repositories;
 
 import at.fhv.teame.domain.SoundCarrier;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface SoundCarrierRepository {
@@ -14,9 +15,9 @@ public interface SoundCarrierRepository {
 
     List<SoundCarrier> soundCarriersBySongName(String song, int pageNr);
 
-    int numberOfSoundCarriersByAlbumName(String artist);
+    Long numberOfSoundCarriersByAlbumName(String artist);
 
-    int numberOfSoundCarriersByArtistName(String artist);
+    Long numberOfSoundCarriersByArtistName(String artist);
 
-    int numberOfSoundCarriersBySongName(String artist);
+    Long numberOfSoundCarriersBySongName(String artist);
 }

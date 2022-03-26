@@ -2,6 +2,7 @@ package at.fhv.teame.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class SoundCarrier {
@@ -9,6 +10,8 @@ public class SoundCarrier {
     @Column
     @GeneratedValue
     private Long id;
+    @Column
+    private String articleId;
     @OneToOne
     private Album album;
     @Enumerated(EnumType.STRING)
@@ -21,11 +24,36 @@ public class SoundCarrier {
     //required for Hibernate
     protected SoundCarrier() {}
 
-    public SoundCarrier(Album album, Medium medium, BigDecimal price, int stock) {
+    public SoundCarrier(String articleId, Album album, Medium medium, BigDecimal price, int stock) {
+        this.articleId = articleId;
         this.album = album;
         this.medium = medium;
         this.price = price;
         this.stock = stock;
+    }
+
+    public String getAlbumName() {
+        return this.album.getName();
+    }
+
+    public String getAlbumLabel() {
+        return this.album.getLabel();
+    }
+
+    public String getAlbumGenre() {
+        return this.album.getGenre();
+    }
+
+    public String getAlbumArtist() {
+        return this.album.getArtist();
+    }
+
+    public List<Song> getAlbumSongs() {
+        return this.album.getSongs();
+    }
+
+    public String getArticleId() {
+        return articleId;
     }
 
     public Long getId() {
@@ -36,8 +64,8 @@ public class SoundCarrier {
         return album;
     }
 
-    public Medium getMedium() {
-        return medium;
+    public String getMedium() {
+        return medium.toString();
     }
 
     public BigDecimal getPrice() {
