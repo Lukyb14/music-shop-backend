@@ -38,6 +38,14 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
+    public int numberOfSoundCarriersByAlbumName(String albumName) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a WHERE a.name = :albumName", SoundCarrier.class);
+        query.setParameter("albumName", albumName);
+        return query.getResultList().size();
+    }
+
+    @Override
     public List<SoundCarrier> soundCarriersByArtistName(String artist, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.artist = :artist", SoundCarrier.class);
@@ -48,6 +56,14 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
+    public int numberOfSoundCarriersByArtistName(String artist) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.artist = :artist", SoundCarrier.class);
+        query.setParameter("artist", artist);
+        return query.getResultList().size();
+    }
+
+    @Override
     public List<SoundCarrier> soundCarriersBySongName(String song, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.title = :song", SoundCarrier.class);
@@ -55,6 +71,14 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         query.setMaxResults(RESULTS_PER_PAGE);
         query.setParameter("song", song);
         return query.getResultList();
+    }
+
+    @Override
+    public int numberOfSoundCarriersBySongName(String song) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.title = :song", SoundCarrier.class);
+        query.setParameter("song", song);
+        return query.getResultList().size();
     }
 
     public static HibernateSoundCarrierRepository getInstance() {

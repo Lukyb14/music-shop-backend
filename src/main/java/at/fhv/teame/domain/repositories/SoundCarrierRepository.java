@@ -13,4 +13,10 @@ public interface SoundCarrierRepository {
     List<SoundCarrier> soundCarriersByArtistName(String artist, int pageNr);
 
     List<SoundCarrier> soundCarriersBySongName(String song, int pageNr);
+
+    int numberOfSoundCarriersByAlbumName(String artist);
+
+    int numberOfSoundCarriersByArtistName(String artist);
+
+    int numberOfSoundCarriersBySongName(String artist);
 }
