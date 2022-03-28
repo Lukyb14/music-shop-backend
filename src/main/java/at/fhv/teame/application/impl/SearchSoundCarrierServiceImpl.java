@@ -26,11 +26,11 @@ public class SearchSoundCarrierServiceImpl extends UnicastRemoteObject implement
     public List<SoundCarrierDTO> soundCarriersByAlbumName(String album, int pageNr) throws RemoteException {
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByAlbumName(album, pageNr);
 
-        return buildSoundCarrierDtos(soundCarriers, pageNr, nrOfRowsByAlbumName(album));
+        return buildSoundCarrierDtos(soundCarriers, pageNr, numberOfSoundCarriersByAlbumName(album));
     }
 
     @Override
-    public int nrOfRowsByAlbumName(String album) throws RemoteException {
+    public int numberOfSoundCarriersByAlbumName(String album) throws RemoteException {
         return soundCarrierRepository.nrOfRowsByAlbumName(album).intValue();
     }
 
@@ -38,11 +38,11 @@ public class SearchSoundCarrierServiceImpl extends UnicastRemoteObject implement
     public List<SoundCarrierDTO> soundCarriersByArtistName(String artist, int pageNr) throws RemoteException {
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByArtistName(artist, pageNr);
 
-        return buildSoundCarrierDtos(soundCarriers, pageNr, nrOfRowsByArtistName(artist));
+        return buildSoundCarrierDtos(soundCarriers, pageNr, numberOfSoundCarriersByArtistName(artist));
     }
 
     @Override
-    public int nrOfRowsByArtistName(String artist) throws RemoteException {
+    public int numberOfSoundCarriersByArtistName(String artist) throws RemoteException {
         return soundCarrierRepository.nrOfRowsByArtistName(artist).intValue();
     }
 
@@ -50,11 +50,11 @@ public class SearchSoundCarrierServiceImpl extends UnicastRemoteObject implement
     public List<SoundCarrierDTO> soundCarriersBySongName(String song, int pageNr) throws RemoteException {
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersBySongName(song, pageNr);
 
-        return buildSoundCarrierDtos(soundCarriers, pageNr, nrOfRowsBySongName(song));
+        return buildSoundCarrierDtos(soundCarriers, pageNr, numberOfSoundCarriersBySongName(song));
     }
 
     @Override
-    public int nrOfRowsBySongName(String song) throws RemoteException {
+    public int numberOfSoundCarriersBySongName(String song) throws RemoteException {
         return soundCarrierRepository.nrOfRowsBySongName(song).intValue();
     }
 

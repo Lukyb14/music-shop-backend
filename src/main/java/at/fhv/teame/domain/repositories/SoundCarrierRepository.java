@@ -1,13 +1,18 @@
 package at.fhv.teame.domain.repositories;
 
 import at.fhv.teame.domain.SoundCarrier;
+import at.fhv.teame.domain.exceptions.InvalidAmountException;
+import at.fhv.teame.domain.exceptions.OutOfStockException;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
+import java.util.Map;
 
 public interface SoundCarrierRepository {
 
-    List<SoundCarrier> allSoundCarriers();
+    void retrieveSoundCarriers(Map<SoundCarrier, Integer> soundCarriers) throws OutOfStockException, InvalidAmountException;
+
+    SoundCarrier soundCarrierByArticleId(String articleId);
 
     List<SoundCarrier> soundCarriersByAlbumName(String album, int pageNr);
 

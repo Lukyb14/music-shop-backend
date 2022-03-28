@@ -1,10 +1,14 @@
 package at.fhv.teame.infrastructure;
 
 import at.fhv.teame.domain.SoundCarrier;
+import at.fhv.teame.domain.exceptions.InvalidAmountException;
+import at.fhv.teame.domain.exceptions.OutOfStockException;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
 
@@ -16,10 +20,26 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
-    public List<SoundCarrier> allSoundCarriers() {
+    public void retrieveSoundCarriers(Map<SoundCarrier, Integer> soundCarriers) throws OutOfStockException, InvalidAmountException {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        TypedQuery<SoundCarrier> query = entityManager.createQuery("from SoundCarrier sc", SoundCarrier.class);
-        return query.getResultList();
+        entityManager.getTransaction().begin();
+        try {
+            for (Map.Entry<SoundCarrier, Integer> entry : soundCarriers.entrySet()) {
+                entry.getKey().retrieve(entry.getValue());
+            }
+            entityManager.getTransaction().commit();
+        } catch (OutOfStockException | InvalidAmountException e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        }
+    }
+
+    @Override
+    public SoundCarrier soundCarrierByArticleId(String articleId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        TypedQuery<SoundCarrier> query = entityManager.createQuery("FROM SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
+        query.setParameter("articleId", articleId);
+        return query.getSingleResult();
     }
 
     @Override
@@ -73,6 +93,8 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         query.setParameter("song", song);
         return (Long) query.getSingleResult();
     }
+
+
 
     public static HibernateSoundCarrierRepository getInstance() {
         if (instance == null) {
