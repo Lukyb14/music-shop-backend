@@ -19,18 +19,21 @@ public class Album {
     private List<Song> songs;
     @Column
     private String genre;
+    @Column
+    private String artist;
 
     //required for Hibernate
     protected Album(){
         songs = new java.util.ArrayList<>();
     }
 
-    public Album (String name, String label, LocalDate release, List<Song> songs, String genre){
+    public Album (String name, String label, LocalDate release, List<Song> songs, String genre, String artist){
         this.name = name;
         this.label = label;
         this.release = release;
         this.songs = songs;
         this.genre = genre;
+        this.artist = artist;
     }
 
     public Long getId() {
@@ -55,5 +58,9 @@ public class Album {
 
     public String getGenre() {
         return genre;
+    }
+
+    public String getArtist() {
+        return artist;
     }
 }

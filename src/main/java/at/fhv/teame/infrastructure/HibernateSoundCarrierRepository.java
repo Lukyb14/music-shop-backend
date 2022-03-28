@@ -3,10 +3,8 @@ package at.fhv.teame.infrastructure;
 import at.fhv.teame.domain.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
@@ -16,7 +14,7 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     private static HibernateSoundCarrierRepository instance;
     private final EntityManagerFactory entityManagerFactory;
 
-    private HibernateSoundCarrierRepository() {
+    public HibernateSoundCarrierRepository() {
         entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
     }
 
@@ -38,17 +36,17 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
-    public int numberOfSoundCarriersByAlbumName(String albumName) {
+    public Long numberOfSoundCarriersByAlbumName(String albumName) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a WHERE a.name = :albumName", SoundCarrier.class);
+        Query query = entityManager.createQuery("SELECT count(s) FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE a.name = :albumName");
         query.setParameter("albumName", albumName);
-        return query.getResultList().size();
+        return (Long) query.getSingleResult();
     }
 
     @Override
     public List<SoundCarrier> soundCarriersByArtistName(String artist, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.artist = :artist", SoundCarrier.class);
+        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE a.artist = :artist", SoundCarrier.class);
         query.setFirstResult((pageNr - 1) * RESULTS_PER_PAGE);
         query.setMaxResults(RESULTS_PER_PAGE);
         query.setParameter("artist", artist);
@@ -56,11 +54,11 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
-    public int numberOfSoundCarriersByArtistName(String artist) {
+    public Long numberOfSoundCarriersByArtistName(String artist) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.artist = :artist", SoundCarrier.class);
+        Query query = entityManager.createQuery("SELECT count(s) FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE a.artist = :artist");
         query.setParameter("artist", artist);
-        return query.getResultList().size();
+        return (Long) query.getSingleResult();
     }
 
     @Override
@@ -74,11 +72,11 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
-    public int numberOfSoundCarriersBySongName(String song) {
+    public Long numberOfSoundCarriersBySongName(String song) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.title = :song", SoundCarrier.class);
+        Query query = entityManager.createQuery("SELECT count(s) FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE s.title = :song");
         query.setParameter("song", song);
-        return query.getResultList().size();
+        return (Long) query.getSingleResult();
     }
 
     public static HibernateSoundCarrierRepository getInstance() {

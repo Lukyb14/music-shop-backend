@@ -14,16 +14,13 @@ public class Song {
     @ManyToOne
     private Album album;
     @Column
-    private String artist;
-    @Column
     private LocalDate release;
 
     //required for Hibernate
     protected Song() {}
 
-    public Song(String title, String artist, LocalDate release) {
+    public Song(String title, LocalDate release) {
         this.title = title;
-        this.artist = artist;
         this.release = release;
     }
 
@@ -33,10 +30,6 @@ public class Song {
 
     public String getTitle() {
         return title;
-    }
-
-    public String getArtist() {
-        return artist;
     }
 
     public LocalDate getRelease() {
