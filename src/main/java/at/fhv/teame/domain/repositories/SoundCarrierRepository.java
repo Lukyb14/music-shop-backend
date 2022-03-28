@@ -15,9 +15,9 @@ public interface SoundCarrierRepository {
 
     List<SoundCarrier> soundCarriersBySongName(String song, int pageNr);
 
-    Long numberOfSoundCarriersByAlbumName(String artist);
+    Long nrOfRowsByAlbumName(String album);
 
-    Long numberOfSoundCarriersByArtistName(String artist);
+    Long nrOfRowsByArtistName(String artist);
 
-    Long numberOfSoundCarriersBySongName(String artist);
+    Long nrOfRowsBySongName(String song);
 }
