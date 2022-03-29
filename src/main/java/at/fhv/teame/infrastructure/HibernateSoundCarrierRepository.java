@@ -101,7 +101,7 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     public SoundCarrier soundCarrierByArticleId(String articleId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<SoundCarrier> query = entityManager.createQuery("from SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
-        query.setParameter(articleId, articleId);
+        query.setParameter("articleId", articleId);
         return query.getSingleResult();
     }
 
