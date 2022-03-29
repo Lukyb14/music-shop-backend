@@ -61,8 +61,8 @@ public class SearchSoundCarrierServiceImpl extends UnicastRemoteObject implement
         List<SoundCarrierDTO> soundCarrierDtos = new LinkedList<>();
         for (SoundCarrier s : soundCarriers) {
             soundCarrierDtos.add(SoundCarrierDTO.builder()
-                    .withSoundCarrierEntity(s.getMedium(), s.getPrice().toString(), s.getStock(), s.getAlbumSongs().size())
-                    .withAlbumEntity(s.getAlbumName(), s.getAlbumArtist())
+                    .withSoundCarrierEntity(s.getArticleId(), s.getMedium(), s.getPrice().toString(), s.getStock(), s.getAlbumSongs().size())
+                    .withAlbumEntity(s.getAlbumName(), s.getAlbumArtist(), s.getAlbumGenre())
                     .build());
         }
         return soundCarrierDtos;
