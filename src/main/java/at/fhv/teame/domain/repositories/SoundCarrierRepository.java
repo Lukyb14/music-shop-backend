@@ -4,15 +4,12 @@ import at.fhv.teame.domain.SoundCarrier;
 import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.exceptions.OutOfStockException;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Map;
 
 public interface SoundCarrierRepository {
 
-    void retrieveSoundCarriers(Map<SoundCarrier, Integer> soundCarriers) throws OutOfStockException, InvalidAmountException;
-
-    SoundCarrier soundCarrierByArticleId(String articleId);
+    void processPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws OutOfStockException, InvalidAmountException;
 
     List<SoundCarrier> soundCarriersByAlbumName(String album, int pageNr);
 

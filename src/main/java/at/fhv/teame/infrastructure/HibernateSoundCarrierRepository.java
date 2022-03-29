@@ -8,7 +8,6 @@ import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
 
@@ -20,26 +19,21 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
-    public void retrieveSoundCarriers(Map<SoundCarrier, Integer> soundCarriers) throws OutOfStockException, InvalidAmountException {
+    public void processPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws OutOfStockException, InvalidAmountException {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         try {
-            for (Map.Entry<SoundCarrier, Integer> entry : soundCarriers.entrySet()) {
-                entry.getKey().retrieve(entry.getValue());
+            for (Map.Entry<String, Integer> entry : shoppingCartItems.entrySet()) {
+                TypedQuery<SoundCarrier> query = entityManager.createQuery("FROM SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
+                query.setParameter("articleId", entry.getKey());
+                SoundCarrier soundCarrier = query.getSingleResult();
+                soundCarrier.retrieve(entry.getValue());
             }
             entityManager.getTransaction().commit();
         } catch (OutOfStockException | InvalidAmountException e) {
             entityManager.getTransaction().rollback();
             throw e;
         }
-    }
-
-    @Override
-    public SoundCarrier soundCarrierByArticleId(String articleId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        TypedQuery<SoundCarrier> query = entityManager.createQuery("FROM SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
-        query.setParameter("articleId", articleId);
-        return query.getSingleResult();
     }
 
     @Override
@@ -66,7 +60,7 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         query.setParameter("artist", artist);
         //query.setFirstResult((pageNr - 1) * ROWS_PER_PAGE);
 
-        System.out.println("pageNr: "+pageNr);
+        System.out.println("pageNr: " + pageNr);
         return query.getResultList();
     }
 
@@ -93,7 +87,6 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         query.setParameter("song", song);
         return (Long) query.getSingleResult();
     }
-
 
 
     public static HibernateSoundCarrierRepository getInstance() {
