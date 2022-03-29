@@ -8,24 +8,27 @@ import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.sharedlib.rmi.PurchaseSoundCarrierService;
 import at.fhv.teame.sharedlib.rmi.exceptions.PurchaseFailedException;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
-public class PurchaseSoundCarrierServiceImpl implements PurchaseSoundCarrierService {
+public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject implements PurchaseSoundCarrierService {
 
     private final SoundCarrierRepository soundCarrierRepository;
 
-    public PurchaseSoundCarrierServiceImpl()  {
+    public PurchaseSoundCarrierServiceImpl() throws RemoteException {
         this.soundCarrierRepository = HibernateSoundCarrierRepository.getInstance();
     }
 
     @Override
-    public void confirmPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws PurchaseFailedException {
+    public void confirmPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws PurchaseFailedException, RemoteException {
         if (shoppingCartItems.isEmpty()) {
             throw new PurchaseFailedException();
         }
         try {
-            PaymentMethod paymentMethodEnum = PaymentMethod.valueOf(paymentMethod);
+            PaymentMethod paymentMethodEnum = PaymentMethod.valueOf(paymentMethod.toUpperCase(Locale.ROOT));
 
             Map<SoundCarrier, Integer> items = new HashMap<>();
             for (Map.Entry<String, Integer> entry : shoppingCartItems.entrySet()) {
