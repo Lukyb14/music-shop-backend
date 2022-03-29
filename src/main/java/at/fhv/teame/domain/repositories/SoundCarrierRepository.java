@@ -6,18 +6,17 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface SoundCarrierRepository {
-
-    List<SoundCarrier> allSoundCarriers();
-
     List<SoundCarrier> soundCarriersByAlbumName(String album, int pageNr);
 
     List<SoundCarrier> soundCarriersByArtistName(String artist, int pageNr);
 
     List<SoundCarrier> soundCarriersBySongName(String song, int pageNr);
 
-    Long numberOfSoundCarriersByAlbumName(String artist);
+    Long totResultsByAlbumName(String album);
 
-    Long numberOfSoundCarriersByArtistName(String artist);
+    Long totResultsByArtistName(String artist);
 
-    Long numberOfSoundCarriersBySongName(String artist);
+    Long totResultsBySongName(String song);
+
+    SoundCarrier soundCarrierByArticleId(String articleId);
 }

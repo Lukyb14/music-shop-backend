@@ -63,4 +63,8 @@ public class Album {
     public String getArtist() {
         return artist;
     }
+
+    public void setSong(List<Song> songs) {
+        this.songs = songs;
+    }
 }
