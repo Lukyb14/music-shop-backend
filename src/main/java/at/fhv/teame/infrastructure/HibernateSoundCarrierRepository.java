@@ -1,10 +1,13 @@
 package at.fhv.teame.infrastructure;
 
 import at.fhv.teame.domain.SoundCarrier;
+import at.fhv.teame.domain.exceptions.InvalidAmountException;
+import at.fhv.teame.domain.exceptions.OutOfStockException;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     private final EntityManagerFactory entityManagerFactory;
@@ -12,6 +15,24 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
 
     public HibernateSoundCarrierRepository() {
         entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
+    }
+
+    @Override
+    public void processPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws OutOfStockException, InvalidAmountException {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        try {
+            for (Map.Entry<String, Integer> entry : shoppingCartItems.entrySet()) {
+                TypedQuery<SoundCarrier> query = entityManager.createQuery("FROM SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
+                query.setParameter("articleId", entry.getKey());
+                SoundCarrier soundCarrier = query.getSingleResult();
+                soundCarrier.retrieve(entry.getValue());
+            }
+            entityManager.getTransaction().commit();
+        } catch (OutOfStockException | InvalidAmountException e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        }
     }
 
     @Override

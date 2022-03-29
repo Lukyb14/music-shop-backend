@@ -1,5 +1,8 @@
 package at.fhv.teame.domain;
 
+import at.fhv.teame.domain.exceptions.InvalidAmountException;
+import at.fhv.teame.domain.exceptions.OutOfStockException;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,7 +13,7 @@ public class SoundCarrier {
     @Column
     @GeneratedValue
     private Long id;
-    @Column
+    @Column(unique = true)
     private String articleId;
     @OneToOne
     private Album album;
@@ -30,6 +33,16 @@ public class SoundCarrier {
         this.medium = medium;
         this.price = price;
         this.stock = stock;
+    }
+
+    public void retrieve(int amount) throws OutOfStockException, InvalidAmountException {
+        if (stock - amount < 0) {
+            throw new OutOfStockException();
+        }
+        if (amount < 0) {
+            throw new InvalidAmountException();
+        }
+        stock -= amount;
     }
 
     public String getAlbumName() {
