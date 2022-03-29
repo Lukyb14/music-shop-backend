@@ -12,11 +12,9 @@ import java.util.Map;
 
 public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject implements PurchaseSoundCarrierService {
 
-    private final SoundCarrierRepository soundCarrierRepository;
+    private final SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();;
 
-    public PurchaseSoundCarrierServiceImpl() throws RemoteException {
-        this.soundCarrierRepository = HibernateSoundCarrierRepository.getInstance();
-    }
+    public PurchaseSoundCarrierServiceImpl() throws RemoteException { super(); }
 
     @Override
     public void confirmPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws PurchaseFailedException, RemoteException {
