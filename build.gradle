@@ -8,6 +8,10 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+        credentials {username 'jp_r2pd1rhpk1m11g30nut6aima76'}
+    }
 }
 
 dependencies {
@@ -16,7 +20,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     implementation 'org.hibernate:hibernate-core:5.6.5.Final'
     implementation 'org.postgresql:postgresql:42.3.3'
-    implementation files('libs/music-shop-sharedlib.jar')
+    implementation 'com.github.Lukyb14:music-shop-sharedlib:v1.0.0'
 }
 
 test {
