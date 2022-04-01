@@ -7,8 +7,10 @@ DELETE FROM soundcarrier;
 DELETE FROM song;
 DELETE FROM album;
 DROP SEQUENCE seq_articleId;
+DROP SEQUENCE seq_invoiceId;
 
 CREATE SEQUENCE seq_articleId START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE seq_invoiceId START WITH 10000 INCREMENT BY 1;
 
 INSERT INTO album (id, genre, label, name, release, artist) VALUES (1, 'Rock', 'Leidseplein Presse B.V.', 'The Razors Edge', '1990-01-01', 'AC/DC');
 INSERT INTO album (id, genre, label, name, release, artist) VALUES (2, 'Rock', 'Leidseplein Presse B.V.', 'Back In Black', '1980-01-01', 'AC/DC');
