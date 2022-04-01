@@ -3,6 +3,7 @@ package at.fhv.teame.domain;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Invoice {
@@ -13,6 +14,7 @@ public class Invoice {
     @GeneratedValue(generator = "seq_invoiceId", strategy = GenerationType.SEQUENCE)
     @Column(unique = true)
     private String invoiceId;
+    // TODO: Value objects and packages
    /*
     TODO: Customer class, get them from customer db
     @Column
@@ -34,13 +36,16 @@ public class Invoice {
     // required by hibernate
     protected Invoice() {}
 
-    public Invoice(String invoiceId, LocalDate dateOfPurchase, PaymentMethod paymentMethod,
-                   BigDecimal totalPrice, List<InvoiceLine> purchasedItems) {
-        this.invoiceId = invoiceId;
+    public Invoice(LocalDate dateOfPurchase, PaymentMethod paymentMethod,
+                   BigDecimal totalPrice) {
         this.dateOfPurchase = dateOfPurchase;
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
-        this.purchasedItems = purchasedItems;
+        this.purchasedItems = new ArrayList<>();
+    }
+
+    public void addInvoiceItem(InvoiceLine invoiceLine) {
+        purchasedItems.add(invoiceLine);
     }
 
     public Long getId() {

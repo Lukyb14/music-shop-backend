@@ -11,22 +11,22 @@ public class InvoiceLine {
     @ManyToOne
     private Invoice invoice;
     // Soundcarrier manytoone oder one-to-one?
-    @ManyToOne
+    @OneToOne
     private SoundCarrier soundCarrier;
     @Column
-    private int amount;
+    private int quantity;
     // nehmen oder nicht, weil preis kann sich ändern?
     @Column
-    private BigDecimal itemPrice;
+    private BigDecimal price;
 
     // required by hibernate
     protected InvoiceLine() {}
 
-    public InvoiceLine(Invoice invoice, SoundCarrier soundCarrier, int amount, BigDecimal itemPrice) {
+    public InvoiceLine(Invoice invoice, SoundCarrier soundCarrier, int quantity, BigDecimal price) {
         this.invoice = invoice;
         this.soundCarrier = soundCarrier;
-        this.amount = amount;
-        this.itemPrice = itemPrice;
+        this.quantity = quantity;
+        this.price = price;
     }
 
     public Long getId() {
@@ -41,11 +41,11 @@ public class InvoiceLine {
         return soundCarrier;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public BigDecimal getItemPrice() {
-        return itemPrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 }
