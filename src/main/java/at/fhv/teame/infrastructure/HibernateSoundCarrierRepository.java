@@ -63,6 +63,8 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         query.setParameter("artist", artist);
         int firstResult = (pageNr - 1) * ROWS_PER_PAGE;
         int maxResults = calcMaxResults(totResultsByArtistName(artist).intValue(), pageNr);
+        System.out.println("first:" + firstResult);
+        System.out.println("maxResult:" + maxResults);
         query.setFirstResult(firstResult);
         query.setMaxResults(maxResults);
         return query.getResultList();
