@@ -13,8 +13,9 @@ import java.rmi.registry.Registry;
 
 public class Main {
     public static void main(String[] args) {
+        RMIClient.startRMIClient();
         try {
-            LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+            LocateRegistry.createRegistry(1100);
             RMIFactoryImpl rmiFactory = new RMIFactoryImpl();
             Naming.rebind("rmi://localhost/rmiFactory", rmiFactory);
             System.out.println("rmiFactory bound in registry");
