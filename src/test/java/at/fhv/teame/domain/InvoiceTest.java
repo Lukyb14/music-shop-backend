@@ -3,9 +3,8 @@ package at.fhv.teame.domain;
 import at.fhv.teame.application.impl.PurchaseSoundCarrierServiceImpl;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
-import at.fhv.teame.domain.model.PaymentMethod;
-import at.fhv.teame.domain.model.SoundCarrier;
-import at.fhv.teame.domain.repositories.InvoiceRepository;
+import at.fhv.teame.domain.model.invoice.PaymentMethod;
+import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
@@ -45,10 +44,21 @@ class InvoiceTest {
 
     }
 
-  /*  @Test
+    @Test
+    void getInvoiceByIdTest() {
+        // given
+        Long invoiceIdExpected = Long.valueOf(20001);
+
+        // when
+        Invoice invoice = invoiceRepository.invoiceById(invoiceIdExpected);
+        Long invoiceIdActual = invoice.getInvoiceId();
+        // then
+        assertEquals(invoiceIdExpected, invoiceIdActual);
+    }
+
+    @Test
     void invoiceNumberTest() {
         SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();
-        InvoiceRepository invoiceRepository = new HibernateInvoiceRepository();
 
         SoundCarrier soundCarrier = soundCarrierRepository.soundCarrierByArticleId("1001");
 
@@ -57,5 +67,5 @@ class InvoiceTest {
         invoice.addInvoiceItem(new InvoiceLine(invoice, soundCarrier, 1, soundCarrier.getPrice()));
 
         assertEquals(10000, invoice.getInvoiceId());
-    }*/
+    }
 }

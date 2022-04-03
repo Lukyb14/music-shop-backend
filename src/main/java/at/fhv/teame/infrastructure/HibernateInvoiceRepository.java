@@ -6,7 +6,7 @@ import at.fhv.teame.domain.repositories.InvoiceRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.Optional;
+import javax.persistence.TypedQuery;
 
 public class HibernateInvoiceRepository implements InvoiceRepository {
     private final EntityManagerFactory entityManagerFactory;
@@ -24,7 +24,10 @@ public class HibernateInvoiceRepository implements InvoiceRepository {
     }
 
     @Override
-    public Optional<Invoice> invoiceById(String invoiceId) {
-        return Optional.empty();
+    public Invoice invoiceById(Long invoiceId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        TypedQuery<Invoice> query = entityManager.createQuery("from Invoice invoice WHERE invoice.invoiceId = :invoiceId", Invoice.class);
+        query.setParameter("invoiceId", invoiceId);
+        return query.getSingleResult();
     }
 }

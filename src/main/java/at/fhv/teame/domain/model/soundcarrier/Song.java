@@ -1,4 +1,4 @@
-package at.fhv.teame.domain.model;
+package at.fhv.teame.domain.model.soundcarrier;
 
 import javax.persistence.*;
 import java.time.LocalDate;

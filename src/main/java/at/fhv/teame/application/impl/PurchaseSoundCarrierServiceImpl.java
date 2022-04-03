@@ -3,8 +3,8 @@ package at.fhv.teame.application.impl;
 
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
-import at.fhv.teame.domain.model.PaymentMethod;
-import at.fhv.teame.domain.model.SoundCarrier;
+import at.fhv.teame.domain.model.invoice.PaymentMethod;
+import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;

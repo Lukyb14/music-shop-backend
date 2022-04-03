@@ -1,4 +1,4 @@
-package at.fhv.teame.domain.model;
+package at.fhv.teame.domain.model.soundcarrier;
 
 public enum Medium {
     CD,

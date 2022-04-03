@@ -1,6 +1,6 @@
 package at.fhv.teame.domain.model.invoice;
 
-import at.fhv.teame.domain.model.SoundCarrier;
+import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

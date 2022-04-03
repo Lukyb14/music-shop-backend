@@ -1,7 +1,7 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.domain.model.Song;
-import at.fhv.teame.domain.model.SoundCarrier;
+import at.fhv.teame.domain.model.soundcarrier.Song;
+import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.SongDTO;

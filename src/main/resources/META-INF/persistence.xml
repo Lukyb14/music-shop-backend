@@ -7,9 +7,9 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!-- Entities -->
-        <class>at.fhv.teame.domain.model.Album</class>
-        <class>at.fhv.teame.domain.model.Song</class>
-        <class>at.fhv.teame.domain.model.SoundCarrier</class>
+        <class>at.fhv.teame.domain.model.soundcarrier.Album</class>
+        <class>at.fhv.teame.domain.model.soundcarrier.Song</class>
+        <class>at.fhv.teame.domain.model.soundcarrier.SoundCarrier</class>
         <class>at.fhv.teame.domain.model.invoice.Invoice</class>
         <class>at.fhv.teame.domain.model.invoice.InvoiceLine</class>
 

@@ -1,9 +1,7 @@
 package at.fhv.teame.application;
 
 import at.fhv.teame.application.impl.SearchSoundCarrierServiceImpl;
-import at.fhv.teame.sharedlib.dto.SongDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
-import at.fhv.teame.sharedlib.rmi.SearchSoundCarrierService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +9,6 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SoundCarrierServiceTest {
 

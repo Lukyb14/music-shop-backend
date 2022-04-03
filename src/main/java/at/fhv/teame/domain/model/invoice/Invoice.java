@@ -1,13 +1,8 @@
 package at.fhv.teame.domain.model.invoice;
 
-import at.fhv.teame.domain.model.PaymentMethod;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
