@@ -1,10 +1,10 @@
 package at.fhv.teame.application.impl;
 
 
-import at.fhv.teame.domain.Invoice;
-import at.fhv.teame.domain.InvoiceLine;
-import at.fhv.teame.domain.PaymentMethod;
-import at.fhv.teame.domain.SoundCarrier;
+import at.fhv.teame.domain.model.invoice.Invoice;
+import at.fhv.teame.domain.model.invoice.InvoiceLine;
+import at.fhv.teame.domain.model.PaymentMethod;
+import at.fhv.teame.domain.model.SoundCarrier;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
@@ -43,7 +43,7 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
         }
     }
 
-    private Invoice createInvoice(Map<String, Integer> shoppingCartItems,
+    public Invoice createInvoice(Map<String, Integer> shoppingCartItems,
                                   String paymentMethod,
                                   BigDecimal totalPrice) {
 

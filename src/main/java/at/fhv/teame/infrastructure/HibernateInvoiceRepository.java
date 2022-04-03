@@ -1,6 +1,6 @@
 package at.fhv.teame.infrastructure;
 
-import at.fhv.teame.domain.Invoice;
+import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 
 import javax.persistence.EntityManager;
@@ -19,11 +19,6 @@ public class HibernateInvoiceRepository implements InvoiceRepository {
     public void add(Invoice invoice) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-/*
-        Query q = entityManager.createNativeQuery("SELECT nextval('numcallcartnewcart') as num");
-        BigInteger result = (BigInteger)q.getSingleResult();
-        invoice.generateInvoiceId(result.toString());
-*/
         entityManager.persist(invoice);
         entityManager.getTransaction().commit();
     }

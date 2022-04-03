@@ -1,4 +1,4 @@
-package at.fhv.teame.domain;
+package at.fhv.teame.domain.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;

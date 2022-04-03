@@ -1,22 +1,25 @@
-package at.fhv.teame.domain;
+package at.fhv.teame.domain.model.invoice;
+
+import at.fhv.teame.domain.model.PaymentMethod;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Invoice {
     @Id
-    @Column
-    @GeneratedValue
-    private Long id;
-    @GeneratedValue(generator = "seq_invoiceId", strategy = GenerationType.SEQUENCE)
-    @Column(unique = true)
-    private String invoiceId;
+    @GeneratedValue(generator = "seq_gen", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "seq_gen", sequenceName = "seq_invoiceid", allocationSize = 1, initialValue = 20000)
+    private Long invoiceId;
     // TODO: Value objects and packages
-   /*
-    TODO: Customer class, get them from customer db
+
+    /*
+    TODO: get them from customer db
     @Column
     private String customerFirstName;
     @Column
@@ -24,6 +27,7 @@ public class Invoice {
     @Column
     private String customerAddress;
     */
+
     @Column
     private LocalDate dateOfPurchase;
     @Column
@@ -48,11 +52,7 @@ public class Invoice {
         purchasedItems.add(invoiceLine);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getInvoiceId() {
+    public Long getInvoiceId() {
         return invoiceId;
     }
 

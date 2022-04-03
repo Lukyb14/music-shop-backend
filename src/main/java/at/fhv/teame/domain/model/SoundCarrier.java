@@ -1,4 +1,4 @@
-package at.fhv.teame.domain;
+package at.fhv.teame.domain.model;
 
 import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.exceptions.OutOfStockException;

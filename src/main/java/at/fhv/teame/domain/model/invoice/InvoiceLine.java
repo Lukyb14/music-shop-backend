@@ -1,4 +1,6 @@
-package at.fhv.teame.domain;
+package at.fhv.teame.domain.model.invoice;
+
+import at.fhv.teame.domain.model.SoundCarrier;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,12 +12,10 @@ public class InvoiceLine {
     private Long id;
     @ManyToOne
     private Invoice invoice;
-    // Soundcarrier manytoone oder one-to-one?
     @OneToOne
     private SoundCarrier soundCarrier;
     @Column
     private int quantity;
-    // nehmen oder nicht, weil preis kann sich ändern?
     @Column
     private BigDecimal price;
 

@@ -1,6 +1,6 @@
 package at.fhv.teame.domain.repositories;
 
-import at.fhv.teame.domain.Invoice;
+import at.fhv.teame.domain.model.invoice.Invoice;
 
 import java.util.Optional;
 
