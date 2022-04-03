@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Invoice {
     @Id
     @GeneratedValue(generator = "seq_gen", strategy = GenerationType.SEQUENCE)
@@ -30,11 +31,11 @@ public class Invoice {
 
     @Column
     private LocalDate dateOfPurchase;
-    @Column
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     @Column
     private BigDecimal totalPrice;
-    @OneToMany(mappedBy = "invoiceLine")
+    @OneToMany (mappedBy = "invoice")
     private List<InvoiceLine> purchasedItems;
 
     // required by hibernate

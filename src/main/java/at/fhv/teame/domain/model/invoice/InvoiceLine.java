@@ -5,6 +5,7 @@ import at.fhv.teame.domain.model.SoundCarrier;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Entity
 public class InvoiceLine {
     @Id
     @Column
