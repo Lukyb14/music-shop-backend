@@ -12,7 +12,6 @@ public class Invoice {
     @GeneratedValue(generator = "seq_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "seq_gen", sequenceName = "seq_invoiceid", allocationSize = 1, initialValue = 20000)
     private Long invoiceId;
-    // TODO: Value objects and packages
 
     /*
     TODO: get them from customer db
@@ -30,11 +29,12 @@ public class Invoice {
     private PaymentMethod paymentMethod;
     @Column
     private BigDecimal totalPrice;
-    @OneToMany (mappedBy = "invoice")
+    @OneToMany(mappedBy = "invoice")
     private List<InvoiceLine> purchasedItems;
 
     // required by hibernate
-    protected Invoice() {}
+    protected Invoice() {
+    }
 
     public Invoice(LocalDate dateOfPurchase, PaymentMethod paymentMethod,
                    BigDecimal totalPrice) {
@@ -44,8 +44,12 @@ public class Invoice {
         this.purchasedItems = new ArrayList<>();
     }
 
-    public void addInvoiceItem(InvoiceLine invoiceLine) {
-        purchasedItems.add(invoiceLine);
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void setPurchasedItems(List<InvoiceLine> purchasedItems) {
+        this.purchasedItems = purchasedItems;
     }
 
     public Long getInvoiceId() {

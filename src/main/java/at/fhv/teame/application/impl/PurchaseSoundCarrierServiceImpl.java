@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -24,18 +26,19 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
     private final SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();
     private final InvoiceRepository invoiceRepository = new HibernateInvoiceRepository();
 
-    public PurchaseSoundCarrierServiceImpl() throws RemoteException { super(); }
+    public PurchaseSoundCarrierServiceImpl() throws RemoteException {
+        super();
+    }
 
     @Override
-    public void confirmPurchase(Map<String, Integer> shoppingCartItems,
-                                String paymentMethod,
-                                BigDecimal totalPrice) throws PurchaseFailedException, RemoteException {
+    public void confirmPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod)
+            throws PurchaseFailedException, RemoteException {
         if (shoppingCartItems.isEmpty()) {
             throw new PurchaseFailedException();
         }
         try {
             soundCarrierRepository.processPurchase(shoppingCartItems, paymentMethod);
-            Invoice invoice = createInvoice(shoppingCartItems, paymentMethod, totalPrice);
+            Invoice invoice = createInvoice(shoppingCartItems, paymentMethod);
             invoiceRepository.add(invoice);
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,18 +46,30 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
         }
     }
 
-    public Invoice createInvoice(Map<String, Integer> shoppingCartItems,
-                                  String paymentMethod,
-                                  BigDecimal totalPrice) {
+    public Invoice createInvoice(Map<String, Integer> shoppingCartItems, String paymentMethod) {
+        // start with totalPrice of 0
+        BigDecimal totalPrice = new BigDecimal(0);
+        List<InvoiceLine> purchasedItems = new ArrayList<>();
 
         Invoice invoice = new Invoice(LocalDate.now(), PaymentMethod.valueOf(paymentMethod.toUpperCase(Locale.ROOT)), totalPrice);
 
+        // get every item in shopping cart and calc their price
+        // create a invoiceline with the information gathered from the shoppingcart item
+        // calculate total price for invoice
+        // key = articleId, value = quantity
         for (Map.Entry<String, Integer> entry : shoppingCartItems.entrySet()) {
             SoundCarrier soundCarrier = soundCarrierRepository.soundCarrierByArticleId(entry.getKey());
 
-            InvoiceLine invoiceLine = new InvoiceLine(invoice, soundCarrier, entry.getValue(), soundCarrier.getPrice());
-            invoice.addInvoiceItem(invoiceLine);
+            int quantity = entry.getValue();
+            BigDecimal price = soundCarrier.getPrice().multiply(new BigDecimal(quantity));
+
+            InvoiceLine invoiceLine = new InvoiceLine(invoice, soundCarrier, quantity, price);
+
+            purchasedItems.add(invoiceLine);
+            totalPrice = totalPrice.add(price);
         }
+        invoice.setPurchasedItems(purchasedItems);
+        invoice.setTotalPrice(totalPrice);
         return invoice;
     }
 }

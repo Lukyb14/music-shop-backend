@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +38,7 @@ class InvoiceTest {
         String paymentMethod = "cash";
         BigDecimal totalPrice = new BigDecimal("201");
 
-        Invoice invoice = purchaseSoundCarrierService.createInvoice(shoppingCart, paymentMethod, totalPrice);
+        Invoice invoice = purchaseSoundCarrierService.createInvoice(shoppingCart, paymentMethod);
         invoiceRepository.add(invoice);
 
         System.out.println(invoice.getInvoiceId());
@@ -64,7 +65,8 @@ class InvoiceTest {
 
         Invoice invoice = new Invoice(LocalDate.now(), PaymentMethod.CASH, new BigDecimal("100"));
 
-        invoice.addInvoiceItem(new InvoiceLine(invoice, soundCarrier, 1, soundCarrier.getPrice()));
+        List<InvoiceLine> invoiceLineList = List.of(new InvoiceLine(invoice, soundCarrier, 1, soundCarrier.getPrice()));
+        invoice.setPurchasedItems(invoiceLineList);
 
         assertEquals(10000, invoice.getInvoiceId());
     }
