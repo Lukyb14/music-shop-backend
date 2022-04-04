@@ -1,9 +1,11 @@
 package at.fhv.teame.application.impl;
 
 import at.fhv.teame.domain.model.invoice.Invoice;
+import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
+import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
 import at.fhv.teame.sharedlib.rmi.SearchInvoiceService;
 
 import java.rmi.RemoteException;
@@ -24,6 +26,11 @@ public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements Sea
 
     private InvoiceDTO buildInvoiceDTO(Invoice invoice) {
         // TODO: implement this method, needed by invoiceById
+        return null;
+    }
+
+    private InvoiceLineDTO buildInvoiceLineDTO (InvoiceLine invoiceLine) {
+        // TODO: implement this method, needed by buildInvoiceDTO
         return null;
     }
 }
