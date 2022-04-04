@@ -13,6 +13,7 @@ import at.fhv.teame.sharedlib.rmi.PurchaseSoundCarrierService;
 import at.fhv.teame.sharedlib.rmi.exceptions.PurchaseFailedException;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
@@ -69,7 +70,7 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
             totalPrice = totalPrice.add(price);
         }
         invoice.setPurchasedItems(purchasedItems);
-        invoice.setTotalPrice(totalPrice);
+        invoice.setTotalPrice(totalPrice.setScale(2,  RoundingMode.HALF_UP));
         return invoice;
     }
 }
