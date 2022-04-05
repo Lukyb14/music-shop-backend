@@ -12,17 +12,12 @@ public class Invoice {
     @GeneratedValue(generator = "seq_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "seq_gen", sequenceName = "seq_invoiceid", allocationSize = 1, initialValue = 20000)
     private Long invoiceId;
-
-    /*
-    TODO: get them from customer db
     @Column
     private String customerFirstName;
     @Column
     private String customerLastName;
     @Column
     private String customerAddress;
-    */
-
     @Column
     private LocalDate dateOfPurchase;
     @Enumerated(EnumType.STRING)
@@ -49,6 +44,21 @@ public class Invoice {
         this.totalRefundable = new BigDecimal(0);
     }
 
+    public Invoice(LocalDate dateOfPurchase, PaymentMethod paymentMethod, String customerFirstName,
+                   String customerLastName, String customerAddress) {
+
+        this.customerFirstName = customerFirstName;
+        this.customerLastName = customerLastName:
+        this.customerAddress = customerAddress;
+        this.dateOfPurchase = dateOfPurchase;
+        this.paymentMethod = paymentMethod;
+        this.totalPrice = new BigDecimal(0);
+        this.purchasedItems = new ArrayList<>();
+        this.currentRefundable = new BigDecimal(0);
+        this.totalRefundable = new BigDecimal(0);
+
+    }
+
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
         this.currentRefundable = currentRefundable.add(totalPrice);
@@ -61,6 +71,18 @@ public class Invoice {
 
     public Long getInvoiceId() {
         return invoiceId;
+    }
+
+    public String getCustomerFirstName() {
+        return customerFirstName;
+    }
+
+    public String getCustomerLastName() {
+        return customerLastName;
+    }
+
+    public String getCustomerAddress() {
+        return customerAddress;
     }
 
     public LocalDate getDateOfPurchase() {
@@ -86,4 +108,5 @@ public class Invoice {
     public BigDecimal getTotalRefundable() {
         return totalRefundable;
     }
+
 }
