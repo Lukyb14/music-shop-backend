@@ -48,7 +48,7 @@ public class Invoice {
                    String customerLastName, String customerAddress) {
 
         this.customerFirstName = customerFirstName;
-        this.customerLastName = customerLastName:
+        this.customerLastName = customerLastName;
         this.customerAddress = customerAddress;
         this.dateOfPurchase = dateOfPurchase;
         this.paymentMethod = paymentMethod;
