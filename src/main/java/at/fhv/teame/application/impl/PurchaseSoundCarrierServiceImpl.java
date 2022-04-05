@@ -52,7 +52,7 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
         BigDecimal totalPrice = new BigDecimal(0);
         List<InvoiceLine> purchasedItems = new ArrayList<>();
 
-        Invoice invoice = new Invoice(LocalDate.now(), PaymentMethod.valueOf(paymentMethod.toUpperCase(Locale.ROOT)), totalPrice);
+        Invoice invoice = new Invoice(LocalDate.now(), PaymentMethod.valueOf(paymentMethod.toUpperCase(Locale.ROOT)));
 
         // get every item in shopping cart and calc their price
         // create a invoiceline with the information gathered from the shoppingcart item

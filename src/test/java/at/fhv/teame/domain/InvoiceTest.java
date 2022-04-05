@@ -65,7 +65,8 @@ class InvoiceTest {
 
         SoundCarrier soundCarrier = soundCarrierRepository.soundCarrierByArticleId("1001");
 
-        Invoice invoice = new Invoice(LocalDate.now(), PaymentMethod.CASH, new BigDecimal("100"));
+        Invoice invoice = new Invoice(LocalDate.now(), PaymentMethod.CASH);
+        invoice.setTotalPrice(new BigDecimal("100"));
 
         List<InvoiceLine> invoiceLineList = List.of(new InvoiceLine(invoice, soundCarrier, 1, soundCarrier.getPrice()));
         invoice.setPurchasedItems(invoiceLineList);
