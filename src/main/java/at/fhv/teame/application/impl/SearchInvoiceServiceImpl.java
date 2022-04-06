@@ -10,6 +10,7 @@ import at.fhv.teame.sharedlib.rmi.SearchInvoiceService;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements SearchInvoiceService {
     private final InvoiceRepository invoiceRepository = new HibernateInvoiceRepository();
@@ -19,18 +20,34 @@ public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements Sea
     }
 
     @Override
-    public InvoiceDTO invoiceById(String s) throws RemoteException {
-        // TODO: implement this method
-        return null;
+    public InvoiceDTO invoiceById(String invoiceId) throws RemoteException {
+       Invoice invoice = invoiceRepository.invoiceById(Long.valueOf(invoiceId));
+       return buildInvoiceDTO(invoice);
+
     }
 
     private InvoiceDTO buildInvoiceDTO(Invoice invoice) {
-        // TODO: implement this method, needed by invoiceById
-        return null;
+
+        return InvoiceDTO.builder().withInvoiceEntity(  invoice.getInvoiceId().toString(),
+                                                        invoice.getDateOfPurchase().toString(),
+                                                        invoice.getPaymentMethod().toString(),
+                                                        invoice.getCurrentRefundable().toString(),
+                                                        invoice.getTotalRefundable().toString(),
+                                                        buildInvoiceLineDTO(invoice.getPurchasedItems()))
+                                                        .withCustomerEntity(invoice.getCustomerFirstName(),invoice.getCustomerLastName(), invoice.getCustomerAddress()).build();
     }
 
-    private InvoiceLineDTO buildInvoiceLineDTO (InvoiceLine invoiceLine) {
-        // TODO: implement this method, needed by buildInvoiceDTO
-        return null;
+    private InvoiceLineDTO[] buildInvoiceLineDTO (List<InvoiceLine> invoiceLines) {
+
+        InvoiceLineDTO[] invoiceLineDto = new InvoiceLineDTO[invoiceLines.size()];
+
+        for(int i = 0; i <invoiceLineDto.length; i++){
+            InvoiceLine invoiceLine = invoiceLines.get(i);
+            invoiceLineDto[i] = InvoiceLineDTO.builder().withInvoiceLineEntity(invoiceLine.getSoundCarrier().getArticleId(),
+                    invoiceLine.getSoundCarrier().getAlbumArtist(), invoiceLine.getSoundCarrier().getAlbumName(),
+                    invoiceLine.getSoundCarrier().getMedium(), invoiceLine.getQuantity(), invoiceLine.getAmountOfReturnableItems(),
+                    invoiceLine.getAmountOfReturnedItems(), invoiceLine.getPrice().toString()).build();
+        }
+        return invoiceLineDto;
     }
 }
