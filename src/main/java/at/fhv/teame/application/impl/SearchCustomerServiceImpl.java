@@ -16,12 +16,22 @@ public class SearchCustomerServiceImpl extends UnicastRemoteObject implements Se
     }
 
     @Override
-    public List<CustomerDTO> getCustomerByFullName(String givenName, String familyName) throws RemoteException {
-        return searchCustomerService.getCustomerByFullName(givenName, familyName);
+    public List<CustomerDTO> getCustomerByFullName(String givenName, String familyName, int pageNr) throws RemoteException {
+        return searchCustomerService.getCustomerByFullName(givenName, familyName, pageNr);
     }
 
     @Override
-    public List<CustomerDTO> getCustomerByFamilyName(String familyName) throws RemoteException {
-        return searchCustomerService.getCustomerByFamilyName(familyName);
+    public List<CustomerDTO> getCustomerByFamilyName(String familyName, int pageNr) throws RemoteException {
+        return searchCustomerService.getCustomerByFamilyName(familyName, pageNr);
+    }
+
+    @Override
+    public int totResultsByFullName(String givenName, String familyName) throws RemoteException {
+        return searchCustomerService.totResultsByFullName(givenName, familyName);
+    }
+
+    @Override
+    public int totResultsByFamilyName(String familyName) throws RemoteException {
+        return searchCustomerService.totResultsByFamilyName(familyName);
     }
 }
