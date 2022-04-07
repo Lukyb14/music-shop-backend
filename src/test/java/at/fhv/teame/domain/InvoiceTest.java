@@ -8,6 +8,7 @@ import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
+import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,17 +35,45 @@ class InvoiceTest {
     }
 
     @Test
-    void invoiceIntTest() {
-        Map<String, Integer> shoppingCart = new HashMap<>();
-        shoppingCart.put("1121", 1);
+    void invoiceWithoutCustomerTest() {
+        Map<String, Integer> purchasedItems = new HashMap<>();
+        purchasedItems.put("1161", 1);
         String paymentMethod = "cash";
-        BigDecimal totalPrice = new BigDecimal("201");
 
-        Invoice invoice = purchaseSoundCarrierService.createInvoice(shoppingCart, paymentMethod);
+        ShoppingCartDTO shoppingCartDTO = ShoppingCartDTO.builder()
+                .withShoppingCartEntity(
+                        purchasedItems,
+                        paymentMethod,
+                        "guest",
+                        "",
+                        ""
+                ).build();
+
+        Invoice invoice = purchaseSoundCarrierService.createInvoice(shoppingCartDTO);
         invoiceRepository.add(invoice);
 
         System.out.println(invoice.getInvoiceId());
+    }
 
+    @Test
+    void invoiceWithCustomerTest() {
+        Map<String, Integer> purchasedItems = new HashMap<>();
+        purchasedItems.put("1161", 1);
+        String paymentMethod = "cash";
+
+        ShoppingCartDTO shoppingCartDTO = ShoppingCartDTO.builder()
+                .withShoppingCartEntity(
+                        purchasedItems,
+                        paymentMethod,
+                        "Rainer",
+                        "Zufall",
+                        "Keinegültigeaddresse 1, 1000 Niemandshausen"
+                ).build();
+
+        Invoice invoice = purchaseSoundCarrierService.createInvoice(shoppingCartDTO);
+        invoiceRepository.add(invoice);
+
+        System.out.println(invoice.getInvoiceId());
     }
 
     @Test
@@ -90,7 +119,16 @@ class InvoiceTest {
         totalPriceExpected = totalPriceExpected.add(price1).add(price2).add(price3).setScale(2, RoundingMode.HALF_UP);
         String paymentMethodExpected = "cash";
 
-        Invoice invoice = purchaseSoundCarrierService.createInvoice(shoppingCartItemsExpected, paymentMethodExpected);
+        ShoppingCartDTO shoppingCartDTO = ShoppingCartDTO.builder()
+                .withShoppingCartEntity(
+                        shoppingCartItemsExpected,
+                        paymentMethodExpected,
+                        "guest",
+                        "",
+                        ""
+                ).build();
+
+        Invoice invoice = purchaseSoundCarrierService.createInvoice(shoppingCartDTO);
 
         assertEquals(totalPriceExpected, invoice.getTotalPrice());
         assertEquals(shoppingCartItemsExpected.size(), invoice.getPurchasedItems().size());
