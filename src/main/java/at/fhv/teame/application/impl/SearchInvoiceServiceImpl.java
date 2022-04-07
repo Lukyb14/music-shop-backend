@@ -31,8 +31,7 @@ public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements Sea
         return InvoiceDTO.builder().withInvoiceEntity(invoice.getInvoiceId().toString(),
                         invoice.getDateOfPurchase().toString(),
                         invoice.getPaymentMethod().toString(),
-                        invoice.getCurrentRefundable().toString(),
-                        invoice.getTotalRefundable().toString(),
+                        invoice.getToRefund().toString(),
                         buildInvoiceLineDTO(invoice.getPurchasedItems()))
                 .withCustomerEntity(invoice.getCustomerFirstName(),
                         invoice.getCustomerLastName(),
