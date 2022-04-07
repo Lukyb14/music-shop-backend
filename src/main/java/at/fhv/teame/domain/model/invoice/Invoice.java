@@ -27,9 +27,7 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice")
     private List<InvoiceLine> purchasedItems;
     @Column
-    private BigDecimal currentRefundable;
-    @Column
-    private BigDecimal totalRefundable;
+    private BigDecimal toRefund;
 
     // required by hibernate
     protected Invoice() {
@@ -40,8 +38,7 @@ public class Invoice {
         this.paymentMethod = paymentMethod;
         this.totalPrice = new BigDecimal(0);
         this.purchasedItems = new ArrayList<>();
-        this.currentRefundable = new BigDecimal(0);
-        this.totalRefundable = new BigDecimal(0);
+        this.toRefund = new BigDecimal(0);
     }
 
     public Invoice(LocalDate dateOfPurchase, PaymentMethod paymentMethod, String customerFirstName,
@@ -54,15 +51,13 @@ public class Invoice {
         this.paymentMethod = paymentMethod;
         this.totalPrice = new BigDecimal(0);
         this.purchasedItems = new ArrayList<>();
-        this.currentRefundable = new BigDecimal(0);
-        this.totalRefundable = new BigDecimal(0);
+        this.toRefund = new BigDecimal(0);
 
     }
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
-        this.currentRefundable = currentRefundable.add(totalPrice);
-        this.totalRefundable = totalRefundable.add(totalPrice);
+        this.toRefund = toRefund.add(totalPrice);
     }
 
     public void setPurchasedItems(List<InvoiceLine> purchasedItems) {
@@ -101,12 +96,8 @@ public class Invoice {
         return purchasedItems;
     }
 
-    public BigDecimal getCurrentRefundable() {
-        return currentRefundable;
-    }
-
-    public BigDecimal getTotalRefundable() {
-        return totalRefundable;
+    public BigDecimal getToRefund() {
+        return toRefund;
     }
 
 }

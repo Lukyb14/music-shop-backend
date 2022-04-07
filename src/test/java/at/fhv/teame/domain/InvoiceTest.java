@@ -1,6 +1,7 @@
 package at.fhv.teame.domain;
 
 import at.fhv.teame.application.impl.PurchaseSoundCarrierServiceImpl;
+import at.fhv.teame.application.impl.SearchInvoiceServiceImpl;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.model.invoice.PaymentMethod;
@@ -8,6 +9,7 @@ import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
+import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -25,11 +28,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InvoiceTest {
 
+    private SearchInvoiceServiceImpl searchInvoiceService;
     private PurchaseSoundCarrierServiceImpl purchaseSoundCarrierService;
     private HibernateInvoiceRepository invoiceRepository;
 
     @BeforeEach
     void setup() throws IOException {
+        searchInvoiceService = new SearchInvoiceServiceImpl();
         purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl();
         invoiceRepository = new HibernateInvoiceRepository();
     }
@@ -58,7 +63,7 @@ class InvoiceTest {
     @Test
     void invoiceWithCustomerTest() {
         Map<String, Integer> purchasedItems = new HashMap<>();
-        purchasedItems.put("1161", 1);
+        purchasedItems.put("10001", 1);
         String paymentMethod = "cash";
 
         ShoppingCartDTO shoppingCartDTO = ShoppingCartDTO.builder()
@@ -133,5 +138,18 @@ class InvoiceTest {
         assertEquals(totalPriceExpected, invoice.getTotalPrice());
         assertEquals(shoppingCartItemsExpected.size(), invoice.getPurchasedItems().size());
         assertEquals(paymentMethodExpected.toUpperCase(Locale.ROOT), invoice.getPaymentMethod().toString());
+    }
+
+    @Test
+    void testSearchInvoiceServiceImpl() throws RemoteException {
+        InvoiceDTO invoiceDTO = searchInvoiceService.invoiceById("20000");
+        assertEquals("20000", invoiceDTO.getInvoiceId());
+        assertEquals("14.30", invoiceDTO.getToRefund());
+        assertEquals("Keinegültigeaddresse 1, 1000 Niemandshausen", invoiceDTO.getCustomerAddress());
+        assertEquals("Rainer", invoiceDTO.getCustomerFirstName());
+        assertEquals("Zufall", invoiceDTO.getCustomerLastName());
+        assertEquals("2022-04-07", invoiceDTO.getPurchaseDate());
+        assertEquals("CASH", invoiceDTO.getPaymentMethod());
+
     }
 }
