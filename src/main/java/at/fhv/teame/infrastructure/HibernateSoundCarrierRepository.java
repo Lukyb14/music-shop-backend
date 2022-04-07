@@ -40,10 +40,8 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a WHERE lower(a.name) = lower(:albumName)", SoundCarrier.class);
         query.setParameter("albumName", albumName);
-        int firstResult = (pageNr - 1) * ROWS_PER_PAGE;
-        int maxResults = calcMaxResults(totResultsByAlbumName(albumName).intValue(), pageNr);
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
+        query.setFirstResult((pageNr - 1) * ROWS_PER_PAGE);
+        query.setMaxResults(ROWS_PER_PAGE);
         return query.getResultList();
     }
 
@@ -61,12 +59,8 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         System.out.println(artist);
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE lower(a.artist) = lower(:artist)", SoundCarrier.class);
         query.setParameter("artist", artist);
-        int firstResult = (pageNr - 1) * ROWS_PER_PAGE;
-        int maxResults = calcMaxResults(totResultsByArtistName(artist).intValue(), pageNr);
-        System.out.println("first:" + firstResult);
-        System.out.println("maxResult:" + maxResults);
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
+        query.setFirstResult((pageNr - 1) * ROWS_PER_PAGE);
+        query.setMaxResults(ROWS_PER_PAGE);
         return query.getResultList();
     }
 
@@ -83,10 +77,8 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE lower(s.title) = lower(:song)", SoundCarrier.class);
         query.setParameter("song", song);
-        int firstResult = (pageNr - 1) * ROWS_PER_PAGE;
-        int maxResults = calcMaxResults(totResultsBySongName(song).intValue(), pageNr);
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
+        query.setFirstResult((pageNr - 1) * ROWS_PER_PAGE);
+        query.setMaxResults(ROWS_PER_PAGE);
         return query.getResultList();
     }
 
@@ -105,15 +97,5 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         TypedQuery<SoundCarrier> query = entityManager.createQuery("from SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
         query.setParameter("articleId", articleId);
         return query.getSingleResult();
-    }
-
-    private int calcMaxResults(int totResultsInMatch, int pageNr) {
-        int maxResults;
-        if ((totResultsInMatch / (ROWS_PER_PAGE * pageNr)) > 0) {
-            maxResults = ROWS_PER_PAGE;
-        } else {
-            maxResults = totResultsInMatch % ROWS_PER_PAGE;
-        }
-        return maxResults;
     }
 }
