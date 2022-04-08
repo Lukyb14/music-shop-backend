@@ -1,6 +1,7 @@
 package at.fhv.teame.infrastructure;
 
 import at.fhv.teame.domain.model.invoice.Invoice;
+import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 
 import javax.persistence.EntityManager;
@@ -20,6 +21,9 @@ public class HibernateInvoiceRepository implements InvoiceRepository {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         entityManager.persist(invoice);
+        for (InvoiceLine invoiceLine : invoice.getPurchasedItems()){
+            entityManager.persist(invoiceLine);
+        }
         entityManager.getTransaction().commit();
     }
 

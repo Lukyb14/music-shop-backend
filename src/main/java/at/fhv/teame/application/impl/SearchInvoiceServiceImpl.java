@@ -47,7 +47,7 @@ public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements Sea
             InvoiceLine invoiceLine = invoiceLines.get(i);
             invoiceLineDto[i] = InvoiceLineDTO.builder().withInvoiceLineEntity(invoiceLine.getSoundCarrier().getArticleId(),
                     invoiceLine.getSoundCarrier().getAlbumArtist(), invoiceLine.getSoundCarrier().getAlbumName(),
-                    invoiceLine.getSoundCarrier().getMedium(), invoiceLine.getQuantity(), invoiceLine.getAmountOfReturnableItems(),
+                    invoiceLine.getSoundCarrier().getMedium(), invoiceLine.getQuantity(),
                     invoiceLine.getAmountOfReturnedItems(), invoiceLine.getPrice().toString()).build();
         }
         return invoiceLineDto;
