@@ -1,4 +1,4 @@
-package at.fhv.teame.application;
+package at.fhv.teame.integration;
 
 import at.fhv.teame.application.impl.SearchSoundCarrierServiceImpl;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.List;
 
-
-class SoundCarrierServiceTest {
-
+public class IntegrationTest {
     private SearchSoundCarrierServiceImpl soundCarrierService;
 
     @BeforeEach
