@@ -15,13 +15,16 @@ public class Song {
     private Album album;
     @Column
     private LocalDate release;
+    @Column
+    private String duration;
 
     //required for Hibernate
     protected Song() {}
 
-    public Song(String title, LocalDate release) {
+    public Song(String title, LocalDate release, String duration) {
         this.title = title;
         this.release = release;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -34,5 +37,9 @@ public class Song {
 
     public LocalDate getRelease() {
         return release;
+    }
+
+    public String getDuration() {
+        return duration;
     }
 }
