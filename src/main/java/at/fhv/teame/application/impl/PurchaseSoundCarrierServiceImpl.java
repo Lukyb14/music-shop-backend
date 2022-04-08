@@ -12,7 +12,6 @@ import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import at.fhv.teame.sharedlib.rmi.PurchaseSoundCarrierService;
 import at.fhv.teame.sharedlib.rmi.exceptions.PurchaseFailedException;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
