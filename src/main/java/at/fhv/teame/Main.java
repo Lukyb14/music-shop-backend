@@ -1,7 +1,8 @@
 package at.fhv.teame;
 
+import at.fhv.teame.rmi.RMIClient;
 import at.fhv.teame.rmi.RMIFactoryImpl;
-import at.fhv.teame.rmi.client.RMIClient;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;

@@ -1,15 +1,8 @@
 package at.fhv.teame.rmi;
 
-import at.fhv.teame.application.impl.PurchaseSoundCarrierServiceImpl;
-import at.fhv.teame.application.impl.SearchCustomerServiceImpl;
-import at.fhv.teame.application.impl.SearchInvoiceServiceImpl;
-import at.fhv.teame.application.impl.SearchSoundCarrierServiceImpl;
-import at.fhv.teame.sharedlib.rmi.PurchaseSoundCarrierService;
-import at.fhv.teame.sharedlib.rmi.SearchCustomerService;
-import at.fhv.teame.sharedlib.rmi.SearchInvoiceService;
-import at.fhv.teame.sharedlib.rmi.SearchSoundCarrierService;
+import at.fhv.teame.application.impl.*;
+import at.fhv.teame.sharedlib.rmi.*;
 import at.fhv.teame.sharedlib.rmi.factory.RMIFactory;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -20,12 +13,12 @@ public class RMIFactoryImpl extends UnicastRemoteObject implements RMIFactory {
     }
 
     @Override
-    public SearchSoundCarrierService createSearchSoundCarrierService() throws RemoteException {
+    public SearchSoundCarrierService createSearchSoundCarrierServiceImpl() throws RemoteException {
         return new SearchSoundCarrierServiceImpl();
     }
 
     @Override
-    public PurchaseSoundCarrierService createPurchaseSoundCarrierService() throws RemoteException {
+    public PurchaseSoundCarrierService createPurchaseSoundCarrierServiceImpl() throws RemoteException {
         return new PurchaseSoundCarrierServiceImpl();
     }
 
@@ -37,5 +30,10 @@ public class RMIFactoryImpl extends UnicastRemoteObject implements RMIFactory {
     @Override
     public SearchInvoiceService createSearchInvoiceServiceImpl() throws RemoteException {
         return new SearchInvoiceServiceImpl();
+    }
+
+    @Override
+    public AuthenticationService createSearchAuthenticationServiceImpl() throws RemoteException {
+        return new AuthenticationServiceImpl();
     }
 }
