@@ -11,8 +11,8 @@ import java.rmi.registry.LocateRegistry;
 
 public class Main {
     public static void main(String[] args) {
-        RMIClient.startRMIClient();
         try {
+            RMIClient.startRMIClient();
             LocateRegistry.createRegistry(1100);
             RMIFactoryImpl rmiFactory = new RMIFactoryImpl();
             Naming.rebind("rmi://localhost:1100/rmiFactory", rmiFactory);

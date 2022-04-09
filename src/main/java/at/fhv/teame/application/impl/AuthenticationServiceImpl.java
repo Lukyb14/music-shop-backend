@@ -1,29 +1,37 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.domain.model.user.ClientUser;
+import at.fhv.teame.domain.repositories.SessionRepository;
+import at.fhv.teame.domain.repositories.UserRepository;
+import at.fhv.teame.infrastructure.HibernateUserRepository;
+import at.fhv.teame.infrastructure.ListSessionRepository;
+import at.fhv.teame.rmi.Session;
+import at.fhv.teame.sharedlib.dto.SessionDTO;
 import at.fhv.teame.sharedlib.rmi.AuthenticationService;
+import at.fhv.teame.sharedlib.rmi.exceptions.LoginFailedException;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.Properties;
+import java.util.UUID;
 
 public class AuthenticationServiceImpl extends UnicastRemoteObject implements AuthenticationService {
 
+    private static final String PROVIDER_URL = "ldap://10.0.40.169:389";
+    private final UserRepository userRepository;
+    private final SessionRepository sessionRepository;
+
     public AuthenticationServiceImpl() throws RemoteException {
-        super();
+        userRepository = new HibernateUserRepository();
+        sessionRepository = new ListSessionRepository();
     }
 
-    private static final String PROVIDER_URL = "ldap://10.0.40.169:389";
-
     @Override
-    public boolean login(String username, String password) throws RemoteException {
-        System.out.println("user: " + username);
-        System.out.println("pw: " + password);
+    public SessionDTO login(String username, String password) throws RemoteException, LoginFailedException {
 
         Properties properties = new Properties();
         properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -41,24 +49,35 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
                 if (distinguishedName != null) break;
             }
 
-            if(distinguishedName == null) return false;
+            if(distinguishedName == null) throw new LoginFailedException();
 
             properties.put(Context.SECURITY_PRINCIPAL, distinguishedName);
             properties.put(Context.SECURITY_CREDENTIALS, password);
             try {
                 ctx = new InitialDirContext(properties);
                 System.out.println("Connection to LDAP System successful");
-                return true;
+
+                ClientUser clientUser = userRepository.userByCn(username);
+                Session session = sessionRepository.createSession(clientUser);
+
+
+                return new SessionDTO(session.getSessionId().toString(), clientUser.getRole().toString());
             } catch (Exception e) {
-                System.out.println("invalid password");
-                return false;
+                // invalid password
+                e.printStackTrace();
+                throw new LoginFailedException();
             } finally {
                 ctx.close();
             }
         } catch (NamingException e) {
-            System.out.println("invalid user or password");
-            return false;
+            // invalid user or password
+            throw new LoginFailedException();
         }
+    }
+
+    @Override
+    public void logout(UUID uuid) throws RemoteException {
+
     }
 
 
