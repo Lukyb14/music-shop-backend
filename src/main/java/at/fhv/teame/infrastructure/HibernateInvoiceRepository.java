@@ -34,4 +34,6 @@ public class HibernateInvoiceRepository implements InvoiceRepository {
         query.setParameter("invoiceId", invoiceId);
         return query.getSingleResult();
     }
+
+
 }
