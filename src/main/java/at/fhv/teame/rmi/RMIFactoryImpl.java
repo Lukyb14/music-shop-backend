@@ -32,10 +32,6 @@ public class RMIFactoryImpl extends UnicastRemoteObject implements RMIFactory {
 
     @Override
     public SearchCustomerService createSearchCustomerServiceImpl() throws RemoteException {
-        return null;
-    }
-    @Override
-    public SearchCustomerService createSearchCustomerServiceImpl() throws RemoteException {
         return new SearchCustomerServiceImpl();
     }
 
