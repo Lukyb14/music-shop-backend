@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface SessionRepository {
     Session createSession(ClientUser clientUser);
     Session sessionById(UUID sessionId) throws SessionNotFoundException;
-    void logout(UUID sessionId);
+    void deleteSession(UUID sessionId);
 }

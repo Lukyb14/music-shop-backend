@@ -32,7 +32,7 @@ public class ListSessionRepository implements SessionRepository {
     }
 
     @Override
-    public void logout(UUID sessionId) {
+    public void deleteSession(UUID sessionId) {
         sessions.stream()
                 .filter(session -> session.getSessionId().equals(sessionId))
                 .findFirst()

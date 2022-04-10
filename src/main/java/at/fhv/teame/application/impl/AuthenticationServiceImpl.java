@@ -9,7 +9,6 @@ import at.fhv.teame.rmi.Session;
 import at.fhv.teame.sharedlib.dto.SessionDTO;
 import at.fhv.teame.sharedlib.rmi.AuthenticationService;
 import at.fhv.teame.sharedlib.rmi.exceptions.LoginFailedException;
-
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -77,7 +76,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
 
     @Override
     public void logout(UUID uuid) throws RemoteException {
-
+        sessionRepository.deleteSession(uuid);
     }
 
 
