@@ -1,6 +1,6 @@
 package at.fhv.teame.domain.repositories;
 
-import at.fhv.teame.domain.SoundCarrier;
+import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.exceptions.OutOfStockException;
 

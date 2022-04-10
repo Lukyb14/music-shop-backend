@@ -1,9 +1,12 @@
 package at.fhv.teame.rmi;
 
 import at.fhv.teame.application.impl.PurchaseSoundCarrierServiceImpl;
+import at.fhv.teame.application.impl.SearchInvoiceServiceImpl;
 import at.fhv.teame.application.impl.SearchCustomerServiceImpl;
 import at.fhv.teame.application.impl.SearchSoundCarrierServiceImpl;
 import at.fhv.teame.sharedlib.rmi.PurchaseSoundCarrierService;
+import at.fhv.teame.sharedlib.rmi.SearchCustomerService;
+import at.fhv.teame.sharedlib.rmi.SearchInvoiceService;
 import at.fhv.teame.sharedlib.rmi.SearchCustomerService;
 import at.fhv.teame.sharedlib.rmi.SearchSoundCarrierService;
 import at.fhv.teame.sharedlib.rmi.factory.RMIFactory;
@@ -29,7 +32,15 @@ public class RMIFactoryImpl extends UnicastRemoteObject implements RMIFactory {
 
     @Override
     public SearchCustomerService createSearchCustomerServiceImpl() throws RemoteException {
+        return null;
+    }
+    @Override
+    public SearchCustomerService createSearchCustomerServiceImpl() throws RemoteException {
         return new SearchCustomerServiceImpl();
     }
 
+    @Override
+    public SearchInvoiceService createSearchInvoiceServiceImpl() throws RemoteException {
+        return new SearchInvoiceServiceImpl();
+    }
 }

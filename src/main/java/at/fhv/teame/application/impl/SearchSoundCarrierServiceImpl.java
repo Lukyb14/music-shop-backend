@@ -1,7 +1,7 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.domain.Song;
-import at.fhv.teame.domain.SoundCarrier;
+import at.fhv.teame.domain.model.soundcarrier.Song;
+import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.SongDTO;
@@ -14,9 +14,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SearchSoundCarrierServiceImpl extends UnicastRemoteObject implements SearchSoundCarrierService {
-    private final SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();
+    private final SoundCarrierRepository soundCarrierRepository;
 
-    public SearchSoundCarrierServiceImpl() throws RemoteException { super(); }
+    // default constructor with hibernate
+    public SearchSoundCarrierServiceImpl() throws RemoteException {
+         this(new HibernateSoundCarrierRepository());
+    }
+
+    // for mocking
+    public SearchSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository) throws RemoteException {
+        this.soundCarrierRepository = soundCarrierRepository;
+    }
 
     @Override
     public List<SoundCarrierDTO> soundCarriersByAlbumName(String album, int pageNr) throws RemoteException {
