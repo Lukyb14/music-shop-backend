@@ -24,11 +24,19 @@ import java.util.Map;
 
 public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject implements PurchaseSoundCarrierService {
 
-    private final SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();
-    private final InvoiceRepository invoiceRepository = new HibernateInvoiceRepository();
+    private final SoundCarrierRepository soundCarrierRepository;
+    private final InvoiceRepository invoiceRepository;
 
+    // default constructor with hibernate
     public PurchaseSoundCarrierServiceImpl() throws RemoteException {
-        super();
+        this.soundCarrierRepository = new HibernateSoundCarrierRepository();
+        this.invoiceRepository = new HibernateInvoiceRepository();
+    }
+
+    // for mocking
+    public PurchaseSoundCarrierServiceImpl(InvoiceRepository invoiceRepository, SoundCarrierRepository soundCarrierRepository) throws RemoteException {
+        this.soundCarrierRepository = soundCarrierRepository;
+        this.invoiceRepository = invoiceRepository;
     }
 
     @Override

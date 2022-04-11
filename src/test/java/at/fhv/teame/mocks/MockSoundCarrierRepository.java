@@ -59,7 +59,7 @@ public class MockSoundCarrierRepository implements SoundCarrierRepository {
 
     @Override
     public SoundCarrier soundCarrierByArticleId(String articleId) {
-        return null;
+        return createSoundCarrierDummy();
     }
 
 
