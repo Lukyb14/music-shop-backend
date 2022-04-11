@@ -6,4 +6,6 @@ public interface InvoiceRepository {
     void add(Invoice invoice);
 
     Invoice invoiceById(Long invoiceId);
+
+    void updateInvoiceLine(Long invoiceId, String articleId, int amountOfReturned);
 }

@@ -1,7 +1,5 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.domain.model.invoice.Invoice;
-import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
@@ -12,7 +10,6 @@ import at.fhv.teame.sharedlib.rmi.exceptions.WithdrawalFailedException;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
 import java.util.Map;
 
 public class ReturnSoundCarrierServiceImpl extends UnicastRemoteObject implements ReturnSoundCarrierService {
@@ -32,6 +29,21 @@ public class ReturnSoundCarrierServiceImpl extends UnicastRemoteObject implement
         }
         try {
             soundCarrierRepository.processWithdrawal(withdrawalDTO);
+            for (Map.Entry<String, Integer> entry : withdrawalDTO.getSoundCarrierWithAmount().entrySet()) {
+                if (entry.getValue() > 0) {
+                    invoiceRepository.updateInvoiceLine(
+                            Long.valueOf(withdrawalDTO.getInvoiceId()),
+                            entry.getKey(),
+                            entry.getValue()
+                    );
+
+                    /*InvoiceLine invoiceLine = invoiceRepository.invoiceLineByInvoiceIdAndArticleId(
+                            Long.valueOf(withdrawalDTO.getInvoiceId()), entry.getKey(), entry.getValue()
+                    );*/
+                    /*invoiceRepository.updateInvoiceLine(invoiceLine.getId(), entry.getValue());*/
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new WithdrawalFailedException();

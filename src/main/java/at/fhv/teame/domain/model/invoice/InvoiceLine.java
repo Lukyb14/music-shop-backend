@@ -33,6 +33,10 @@ public class InvoiceLine {
         this.amountOfReturnedItems = 0;
     }
 
+    public void updateAmountOfReturnedItems(int amount) {
+        amountOfReturnedItems = amountOfReturnedItems + amount;
+    }
+
     public Long getId() {
         return id;
     }
