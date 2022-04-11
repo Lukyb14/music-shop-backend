@@ -36,15 +36,14 @@ public class HibernateInvoiceRepository implements InvoiceRepository {
     }
 
     @Override
-    public void updateInvoiceLine(Long invoiceId, String articleId, int incrementAmount) {
+    public void updateInvoiceLine(String invoiceId, String articleId, int returnAmount) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         TypedQuery<InvoiceLine> query = entityManager.createQuery("SELECT DISTINCT il FROM InvoiceLine il JOIN SoundCarrier as s on s.id = il.soundCarrier.id WHERE s.articleId = :articleId AND il.invoice.id = :invoiceId", InvoiceLine.class);
-        query.setParameter("invoiceId", invoiceId);
+        query.setParameter("invoiceId", Long.valueOf(invoiceId));
         query.setParameter("articleId", articleId);
         InvoiceLine invoiceLine = query.getSingleResult();
-        invoiceLine.updateAmountOfReturnedItems(incrementAmount);
-
+        invoiceLine.updateAmountOfReturnedItems(returnAmount);
         entityManager.getTransaction().commit();
     }
 }

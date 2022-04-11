@@ -3,7 +3,6 @@ package at.fhv.teame.domain.repositories;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.exceptions.OutOfStockException;
-import at.fhv.teame.sharedlib.dto.WithdrawalDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,7 @@ public interface SoundCarrierRepository {
 
     void processPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws OutOfStockException, InvalidAmountException;
 
-    void processWithdrawal(WithdrawalDTO withdrawalDTO);
+    void fillStock(String articleId, int amount);
 
     List<SoundCarrier> soundCarriersByAlbumName(String album, int pageNr);
 

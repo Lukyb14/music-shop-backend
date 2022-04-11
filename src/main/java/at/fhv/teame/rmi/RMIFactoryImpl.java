@@ -40,7 +40,7 @@ public class RMIFactoryImpl extends UnicastRemoteObject implements RMIFactory {
 
     @Override
     public WithdrawSoundCarrierService createWithdrawSoundCarrierServiceImpl() throws RemoteException {
-        return new WithDrawSoundCarrierServiceImpl();
+        return new WithdrawalSoundCarrierServiceImpl();
     }
 
 }

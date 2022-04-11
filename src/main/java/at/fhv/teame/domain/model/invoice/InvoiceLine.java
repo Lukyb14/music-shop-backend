@@ -34,7 +34,9 @@ public class InvoiceLine {
     }
 
     public void updateAmountOfReturnedItems(int amount) {
-        amountOfReturnedItems = amountOfReturnedItems + amount;
+        if(amountOfReturnedItems <= quantity) {
+            amountOfReturnedItems = amountOfReturnedItems + amount;
+        }
     }
 
     public Long getId() {
