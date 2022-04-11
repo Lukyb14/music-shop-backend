@@ -4,6 +4,7 @@ import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.exceptions.OutOfStockException;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
+import at.fhv.teame.sharedlib.dto.WithdrawalDTO;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,6 +34,19 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
             entityManager.getTransaction().rollback();
             throw e;
         }
+    }
+
+    @Override
+    public void processWithdrawal(WithdrawalDTO withdrawalDTO) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        for (Map.Entry<String, Integer> entry : withdrawalDTO.getSoundCarrierWithAmount().entrySet()) {
+            TypedQuery<SoundCarrier> query = entityManager.createQuery("FROM SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
+            query.setParameter("articleId", entry.getKey());
+            SoundCarrier soundCarrier = query.getSingleResult();
+            soundCarrier.fillStock(entry.getValue());
+        }
+        entityManager.getTransaction().commit();
     }
 
     @Override

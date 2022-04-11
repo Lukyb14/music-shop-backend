@@ -20,8 +20,6 @@ public class InvoiceLine {
     @Column
     private BigDecimal price;
     @Column
-    private int amountOfReturnableItems;
-    @Column
     private int amountOfReturnedItems;
 
     // required by hibernate
@@ -32,8 +30,11 @@ public class InvoiceLine {
         this.soundCarrier = soundCarrier;
         this.quantity = quantity;
         this.price = price;
-        this.amountOfReturnableItems = quantity;
-        this.amountOfReturnedItems = quantity;
+        this.amountOfReturnedItems = 0;
+    }
+
+    public void updateAmountOfReturnedItems(int amount) {
+        amountOfReturnedItems = amountOfReturnedItems + amount;
     }
 
     public Long getId() {
@@ -55,11 +56,7 @@ public class InvoiceLine {
     public BigDecimal getPrice() {
         return price;
     }
-
-    public int getAmountOfReturnableItems() {
-        return amountOfReturnableItems;
-    }
-
+    
     public int getAmountOfReturnedItems() {
         return amountOfReturnedItems;
     }
