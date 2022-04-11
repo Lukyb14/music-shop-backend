@@ -1,6 +1,7 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.rmi.client.RMIClient;
+
+import at.fhv.teame.rmi.RMIClient;
 import at.fhv.teame.sharedlib.dto.CustomerDTO;
 import at.fhv.teame.sharedlib.rmi.SearchCustomerService;
 import java.rmi.RemoteException;
