@@ -11,6 +11,8 @@ public interface SoundCarrierRepository {
 
     void processPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws OutOfStockException, InvalidAmountException;
 
+    void fillStock(String articleId, int amount);
+
     List<SoundCarrier> soundCarriersByAlbumName(String album, int pageNr);
 
     List<SoundCarrier> soundCarriersByArtistName(String artist, int pageNr);
