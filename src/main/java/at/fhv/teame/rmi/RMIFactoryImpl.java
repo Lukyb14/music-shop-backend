@@ -35,7 +35,7 @@ public class RMIFactoryImpl extends UnicastRemoteObject implements RMIFactory {
 
     @Override
     public AuthenticationService createSearchAuthenticationServiceImpl() throws RemoteException {
-        return null;
+        return new AuthenticationServiceImpl();
     }
 
     @Override

@@ -14,7 +14,7 @@ class SearchCustomerServiceImplTest {
     void getCustomerByFullName() throws RemoteException {
         searchCustomerService = new SearchCustomerServiceImpl();
 
-        List<CustomerDTO> customerDTOS =  searchCustomerService.getCustomerByFullName("jos", "sto");
+        List<CustomerDTO> customerDTOS =  searchCustomerService.getCustomerByFullName("jos", "sto", 1);
 
         for(CustomerDTO customerDTO : customerDTOS) {
             System.out.println(customerDTO.getGivenName());
