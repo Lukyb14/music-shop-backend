@@ -5,6 +5,9 @@ import at.fhv.teame.application.impl.SearchInvoiceServiceImpl;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.model.invoice.PaymentMethod;
+import at.fhv.teame.domain.model.soundcarrier.Album;
+import at.fhv.teame.domain.model.soundcarrier.Medium;
+import at.fhv.teame.domain.model.soundcarrier.Song;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
@@ -19,10 +22,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,9 +40,103 @@ class InvoiceTest {
     }
 
     @Test
+    void getInvoiceById() {
+        // given
+        Long invoiceIdExpected = Long.valueOf(20001);
+
+        // when
+        Invoice invoice = invoiceRepository.invoiceById(invoiceIdExpected);
+        Long invoiceIdActual = invoice.getInvoiceId();
+        // then
+        assertEquals(invoiceIdExpected, invoiceIdActual);
+    }
+
+    @Test
+    void testInvoiceConstructorWithoutCustomer() {
+        //given
+        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
+
+        //when...then
+        assertEquals(LocalDate.of(2022,4,4), invoice.getDateOfPurchase());
+        assertEquals(PaymentMethod.CASH, invoice.getPaymentMethod());
+    }
+
+    @Test
+    void testInvoiceConstructorWithCustomer() {
+        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH,
+                "Umut", "Mueller",
+                "Kanal31, 6900 Bregenz");
+        //when...then
+        assertEquals(LocalDate.of(2022,4,4), invoice.getDateOfPurchase());
+        assertEquals(PaymentMethod.CASH, invoice.getPaymentMethod());
+        assertEquals("Umut", invoice.getCustomerFirstName());
+        assertEquals("Mueller", invoice.getCustomerLastName());
+        assertEquals("Kanal31, 6900 Bregenz", invoice.getCustomerAddress());
+
+    }
+
+    @Test
+    void testTotalPrice() {
+        // given
+        Long invoiceId = Long.valueOf(20001);
+
+        // when
+        Invoice invoice = invoiceRepository.invoiceById(invoiceId);
+        BigDecimal actualTotalPrice = invoice.getTotalPrice().setScale(2, RoundingMode.HALF_UP);
+
+        // then
+        assertEquals(new BigDecimal(15.99).setScale(2, RoundingMode.HALF_UP), actualTotalPrice);
+    }
+
+    @Test
+    void testPriceToRefund() {
+        // given
+        Long invoiceId = Long.valueOf(20001);
+
+        // when
+        Invoice invoice = invoiceRepository.invoiceById(invoiceId);
+        BigDecimal actualToRefund = invoice.getToRefund().setScale(2, RoundingMode.HALF_UP);
+
+        // then
+        assertEquals(new BigDecimal(15.99).setScale(2, RoundingMode.HALF_UP), actualToRefund);
+    }
+
+
+
+
+/* WIP
+    @Test
+    void testInvoiceLineConstructor() {
+        //given
+        List<Song> songs = new ArrayList<>();
+        Song song1 = new Song("Money For Nothing", LocalDate.of(1985, 1, 1));
+        songs.add(song1);
+
+        Album album = new Album("Brothers in Arms", "Mercury Records Limited",
+                LocalDate.of(1985,1,1),
+                songs, "Rock", "Dire Straits");
+
+        SoundCarrier soundCarrier = new SoundCarrier("1015", album, Medium.VINYL, new BigDecimal(5.99).setScale(2, RoundingMode.HALF_UP), 1);
+        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
+        int quantity = 1;
+        BigDecimal price = new BigDecimal(5.99).setScale(2, RoundingMode.HALF_UP);
+
+        InvoiceLine expectedInvoiceLine = new InvoiceLine(invoice, soundCarrier, quantity, price);
+        Long invoiceId = Long.valueOf(20001);
+
+
+
+
+
+
+    }
+
+
+ Ali's  TestHood
+    @Test
     void invoiceWithoutCustomerTest() {
         Map<String, Integer> purchasedItems = new HashMap<>();
-        purchasedItems.put("1161", 1);
+        purchasedItems.put("1020", 1);
         String paymentMethod = "cash";
 
         ShoppingCartDTO shoppingCartDTO = ShoppingCartDTO.builder()
@@ -79,21 +173,11 @@ class InvoiceTest {
         invoiceRepository.add(invoice);
 
         System.out.println(invoice.getInvoiceId());
-    }
+    }*/
 
-    @Test
-    void getInvoiceByIdTest() {
-        // given
-        Long invoiceIdExpected = Long.valueOf(20001);
 
-        // when
-        Invoice invoice = invoiceRepository.invoiceById(invoiceIdExpected);
-        Long invoiceIdActual = invoice.getInvoiceId();
-        // then
-        assertEquals(invoiceIdExpected, invoiceIdActual);
-    }
 
-    @Test
+/*    @Test
     void invoiceNumberTest() {
         SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();
 
@@ -151,5 +235,7 @@ class InvoiceTest {
         assertEquals("2022-04-07", invoiceDTO.getPurchaseDate());
         assertEquals("CASH", invoiceDTO.getPaymentMethod());
 
-    }
+    }*/
+
+
 }

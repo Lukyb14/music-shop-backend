@@ -22,6 +22,7 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.3.3'
     implementation 'com.github.Lukyb14:music-shop-sharedlib:v1.0.20'
     // implementation files('libs/music-shop-sharedlib.jar')
+
 }
 
 test {
