@@ -7,5 +7,5 @@ public interface InvoiceRepository {
 
     Invoice invoiceById(Long invoiceId);
 
-    void updateInvoiceLine(Long invoiceId, String articleId, int amountOfReturned);
+    void updateInvoiceLine(String invoiceId, String articleId, int amountOfReturned);
 }
