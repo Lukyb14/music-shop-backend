@@ -10,10 +10,15 @@ import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class MockSoundCarrierRepository implements SoundCarrierRepository {
+
+    static int nextArticleId = 10000;
+
+
     @Override
     public void processPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws OutOfStockException, InvalidAmountException {
 
@@ -21,22 +26,9 @@ public class MockSoundCarrierRepository implements SoundCarrierRepository {
 
     @Override
     public List<SoundCarrier> soundCarriersByAlbumName(String album, int pageNr) {
-        return List.of(
-                new SoundCarrier(
-                        "1000",
-                        new Album(
-                                "zachary",
-                                "label",
-                                LocalDate.of(2022, 1, 1),
-                                List.of(new Song(
-                                        "songname",
-                                        LocalDate.of(2022, 1, 1))),
-                                "genre",
-                                "artist"
-                        ),
-                        Medium.CD,
-                        BigDecimal.valueOf(12.99),
-                        3)
+        return Arrays.asList(
+                createSoundCarrierDummy(),
+                createSoundCarrierDummy()
         );
     }
 
@@ -68,5 +60,25 @@ public class MockSoundCarrierRepository implements SoundCarrierRepository {
     @Override
     public SoundCarrier soundCarrierByArticleId(String articleId) {
         return null;
+    }
+
+
+    public SoundCarrier createSoundCarrierDummy() {
+        return new SoundCarrier(
+                String.valueOf(nextArticleId++),
+                new Album("Black and White", "Black bars", LocalDate.of(2022,04,11), createSongListDummy(), "Pop", "Bob"),
+                Medium.VINYL,
+                BigDecimal.valueOf(20),
+                3
+        );
+    }
+
+
+    public List<Song> createSongListDummy() {
+        return Arrays.asList(
+                new Song("Hello World", LocalDate.of(2022, 04, 10)),
+                new Song("Apple M1", LocalDate.of(2022, 02, 10)),
+                new Song("Understruck", LocalDate.of(2022, 03, 10))
+        );
     }
 }
