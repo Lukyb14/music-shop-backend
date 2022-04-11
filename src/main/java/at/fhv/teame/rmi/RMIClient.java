@@ -1,4 +1,4 @@
-package at.fhv.teame.rmi.client;
+package at.fhv.teame.rmi;
 
 import at.fhv.teame.application.impl.SearchCustomerServiceImpl;
 import at.fhv.teame.sharedlib.rmi.SearchCustomerService;
