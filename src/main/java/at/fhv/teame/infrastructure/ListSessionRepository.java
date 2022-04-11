@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class ListSessionRepository implements SessionRepository {
 
-    private Set<Session> sessions = new HashSet<>();
+    private static final Set<Session> sessions = new HashSet<>();
 
     @Override
     public Session createSession(ClientUser clientUser) {

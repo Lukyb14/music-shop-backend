@@ -75,8 +75,12 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     }
 
     @Override
-    public void logout(UUID uuid) throws RemoteException {
-        sessionRepository.deleteSession(uuid);
+    public void logout(String sessionId) throws RemoteException {
+        try {
+            sessionRepository.deleteSession(UUID.fromString(sessionId));
+        } catch (IllegalArgumentException ignored) {
+            // if we can't create a UUID from the string, it is invalid and therefore does not exist anyway
+        }
     }
 
 
