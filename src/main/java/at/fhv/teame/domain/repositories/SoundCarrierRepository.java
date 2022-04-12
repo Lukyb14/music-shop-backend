@@ -13,6 +13,8 @@ public interface SoundCarrierRepository {
 
     void fillStock(String articleId, int amount);
 
+    void fillStock(String articleId, int amount);
+
     List<SoundCarrier> soundCarriersByAlbumName(String album, int pageNr);
 
     List<SoundCarrier> soundCarriersByArtistName(String artist, int pageNr);
