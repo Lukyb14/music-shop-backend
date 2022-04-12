@@ -146,7 +146,7 @@ public class SearchSoundCarrierServiceImpl extends UnicastRemoteObject implement
 
         for (int i = 0; i < songDto.length; i++) {
             Song s = songs.get(i);
-            songDto[i] = SongDTO.builder().withSongEntity(s.getTitle(), s.getRelease().toString()).build();
+            songDto[i] = SongDTO.builder().withSongEntity(s.getTitle(), s.getRelease().toString(), s.getDuration()).build();
         }
         return songDto;
     }
