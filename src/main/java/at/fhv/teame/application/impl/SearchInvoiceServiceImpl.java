@@ -19,11 +19,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements SearchInvoiceService {
-    private final InvoiceRepository invoiceRepository = new HibernateInvoiceRepository();
-    private final SessionRepository sessionRepository = new ListSessionRepository();
+    private final InvoiceRepository invoiceRepository;
+    private final SessionRepository sessionRepository;
 
     public SearchInvoiceServiceImpl() throws RemoteException {
-        super();
+        this(new HibernateInvoiceRepository(), new ListSessionRepository());
+    }
+
+    public SearchInvoiceServiceImpl(InvoiceRepository invoiceRepository, SessionRepository sessionRepository) throws RemoteException {
+        this.invoiceRepository = invoiceRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override

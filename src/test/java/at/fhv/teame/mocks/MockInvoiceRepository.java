@@ -13,4 +13,9 @@ public class MockInvoiceRepository implements InvoiceRepository{
     public Invoice invoiceById(Long invoiceId) {
         return null;
     }
+
+    @Override
+    public void updateInvoiceLine(String invoiceId, String articleId, int amountOfReturned) {
+
+    }
 }

@@ -13,7 +13,6 @@ import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.rmi.Session;
-import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import at.fhv.teame.sharedlib.rmi.PurchaseSoundCarrierService;
 import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
@@ -33,14 +32,14 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
 
     // default constructor with hibernate
     public PurchaseSoundCarrierServiceImpl() throws RemoteException {
-        this(new HibernateInvoiceRepository(), new HibernateSoundCarrierRepository());
+        this(new HibernateInvoiceRepository(), new HibernateSoundCarrierRepository(), new ListSessionRepository());
     }
 
     // for mocking
-    public PurchaseSoundCarrierServiceImpl(InvoiceRepository invoiceRepository, SoundCarrierRepository soundCarrierRepository) throws RemoteException {
+    public PurchaseSoundCarrierServiceImpl(InvoiceRepository invoiceRepository, SoundCarrierRepository soundCarrierRepository, SessionRepository sessionRepository) throws RemoteException {
         this.soundCarrierRepository = soundCarrierRepository;
         this.invoiceRepository = invoiceRepository;
-        this.sessionRepository = new ListSessionRepository();
+        this.sessionRepository = sessionRepository;
     }
 
     @Override

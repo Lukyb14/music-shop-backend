@@ -25,8 +25,12 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     private final SessionRepository sessionRepository;
 
     public AuthenticationServiceImpl() throws RemoteException {
-        userRepository = new HibernateUserRepository();
-        sessionRepository = new ListSessionRepository();
+        this(new HibernateUserRepository(), new ListSessionRepository());
+    }
+
+    public AuthenticationServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) throws RemoteException {
+        this.userRepository = userRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override

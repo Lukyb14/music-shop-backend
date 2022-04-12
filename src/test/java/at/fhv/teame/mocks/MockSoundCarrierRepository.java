@@ -81,9 +81,9 @@ public class MockSoundCarrierRepository implements SoundCarrierRepository {
 
     public List<Song> createSongListDummy() {
         return Arrays.asList(
-                new Song("Hello World", LocalDate.of(2022, 04, 10)),
-                new Song("Apple M1", LocalDate.of(2022, 02, 10)),
-                new Song("Understruck", LocalDate.of(2022, 03, 10))
+                new Song("Hello World", LocalDate.of(2022, 04, 10), "2:42"),
+                new Song("Apple M1", LocalDate.of(2022, 02, 10), "3:42"),
+                new Song("Understruck", LocalDate.of(2022, 03, 10), "4:13")
         );
     }
 }

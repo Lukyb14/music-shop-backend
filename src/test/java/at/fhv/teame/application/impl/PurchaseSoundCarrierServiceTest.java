@@ -2,13 +2,11 @@ package at.fhv.teame.application.impl;
 
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
-import at.fhv.teame.domain.model.soundcarrier.Album;
-import at.fhv.teame.domain.model.soundcarrier.Medium;
-import at.fhv.teame.domain.model.soundcarrier.Song;
-import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.mocks.MockInvoiceRepository;
+import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
+import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.rmi.exceptions.PurchaseFailedException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,9 +15,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +28,7 @@ public class PurchaseSoundCarrierServiceTest {
 
     @BeforeAll
     static void beforeAll() throws RemoteException {
-        purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl(new MockInvoiceRepository(), new MockSoundCarrierRepository());
+        purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl(new MockInvoiceRepository(), new MockSoundCarrierRepository(), new MockSessionRepository());
     }
 
     @Test
@@ -50,12 +47,12 @@ public class PurchaseSoundCarrierServiceTest {
 
         //then
         assertThrows(PurchaseFailedException.class, () -> {
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
+            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO, UUID.randomUUID().toString()); // TODO add session uuid here
         });
     }
 
     @Test
-    void given_ShoppingCartDtoAndPurchasedItems_when_confirmPurchase_then_NoException() throws RemoteException, PurchaseFailedException {
+    void given_ShoppingCartDtoAndPurchasedItems_when_confirmPurchase_then_NoException() throws RemoteException, PurchaseFailedException, InvalidSessionException {
         //given
         HashMap<String, Integer> expectedPurchasedItems = new HashMap<>();
         expectedPurchasedItems.put("100001", 1);
@@ -69,7 +66,7 @@ public class PurchaseSoundCarrierServiceTest {
                 .build();
 
         //when
-        purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
+        purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO, UUID.randomUUID().toString());
 
         //then
         assertDoesNotThrow(PurchaseFailedException::new);
@@ -120,8 +117,8 @@ public class PurchaseSoundCarrierServiceTest {
                         expectedPurchasedItems,
                         "CASH",
                         "guest",
-                        null,
-                        null)
+                        "",
+                        "")
                 .build();
 
         //when
