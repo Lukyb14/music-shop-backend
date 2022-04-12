@@ -1,58 +1,124 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.soundcarrier.Song;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
+import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
+import at.fhv.teame.infrastructure.ListSessionRepository;
+import at.fhv.teame.rmi.Session;
 import at.fhv.teame.sharedlib.dto.SongDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
 import at.fhv.teame.sharedlib.rmi.SearchSoundCarrierService;
+import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 public class SearchSoundCarrierServiceImpl extends UnicastRemoteObject implements SearchSoundCarrierService {
-    private final SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();
+    private final SoundCarrierRepository soundCarrierRepository;
+    private final SessionRepository sessionRepository;
 
-    public SearchSoundCarrierServiceImpl() throws RemoteException { super(); }
+    // default constructor with hibernate
+    public SearchSoundCarrierServiceImpl() throws RemoteException {
+         this(new HibernateSoundCarrierRepository());
+    }
+
+    // for mocking
+    public SearchSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository) throws RemoteException {
+        this.soundCarrierRepository = soundCarrierRepository;
+        this.sessionRepository = new ListSessionRepository();
+    }
 
     @Override
-    public List<SoundCarrierDTO> soundCarriersByAlbumName(String album, int pageNr) throws RemoteException {
+    public List<SoundCarrierDTO> soundCarriersByAlbumName(String album, int pageNr, String sessionId) throws RemoteException, InvalidSessionException {
+        try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if (!session.isSeller()) throw new InvalidSessionException();
+        } catch (SessionNotFoundException ignored) {
+            throw new InvalidSessionException();
+        }
+
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByAlbumName(album, pageNr);
         return buildSoundCarrierDtos(soundCarriers);
     }
 
     @Override
-    public int totResultsByAlbumName(String album) throws RemoteException {
+    public int totResultsByAlbumName(String album, String sessionId) throws RemoteException, InvalidSessionException {
+        try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if (!session.isSeller()) throw new InvalidSessionException();
+        } catch (SessionNotFoundException ignored) {
+            throw new InvalidSessionException();
+        }
+
         return soundCarrierRepository.totResultsByAlbumName(album).intValue();
     }
 
     @Override
-    public List<SoundCarrierDTO> soundCarriersByArtistName(String artist, int pageNr) throws RemoteException {
+    public List<SoundCarrierDTO> soundCarriersByArtistName(String artist, int pageNr, String sessionId) throws RemoteException, InvalidSessionException {
+        try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if (!session.isSeller()) throw new InvalidSessionException();
+        } catch (SessionNotFoundException ignored) {
+            throw new InvalidSessionException();
+        }
+
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByArtistName(artist, pageNr);
         return buildSoundCarrierDtos(soundCarriers);
     }
 
     @Override
-    public int totResultsByArtistName(String artist) throws RemoteException {
+    public int totResultsByArtistName(String artist, String sessionId) throws RemoteException, InvalidSessionException {
+        try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if (!session.isSeller()) throw new InvalidSessionException();
+        } catch (SessionNotFoundException ignored) {
+            throw new InvalidSessionException();
+        }
+
         return soundCarrierRepository.totResultsByArtistName(artist).intValue();
     }
 
     @Override
-    public List<SoundCarrierDTO> soundCarriersBySongName(String song, int pageNr) throws RemoteException {
+    public List<SoundCarrierDTO> soundCarriersBySongName(String song, int pageNr, String sessionId) throws RemoteException, InvalidSessionException {
+        try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if (!session.isSeller()) throw new InvalidSessionException();
+        } catch (SessionNotFoundException ignored) {
+            throw new InvalidSessionException();
+        }
+
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersBySongName(song, pageNr);
         return buildSoundCarrierDtos(soundCarriers);
     }
 
     @Override
-    public int totResultsBySongName(String song) throws RemoteException {
+    public int totResultsBySongName(String song, String sessionId) throws RemoteException, InvalidSessionException {
+        try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if (!session.isSeller()) throw new InvalidSessionException();
+        } catch (SessionNotFoundException ignored) {
+            throw new InvalidSessionException();
+        }
+
         return soundCarrierRepository.totResultsBySongName(song).intValue();
     }
 
     @Override
-    public SoundCarrierDetailsDTO soundCarrierDetailsByArticleId(String articleId) throws RemoteException {
+    public SoundCarrierDetailsDTO soundCarrierDetailsByArticleId(String articleId, String sessionId) throws RemoteException, InvalidSessionException {
+        try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if (!session.isSeller()) throw new InvalidSessionException();
+        } catch (SessionNotFoundException ignored) {
+            throw new InvalidSessionException();
+        }
+
         SoundCarrier soundCarrier = soundCarrierRepository.soundCarrierByArticleId(articleId);
         return buildSoundCarrierDetailsDto(soundCarrier);
     }

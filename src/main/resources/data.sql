@@ -1,12 +1,8 @@
-/*
-SELECT * FROM album;
-SELECT * FROM song;
-SELECT * FROM soundcarrier;
- */
 DELETE FROM soundcarrier;
 DELETE FROM song;
 DELETE FROM album;
-DROP SEQUENCE seq_articleId;
+
+DROP SEQUENCE IF EXISTS seq_articleId;
 
 CREATE SEQUENCE seq_articleId START WITH 1000 INCREMENT BY 1;
 
@@ -515,3 +511,10 @@ INSERT INTO soundcarrier (id, articleid, medium, price, stock, album_id) VALUES 
 INSERT INTO soundcarrier (id, articleid, medium, price, stock, album_id) VALUES (62, nextval('"seq_articleid"'), 'CD', 13.59, 4, 32);
 INSERT INTO soundcarrier (id, articleid, medium, price, stock, album_id) VALUES (63, nextval('"seq_articleid"'), 'VINYL', 5.99, 2, 33);
 
+INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('har9090', 'Hüseyin', 'Arziman', 'ADMINISTRATOR');
+INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('lbo3144', 'Lukas', 'Boch', 'OPERATOR');
+INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('uca1511', 'Umut Can', 'Çağlayan', 'SELLER');
+INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('yce5586', 'Yusuf', 'Cetinkaya', 'ADMINISTRATOR');
+INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('aci9089', 'Ali', 'Çinar', 'OPERATOR');
+INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('auk6104', 'Abdul-Halim', 'Ukaiev', 'SELLER');
+INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('zsa2157', 'Zikrihan', 'Sahin', 'ADMINISTRATOR');
