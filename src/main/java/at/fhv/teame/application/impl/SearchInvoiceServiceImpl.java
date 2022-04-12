@@ -1,26 +1,40 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
+import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
+import at.fhv.teame.infrastructure.ListSessionRepository;
+import at.fhv.teame.rmi.Session;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
 import at.fhv.teame.sharedlib.rmi.SearchInvoiceService;
+import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+import java.util.UUID;
 
 public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements SearchInvoiceService {
     private final InvoiceRepository invoiceRepository = new HibernateInvoiceRepository();
+    private final SessionRepository sessionRepository = new ListSessionRepository();
 
     public SearchInvoiceServiceImpl() throws RemoteException {
         super();
     }
 
     @Override
-    public InvoiceDTO invoiceById(String invoiceId) throws RemoteException {
+    public InvoiceDTO invoiceById(String invoiceId, String sessionId) throws RemoteException, InvalidSessionException {
+        try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if (!session.isSeller()) throw new InvalidSessionException();
+        } catch (SessionNotFoundException ignored) {
+            throw new InvalidSessionException();
+        }
+
        Invoice invoice = invoiceRepository.invoiceById(Long.valueOf(invoiceId));
        return buildInvoiceDTO(invoice);
 
