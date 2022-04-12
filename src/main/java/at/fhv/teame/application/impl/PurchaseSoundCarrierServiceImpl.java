@@ -46,7 +46,7 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
             throw new PurchaseFailedException();
         }
         try {
-            soundCarrierRepository.processPurchase(shoppingCartDTO.getPurchasedItems(), shoppingCartDTO.getPaymentMethod());
+            soundCarrierRepository.processPurchase(shoppingCartDTO.getPurchasedItems());
             Invoice invoice = createInvoice(shoppingCartDTO);
             invoiceRepository.add(invoice);
         } catch (Exception e) {
@@ -62,15 +62,15 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
 
         Invoice invoice;
 
-        if (shoppingCartDTO.getCustomerFirstName().equalsIgnoreCase("guest")) {
+        if (shoppingCartDTO.getCustomerLastName().equalsIgnoreCase("guest")) {
             invoice = new Invoice(
                     LocalDate.now(),
-                    PaymentMethod.valueOf(shoppingCartDTO.getPaymentMethod().toUpperCase(Locale.ROOT))
+                    PaymentMethod.valueOf(shoppingCartDTO.getPaymentMethod())
             );
         } else {
             invoice = new Invoice(
                     LocalDate.now(),
-                    PaymentMethod.valueOf(shoppingCartDTO.getPaymentMethod().toUpperCase(Locale.ROOT)),
+                    PaymentMethod.valueOf(shoppingCartDTO.getPaymentMethod()),
                     shoppingCartDTO.getCustomerFirstName(),
                     shoppingCartDTO.getCustomerLastName(),
                     shoppingCartDTO.getCustomerAddress()

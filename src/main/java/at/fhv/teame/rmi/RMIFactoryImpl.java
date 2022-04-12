@@ -34,6 +34,12 @@ public class RMIFactoryImpl extends UnicastRemoteObject implements RMIFactory {
     }
 
     @Override
+    public WithdrawSoundCarrierService createWithdrawSoundCarrierServiceImpl() throws RemoteException {
+        return new WithdrawalSoundCarrierServiceImpl();
+    }
+
+
+    @Override
     public AuthenticationService createSearchAuthenticationServiceImpl() throws RemoteException {
         return new AuthenticationServiceImpl();
     }
