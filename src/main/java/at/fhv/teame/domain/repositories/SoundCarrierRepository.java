@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface SoundCarrierRepository {
 
-    void processPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws OutOfStockException, InvalidAmountException;
+    void processPurchase(Map<String, Integer> shoppingCartItems) throws OutOfStockException, InvalidAmountException;
 
     void fillStock(String articleId, int amount);
 
