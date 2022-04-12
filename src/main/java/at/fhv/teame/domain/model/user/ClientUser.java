@@ -17,6 +17,13 @@ public class ClientUser {
     protected ClientUser() {
     }
 
+    public ClientUser(String cn, String firstName, String lastName, Role role) {
+        this.cn = cn;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+    }
+
     public String getCn() {
         return cn;
     }

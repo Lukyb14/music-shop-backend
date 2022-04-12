@@ -18,11 +18,16 @@ import java.util.UUID;
 
 public class SearchCustomerServiceImpl extends UnicastRemoteObject implements SearchCustomerService {
 
-    private final CustomerService searchCustomerService = RMIClient.getInstanceCustomerService();
-    private final SessionRepository sessionRepository = new ListSessionRepository();
+    private final CustomerService searchCustomerService;
+    private final SessionRepository sessionRepository;
 
     public SearchCustomerServiceImpl() throws RemoteException {
-        super();
+        this(RMIClient.getInstanceCustomerService(), new ListSessionRepository());
+    }
+
+    public SearchCustomerServiceImpl(CustomerService customerService, SessionRepository sessionRepository) throws RemoteException {
+        this.searchCustomerService = customerService;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override

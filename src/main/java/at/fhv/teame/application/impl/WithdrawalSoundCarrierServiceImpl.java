@@ -12,13 +12,17 @@ import java.util.Map;
 
 public class WithdrawalSoundCarrierServiceImpl extends UnicastRemoteObject implements WithdrawSoundCarrierService {
 
-    private final SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();
-    private final InvoiceRepository invoiceRepository = new HibernateInvoiceRepository();
+    private final SoundCarrierRepository soundCarrierRepository;
+    private final InvoiceRepository invoiceRepository;
 
     public WithdrawalSoundCarrierServiceImpl() throws RemoteException {
-        super();
+        this(new HibernateSoundCarrierRepository(), new HibernateInvoiceRepository());
     }
 
+    public WithdrawalSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, InvoiceRepository invoiceRepository) throws RemoteException {
+        this.soundCarrierRepository = soundCarrierRepository;
+        this.invoiceRepository = invoiceRepository;
+    }
 
     @Override
     public void withdrawSoundCarrier(String invoiceId, Map<String, Integer> soundCarrierReturnAmountMap) throws WithdrawalFailedException, RemoteException {

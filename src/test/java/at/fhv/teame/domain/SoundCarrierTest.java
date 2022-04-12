@@ -21,7 +21,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SoundCarrierTest {
+class SoundCarrierTest {
 
 
 
@@ -44,7 +44,7 @@ public class SoundCarrierTest {
         String paymentMethod = "cash";
 
         //when...then
-        assertThrows(OutOfStockException.class, () -> soundCarrierRepository.processPurchase(purchasedItems, paymentMethod));
+        assertThrows(OutOfStockException.class, () -> soundCarrierRepository.processPurchase(purchasedItems));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class SoundCarrierTest {
         String paymentMethod = "cash";
 
         //when...then
-        assertThrows(InvalidAmountException.class, () -> soundCarrierRepository.processPurchase(purchasedItems, paymentMethod));
+        assertThrows(InvalidAmountException.class, () -> soundCarrierRepository.processPurchase(purchasedItems));
     }
 
 
@@ -122,9 +122,9 @@ public class SoundCarrierTest {
         BigDecimal expectedPrice = new BigDecimal(5.99).setScale(2, RoundingMode.HALF_UP);
         int expectedStock = 1;
         List<Song> expectedSongs = new ArrayList<>();
-        Song song1 = new Song("Money For Nothing", LocalDate.of(1985, 1, 1));
-        Song song2 = new Song("Walk of Life", LocalDate.of(1985,1,1));
-        Song song3 = new Song("Brothers in Arms", LocalDate.of(1985,1,1));
+        Song song1 = new Song("Money For Nothing", LocalDate.of(1985, 1, 1), "03:41");
+        Song song2 = new Song("Walk of Life", LocalDate.of(1985,1,1), "03:21");
+        Song song3 = new Song("Brothers in Arms", LocalDate.of(1985,1,1), "04:22");
         expectedSongs.add(song1);
         expectedSongs.add(song2);
         expectedSongs.add(song3);
@@ -164,7 +164,7 @@ public class SoundCarrierTest {
     void testSoundCarrierConstructor () {
         //given
         List<Song> songs = new ArrayList<>();
-        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1));
+        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
         songs.add(song1);
 
         Album album = new Album("Testname", "TestLabel",
@@ -189,7 +189,7 @@ public class SoundCarrierTest {
     void testAlbumSongsAndReleaseDate() {
         //given
         List<Song> expectedSongs = new ArrayList<>();
-        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1));
+        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "04:31");
         expectedSongs.add(song1);
         Album album = new Album("Testname", "TestLabel",
                 LocalDate.of(1985,1,1),
@@ -212,17 +212,11 @@ public class SoundCarrierTest {
         LocalDate releaseDate = LocalDate.of(2010,1,1);
 
         //when
-        Song song = new Song("Perfect Strangers", LocalDate.of(2010,1,1));
+        Song song = new Song("Perfect Strangers", LocalDate.of(2010,1,1), "04:17");
 
         //then
         assertEquals(songTitle, song.getTitle());
         assertEquals(releaseDate, song.getRelease());
 
     }
-
-
-
-
-
-
 }

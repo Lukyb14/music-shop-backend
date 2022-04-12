@@ -26,13 +26,13 @@ public class SearchSoundCarrierServiceImpl extends UnicastRemoteObject implement
 
     // default constructor with hibernate
     public SearchSoundCarrierServiceImpl() throws RemoteException {
-         this(new HibernateSoundCarrierRepository());
+         this(new HibernateSoundCarrierRepository(), new ListSessionRepository());
     }
 
     // for mocking
-    public SearchSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository) throws RemoteException {
+    public SearchSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, SessionRepository sessionRepository) throws RemoteException {
         this.soundCarrierRepository = soundCarrierRepository;
-        this.sessionRepository = new ListSessionRepository();
+        this.sessionRepository = sessionRepository;
     }
 
     @Override
