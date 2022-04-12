@@ -16,9 +16,6 @@ import java.util.Map;
 
 public class MockSoundCarrierRepository implements SoundCarrierRepository {
 
-    static int nextArticleId = 10000;
-
-
     @Override
     public void processPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws OutOfStockException, InvalidAmountException {
 
@@ -34,38 +31,41 @@ public class MockSoundCarrierRepository implements SoundCarrierRepository {
 
     @Override
     public List<SoundCarrier> soundCarriersByArtistName(String artist, int pageNr) {
-        return null;
+        return Arrays.asList(
+                createSoundCarrierDummy(),
+                createSoundCarrierDummy()
+        );
     }
 
     @Override
     public List<SoundCarrier> soundCarriersBySongName(String song, int pageNr) {
-        return null;
+        return Arrays.asList(
+                createSoundCarrierDummy(),
+                createSoundCarrierDummy()
+        );
     }
 
     @Override
-    public Long totResultsByAlbumName(String album) {
-        return null;
-    }
+    public Long totResultsByAlbumName(String album) {return 2L;}
 
     @Override
     public Long totResultsByArtistName(String artist) {
-        return null;
+        return 2L;
     }
 
     @Override
     public Long totResultsBySongName(String song) {
-        return null;
+        return 2L;
     }
 
     @Override
     public SoundCarrier soundCarrierByArticleId(String articleId) {
-        return null;
+        return createSoundCarrierDummy();
     }
-
 
     public SoundCarrier createSoundCarrierDummy() {
         return new SoundCarrier(
-                String.valueOf(nextArticleId++),
+                String.valueOf(100),
                 new Album("Black and White", "Black bars", LocalDate.of(2022,04,11), createSongListDummy(), "Pop", "Bob"),
                 Medium.VINYL,
                 BigDecimal.valueOf(20),
