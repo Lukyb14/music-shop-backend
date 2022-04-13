@@ -1,9 +1,12 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.soundcarrier.Album;
 import at.fhv.teame.domain.model.soundcarrier.Medium;
 import at.fhv.teame.domain.model.soundcarrier.Song;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
+import at.fhv.teame.domain.model.user.ClientUser;
+import at.fhv.teame.domain.model.user.Role;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.SongDTO;
@@ -11,26 +14,27 @@ import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
 import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SearchSoundCarrierServiceTest {
 
-    static SearchSoundCarrierServiceImpl searchSoundCarrierService;
+    private SearchSoundCarrierServiceImpl searchSoundCarrierService;
 
-    @BeforeAll
-    static void beforeAll() throws RemoteException {
-        searchSoundCarrierService = new SearchSoundCarrierServiceImpl(new MockSoundCarrierRepository(), new MockSessionRepository());
+    private MockSessionRepository mockSessionRepository;
+
+
+    @BeforeEach
+    void beforeAll() throws RemoteException {
+        mockSessionRepository = new MockSessionRepository();
+        searchSoundCarrierService = new SearchSoundCarrierServiceImpl(new MockSoundCarrierRepository(), mockSessionRepository);
     }
 
     @Test
@@ -57,6 +61,26 @@ class SearchSoundCarrierServiceTest {
         for (SoundCarrierDTO s : soundCarriersDtoActual) {
             assertTrue(soundCarrierDtosExpected.contains(s));
         }
+    }
+
+    @Test
+    void given_invalidsessionrole_when_soundcarriersByAlbumName_then_throws() {
+        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
+
+        //when..then
+        assertThrows(InvalidSessionException.class, () -> {
+            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1, UUID.randomUUID().toString());
+        }, "InvalidSessionException was expected");
+    }
+
+    @Test
+    void given_invalidsessionId_when_soundcarriersByAlbumName_then_throws() {
+        //when..then
+        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
+
+        assertThrows(InvalidSessionException.class, () -> {
+            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1, invalidSession);
+        }, "InvalidSessionException was expected");
     }
 
     @Test
