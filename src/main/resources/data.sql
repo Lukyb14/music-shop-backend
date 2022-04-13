@@ -518,3 +518,4 @@ INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('yce5586', 'Yusuf
 INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('aci9089', 'Ali', 'Çinar', 'OPERATOR');
 INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('auk6104', 'Abdul-Halim', 'Ukaiev', 'SELLER');
 INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('zsa2157', 'Zikrihan', 'Sahin', 'ADMINISTRATOR');
+INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('tf-test', 'Test', 'Test', 'ADMINISTRATOR');
