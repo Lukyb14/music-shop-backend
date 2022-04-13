@@ -24,8 +24,6 @@ public class PurchaseSoundCarrierServiceTest {
 
     static PurchaseSoundCarrierServiceImpl purchaseSoundCarrierService;
 
-    static int nextArticleId = 10000;
-
     @BeforeAll
     static void beforeAll() throws RemoteException {
         purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl(new MockInvoiceRepository(), new MockSoundCarrierRepository(), new MockSessionRepository());
@@ -135,7 +133,7 @@ public class PurchaseSoundCarrierServiceTest {
         assertEquals(invoiceLineExpected.getPrice(), invoiceActual.getPurchasedItems().get(0).getPrice());
         assertEquals(invoiceLineExpected.getQuantity(), invoiceActual.getPurchasedItems().get(0).getQuantity());
         assertEquals(LocalDate.now(), invoiceActual.getDateOfPurchase());
-        assertEquals(null, invoiceActual.getCustomerFirstName());
+        assertEquals("guest", invoiceActual.getCustomerFirstName());
         assertEquals(shoppingCartDTO.getPaymentMethod(), invoiceActual.getPaymentMethod().toString());
         assertEquals(BigDecimal.valueOf(20).setScale(2,  RoundingMode.HALF_UP), invoiceActual.getToRefund());
 

@@ -34,7 +34,7 @@ class SearchSoundCarrierServiceTest {
     }
 
     @Test
-    void given_2soundCarriersinrepository_when_soundCarriersByAlbumName_then_expectsoundCarrierssequals() throws RemoteException, InvalidSessionException {
+    void given_2soundcarriersinrepository_when_soundcarriersByAlbumName_then_expectsoundcarrierssequals() throws RemoteException, InvalidSessionException {
         //given
         List<SoundCarrier> soundCarriers = Arrays.asList(
                 createSoundCarrierDummy(),
@@ -60,28 +60,19 @@ class SearchSoundCarrierServiceTest {
     }
 
     @Test
-    void given_2soundCarriersinrepository_when_totResultsByAlbumName_then_expecttotResultsByAlbumNameequals() throws RemoteException, InvalidSessionException {
+    void given_totResultsExpected_when_totResultsByAlbumName_then_totResultsequals() throws RemoteException, InvalidSessionException {
         //given
-        List<SoundCarrier> soundCarriers = Arrays.asList(
-                createSoundCarrierDummy(),
-                createSoundCarrierDummy()
-        );
+        int totResultsExpected = 2;
 
         //when
-        int counter = 0;
-        for (SoundCarrier s: soundCarriers) {
-            if (s.getAlbumName().equals("Black and White")){
-                counter = counter +  1;
-            }
-        }
-        int totResults = searchSoundCarrierService.totResultsByAlbumName("Black and White", UUID.randomUUID().toString());
+        int totResultsActual = searchSoundCarrierService.totResultsByAlbumName("Black and White", UUID.randomUUID().toString());
 
         //then
-        assertEquals(totResults, counter);
+        assertEquals(totResultsExpected, totResultsActual);
     }
 
     @Test
-    void given_2soundCarriersinrepository_when_soundCarriersByArtistName_then_expectsoundsCarriersequals() throws RemoteException, InvalidSessionException {
+    void given_2soundcarriersinrepository_when_soundcarriersByArtistName_then_expectsoundscarriersequals() throws RemoteException, InvalidSessionException {
         //given
         List<SoundCarrier> soundCarriers = Arrays.asList(
                 createSoundCarrierDummy(),
@@ -107,28 +98,19 @@ class SearchSoundCarrierServiceTest {
     }
 
     @Test
-    void given_2soundCarriersinrepository_when_totResultsByArtistName_then_expecttotResultsByArtistNameequals() throws RemoteException, InvalidSessionException {
+    void given_totResultsExpected_when_totResultsByArtistName_then_totResultsequals() throws RemoteException, InvalidSessionException {
         //given
-        List<SoundCarrier> soundCarriers = Arrays.asList(
-                createSoundCarrierDummy(),
-                createSoundCarrierDummy()
-        );
+        int totResultsExpected = 2;
 
         //when
-        int counter = 0;
-        for (SoundCarrier s: soundCarriers) {
-            if (s.getAlbumArtist().equals("Bob")){
-                counter = counter +  1;
-            }
-        }
-        int totResults = searchSoundCarrierService.totResultsByArtistName("Bob", UUID.randomUUID().toString());
+        int totResultsActual = searchSoundCarrierService.totResultsByArtistName("Bob", UUID.randomUUID().toString());
 
         //then
-        assertEquals(totResults, counter);
+        assertEquals(totResultsExpected, totResultsActual);
     }
 
     @Test
-    void given_2soundCarriersinrepository_when_soundCarriersBySongName_then_expectsoundsCarriersequals() throws RemoteException, InvalidSessionException {
+    void given_2soundcarriersinrepository_when_soundcarriersBySongName_then_expectsoundscarriersequals() throws RemoteException, InvalidSessionException {
         //given
         List<SoundCarrier> soundCarriers = Arrays.asList(
                 createSoundCarrierDummy(),
@@ -154,49 +136,59 @@ class SearchSoundCarrierServiceTest {
     }
 
     @Test
-    void given_2soundCarriersinrepository_when_totResultsBySongName_then_expecttotResultsBySongNameequals() throws RemoteException, InvalidSessionException {
+    void given_totResultsExpected_when_totResultsBySongName_then_totResultsequals() throws RemoteException, InvalidSessionException {
         //given
-        List<SoundCarrier> soundCarriers = Arrays.asList(
-                createSoundCarrierDummy(),
-                createSoundCarrierDummy()
-        );
+        int totResultsExpected = 2;
 
         //when
-        int counter = 2;
-        int totResults = searchSoundCarrierService.totResultsBySongName("Hello World", UUID.randomUUID().toString());
+        int totResultsActual = searchSoundCarrierService.totResultsBySongName("Hello World", UUID.randomUUID().toString());
 
         //then
-        assertEquals(totResults, counter);
+        assertEquals(totResultsExpected, totResultsActual);
     }
 
     @Test
-    void given_1soundCarriersinrepository_when_soundCarrierDetailsByArticleId_then_SoundcarriersDetailDTOequals() throws RemoteException, InvalidSessionException {
+    void given_soundcarrierinrepository_when_soundcarrierdetailsByArticleId_then_detailsequals() throws RemoteException, InvalidSessionException {
         //given
-        SoundCarrier soundCarrierexpected = createSoundCarrierDummy();
+        SoundCarrier s = createSoundCarrierDummy();
+
+        SoundCarrierDetailsDTO soundCarrierDetailsDTOExpected = SoundCarrierDetailsDTO.builder()
+                .withSoundCarrierEntity(s.getArticleId(), s.getMedium(), s.getPrice().toString(), s.getStock())
+                .withAlbumEntity(s.getAlbumName(), s.getAlbumLabel(), s.getAlbumGenre(), s.getAlbumArtist(), buildSongDtos(s.getAlbumSongs()))
+                .build();
 
         //when
-        SoundCarrierDetailsDTO soundCarrierDetailsDTOactual = searchSoundCarrierService.soundCarrierDetailsByArticleId("100", UUID.randomUUID().toString());
+        SoundCarrierDetailsDTO soundCarrierDetailsDTOActual = searchSoundCarrierService.soundCarrierDetailsByArticleId("100", UUID.randomUUID().toString());
 
         //then
-        assertEquals(soundCarrierexpected.getArticleId(), soundCarrierDetailsDTOactual.getArticleId());
+        assertEquals(soundCarrierDetailsDTOExpected, soundCarrierDetailsDTOActual);
     }
 
-    public SoundCarrier createSoundCarrierDummy() {
+
+    private SoundCarrier createSoundCarrierDummy() {
         return new SoundCarrier(
                 String.valueOf(100),
-                new Album("Black and White", "Black bars", LocalDate.of(2022,04,11), createSongListDummy(), "Pop", "Bob"),
+                new Album("Black and White", "Black bars", LocalDate.of(2022, 04, 11), createSongListDummy(), "Pop", "Bob"),
                 Medium.VINYL,
                 BigDecimal.valueOf(20),
                 3
         );
     }
 
-
-    public List<Song> createSongListDummy() {
+    private List<Song> createSongListDummy() {
         return Arrays.asList(
                 new Song("Hello World", LocalDate.of(2022, 04, 10), "3:10"),
                 new Song("Apple M1", LocalDate.of(2022, 02, 10), "2:54"),
                 new Song("Understruck", LocalDate.of(2022, 03, 10), "4:03")
         );
+    }
+
+    private SongDTO[] buildSongDtos(List<Song> songs) {
+        SongDTO[] songDto = new SongDTO[songs.size()];
+        for (int i = 0; i < songDto.length; i++) {
+            Song s = songs.get(i);
+            songDto[i] = SongDTO.builder().withSongEntity(s.getTitle(), s.getRelease().toString(), s.getDuration()).build();
+        }
+        return songDto;
     }
 }
