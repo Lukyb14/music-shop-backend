@@ -22,10 +22,12 @@ public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements Sea
     private final InvoiceRepository invoiceRepository;
     private final SessionRepository sessionRepository;
 
+    // default constructor with hibernate
     public SearchInvoiceServiceImpl() throws RemoteException {
         this(new HibernateInvoiceRepository(), new ListSessionRepository());
     }
 
+    //for mocking
     public SearchInvoiceServiceImpl(InvoiceRepository invoiceRepository, SessionRepository sessionRepository) throws RemoteException {
         this.invoiceRepository = invoiceRepository;
         this.sessionRepository = sessionRepository;
