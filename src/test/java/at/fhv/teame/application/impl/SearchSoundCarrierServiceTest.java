@@ -29,7 +29,7 @@ class SearchSoundCarrierServiceTest {
 
 
     @BeforeEach
-    void beforeAll() throws RemoteException {
+    void beforeEach() throws RemoteException {
         mockSessionRepository = new MockSessionRepository();
         searchSoundCarrierService = new SearchSoundCarrierServiceImpl(new MockSoundCarrierRepository(), mockSessionRepository);
     }

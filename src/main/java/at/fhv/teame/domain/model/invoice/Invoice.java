@@ -41,9 +41,7 @@ public class Invoice {
         this.toRefund = new BigDecimal(0);
     }
 
-    public Invoice(LocalDate dateOfPurchase, PaymentMethod paymentMethod, String customerFirstName,
-                   String customerLastName, String customerAddress) {
-
+    public Invoice(LocalDate dateOfPurchase, PaymentMethod paymentMethod, String customerFirstName, String customerLastName, String customerAddress) {
         this.customerFirstName = customerFirstName;
         this.customerLastName = customerLastName;
         this.customerAddress = customerAddress;

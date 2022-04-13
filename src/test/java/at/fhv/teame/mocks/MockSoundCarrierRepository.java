@@ -17,8 +17,8 @@ import java.util.Map;
 public class MockSoundCarrierRepository implements SoundCarrierRepository {
 
     @Override
-    public void processPurchase(Map<String, Integer> shoppingCartItems) throws OutOfStockException, InvalidAmountException {
-
+    public void processPurchase(Map<String, Integer> shoppingCartItems) throws InvalidAmountException {
+        if(shoppingCartItems.containsValue(-1) ) throw new InvalidAmountException();
     }
 
     @Override
