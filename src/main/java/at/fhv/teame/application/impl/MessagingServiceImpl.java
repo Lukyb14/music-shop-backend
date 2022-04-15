@@ -1,13 +1,11 @@
 package at.fhv.teame.application.impl;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
 import at.fhv.teame.sharedlib.dto.PublishMessageDTO;
 import at.fhv.teame.sharedlib.rmi.MessageService;
 import at.fhv.teame.sharedlib.rmi.exceptions.PublishingFailedException;
+import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import java.rmi.RemoteException;
 
 public class MessagingServiceImpl implements MessageService {
