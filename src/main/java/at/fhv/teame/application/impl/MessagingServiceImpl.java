@@ -1,5 +1,7 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.domain.repositories.UserRepository;
+import at.fhv.teame.infrastructure.HibernateUserRepository;
 import at.fhv.teame.sharedlib.dto.PublishMessageDTO;
 import at.fhv.teame.sharedlib.rmi.MessageService;
 import at.fhv.teame.sharedlib.rmi.exceptions.PublishingFailedException;
@@ -8,12 +10,19 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import javax.jms.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 public class MessagingServiceImpl extends UnicastRemoteObject implements MessageService {
+    private final UserRepository userRepository;
 
-
+    //default constructor with hibernate
     public MessagingServiceImpl() throws RemoteException {
-        super();
+        this(new HibernateUserRepository());
+    }
+
+    //for mocking
+    public MessagingServiceImpl(UserRepository userRepository) throws RemoteException {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -25,9 +34,9 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
             Connection con = cf.createConnection();
             // create a JMS session
             Session sess = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination dest = sess.createTopic("System.Message");
+            Destination dest = sess.createTopic(publishMessageDTO.getTopic());
             // Create some Message and a MessageProducer with the session
-            TextMessage msg = sess.createTextMessage("HALIM");
+            TextMessage msg = sess.createTextMessage(publishMessageDTO.getContent());
             MessageProducer prod = sess.createProducer(dest);
             // send the message to the destination
             prod.send(msg);
@@ -39,6 +48,11 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
             e.printStackTrace();
             throw new PublishingFailedException();
         }
+    }
+
+    @Override
+    public List<String> allTopics() {
+        return userRepository.allTopics();
     }
 
 
