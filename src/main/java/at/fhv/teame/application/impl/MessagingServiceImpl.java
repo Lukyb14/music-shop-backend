@@ -7,9 +7,14 @@ import at.fhv.teame.sharedlib.rmi.exceptions.PublishingFailedException;
 
 import javax.jms.*;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class MessagingServiceImpl implements MessageService {
+public class MessagingServiceImpl extends UnicastRemoteObject implements MessageService {
 
+
+    public MessagingServiceImpl() throws RemoteException {
+        super();
+    }
 
     @Override
     public void publishMessage(PublishMessageDTO publishMessageDTO, String sessionId) throws RemoteException, PublishingFailedException {
