@@ -64,6 +64,8 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
                 Session session = sessionRepository.createSession(clientUser);
 
 
+
+
                 return new SessionDTO(session.getSessionId().toString(), clientUser.getRole().toString());
             } catch (Exception e) {
                 // invalid password

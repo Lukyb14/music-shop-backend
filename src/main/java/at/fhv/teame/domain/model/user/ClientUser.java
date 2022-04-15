@@ -1,6 +1,11 @@
 package at.fhv.teame.domain.model.user;
 
+import at.fhv.teame.domain.model.invoice.Invoice;
+import at.fhv.teame.domain.model.invoice.InvoiceLine;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class ClientUser {
@@ -12,6 +17,10 @@ public class ClientUser {
     private String lastName;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @ElementCollection
+    @CollectionTable(name="clientuser_topics", joinColumns=@JoinColumn(name="cn"))
+    @Column
+    private List<String> topics;
 
     // for hibernate
     protected ClientUser() {
@@ -22,6 +31,7 @@ public class ClientUser {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        topics = new ArrayList<>();
     }
 
     public String getCn() {
@@ -38,5 +48,9 @@ public class ClientUser {
 
     public Role getRole() {
         return role;
+    }
+
+    public List<String> getTopics() {
+        return topics;
     }
 }
