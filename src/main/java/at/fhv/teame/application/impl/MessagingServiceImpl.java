@@ -8,6 +8,8 @@ import at.fhv.teame.sharedlib.rmi.exceptions.PublishingFailedException;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -28,15 +30,18 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
     @Override
     public void publishMessage(PublishMessageDTO publishMessageDTO, String sessionId) throws RemoteException, PublishingFailedException {
         try {
-            //Create new ConnectionFactory
-            ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory("tcp://10.0.40.169:61616");
+            // Get the JNDI Initial Context to do JNDI lookups
+            InitialContext ctx = new InitialContext();
+            // Get the ConnectionFactory by JNDI name
+            ConnectionFactory cf = (ConnectionFactory) ctx.lookup("connectionFactory");
+            // get the Destination used to send the message by JNDI name
+            Destination dest = (Destination) ctx.lookup(publishMessageDTO.getTopic());
             // Create a connection
             Connection con = cf.createConnection();
             // create a JMS session
             Session sess = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination dest = sess.createTopic(publishMessageDTO.getTopic());
             // Create some Message and a MessageProducer with the session
-            TextMessage msg = sess.createTextMessage(publishMessageDTO.getContent());
+            Message msg = sess.createTextMessage(publishMessageDTO.getContent());
             MessageProducer prod = sess.createProducer(dest);
             // send the message to the destination
             prod.send(msg);
@@ -44,7 +49,7 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
             con.close();
             sess.close();
             System.out.println("Connection closed");
-        } catch (JMSException e) {
+        } catch (JMSException | NamingException e) {
             e.printStackTrace();
             throw new PublishingFailedException();
         }
@@ -58,29 +63,26 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
 
     public void receiveMessage() throws PublishingFailedException {
         try {
-            //Create new ConnectionFactory
-            ConnectionFactory cf = new ActiveMQConnectionFactory("tcp://10.0.40.169:61616");
+            InitialContext ctx = new InitialContext();
+            ConnectionFactory cf = (ConnectionFactory) ctx.lookup("connectionFactory");
+            Topic dest = (Topic) ctx.lookup("System.Message");
             Connection con = cf.createConnection();
             con.setClientID("DurableSubscriber");
             Session sess = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
             // Start the connection: msg delivery can begin with existing consumer
             con.start();
-
-            Topic dest = sess.createTopic("Rock");
             // Create a MessageConsumer
-            MessageConsumer consumer = sess.createDurableSubscriber(dest, "Listener");
+            MessageConsumer consumer = sess.createDurableSubscriber(dest, "har9090");
             // Receive the messages sent to the destination
-            TextMessage msg = (TextMessage) consumer.receiveNoWait();
+            TextMessage msg = (TextMessage) consumer.receive(1);
             if (msg != null) System.out.println(msg.getText());
             // Close the connection
             con.close();
             System.out.println("Connection closed");
-        } catch (JMSException e) {
+        } catch (JMSException | NamingException e) {
             throw new PublishingFailedException();
         }
     }
-
-
 
 
 }
