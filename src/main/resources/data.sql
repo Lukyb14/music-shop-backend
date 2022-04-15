@@ -519,3 +519,7 @@ INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('aci9089', 'Ali',
 INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('auk6104', 'Abdul-Halim', 'Ukaiev', 'SELLER');
 INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('zsa2157', 'Zikrihan', 'Sahin', 'ADMINISTRATOR');
 INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('tf-test', 'Test', 'Test', 'ADMINISTRATOR');
+
+INSERT INTO clientuser_topics(cn, topics) VALUES ('har9090', 'System.Messages');
+INSERT INTO clientuser_topics(cn, topics) VALUES ('har9090', 'Pop');
+INSERT INTO clientuser_topics(cn, topics) VALUES ('har9090', 'Rock')

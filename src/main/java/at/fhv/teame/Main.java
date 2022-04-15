@@ -1,6 +1,7 @@
 package at.fhv.teame;
 
 import at.fhv.teame.application.impl.MessagingServiceImpl;
+import at.fhv.teame.application.impl.SearchSoundCarrierServiceImpl;
 import at.fhv.teame.rmi.RMIClient;
 import at.fhv.teame.rmi.RMIFactoryImpl;
 import at.fhv.teame.sharedlib.dto.PublishMessageDTO;
@@ -22,7 +23,8 @@ public class Main {
             System.out.println("rmiFactory bound in registry");
             MessagingServiceImpl messagingService = new MessagingServiceImpl();
             PublishMessageDTO publishMessageDTO = new PublishMessageDTO("System.Message","Annanas", "Dies das!");
-            messagingService.publishMessage(publishMessageDTO, "1");
+            //messagingService.publishMessage(publishMessageDTO, "1");
+            messagingService.receiveMessage();
         } catch (RemoteException | MalformedURLException | PublishingFailedException e) {
             e.printStackTrace();
         }
