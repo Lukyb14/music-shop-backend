@@ -33,6 +33,6 @@ public class HibernateUserRepository implements UserRepository {
     @Override
     public List<String> allTopics() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        return entityManager.createNativeQuery("SELECT DISTINCT topics FROM clientuser_topics ORDER BY topics;").getResultList();
+        return entityManager.createNativeQuery("SELECT DISTINCT topics FROM clientuser_topics WHERE topics != 'Order' ORDER BY topics;").getResultList();
     }
 }
