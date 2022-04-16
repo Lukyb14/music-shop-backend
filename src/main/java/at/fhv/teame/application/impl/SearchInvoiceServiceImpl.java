@@ -13,6 +13,7 @@ import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
 import at.fhv.teame.sharedlib.rmi.SearchInvoiceService;
 import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
 
+import javax.persistence.NoResultException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -39,9 +40,13 @@ public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements Sea
         } catch (SessionNotFoundException ignored) {
             throw new InvalidSessionException();
         }
+        try{
+            Invoice invoice = invoiceRepository.invoiceById(Long.valueOf(invoiceId));
+            return buildInvoiceDTO(invoice);
+        } catch (NoResultException noResultException){
+            return null;
+        }
 
-       Invoice invoice = invoiceRepository.invoiceById(Long.valueOf(invoiceId));
-       return buildInvoiceDTO(invoice);
 
     }
 
