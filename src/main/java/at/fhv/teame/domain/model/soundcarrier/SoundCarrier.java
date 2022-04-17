@@ -1,4 +1,4 @@
-package at.fhv.teame.domain;
+package at.fhv.teame.domain.model.soundcarrier;
 
 import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.exceptions.OutOfStockException;
@@ -35,6 +35,7 @@ public class SoundCarrier {
         this.stock = stock;
     }
 
+    // TODO: refactor method name
     public void retrieve(int amount) throws OutOfStockException, InvalidAmountException {
         if (stock - amount < 0) {
             throw new OutOfStockException();
@@ -44,6 +45,11 @@ public class SoundCarrier {
         }
         stock -= amount;
     }
+
+    public void fillStock(int amount) {
+        stock = stock + amount;
+    }
+
 
     public String getAlbumName() {
         return this.album.getName();

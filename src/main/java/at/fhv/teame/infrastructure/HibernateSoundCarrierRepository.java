@@ -1,10 +1,9 @@
 package at.fhv.teame.infrastructure;
 
-import at.fhv.teame.domain.SoundCarrier;
+import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.exceptions.OutOfStockException;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
-
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,7 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
-    public void processPurchase(Map<String, Integer> shoppingCartItems, String paymentMethod) throws OutOfStockException, InvalidAmountException {
+    public void processPurchase(Map<String, Integer> shoppingCartItems) throws OutOfStockException, InvalidAmountException {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         try {
@@ -36,14 +35,25 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     }
 
     @Override
+    public void fillStock(String articleId, int amount) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+
+        TypedQuery<SoundCarrier> query = entityManager.createQuery("FROM SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
+        query.setParameter("articleId", articleId);
+        SoundCarrier soundCarrier = query.getSingleResult();
+        soundCarrier.fillStock(amount);
+
+        entityManager.getTransaction().commit();
+    }
+
+    @Override
     public List<SoundCarrier> soundCarriersByAlbumName(String albumName, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a WHERE lower(a.name) = lower(:albumName)", SoundCarrier.class);
         query.setParameter("albumName", albumName);
-        int firstResult = (pageNr - 1) * ROWS_PER_PAGE;
-        int maxResults = calcMaxResults(totResultsByAlbumName(albumName).intValue(), pageNr);
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
+        query.setFirstResult((pageNr - 1) * ROWS_PER_PAGE);
+        query.setMaxResults(ROWS_PER_PAGE);
         return query.getResultList();
     }
 
@@ -61,10 +71,8 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         System.out.println(artist);
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE lower(a.artist) = lower(:artist)", SoundCarrier.class);
         query.setParameter("artist", artist);
-        int firstResult = (pageNr - 1) * ROWS_PER_PAGE;
-        int maxResults = calcMaxResults(totResultsByArtistName(artist).intValue(), pageNr);
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
+        query.setFirstResult((pageNr - 1) * ROWS_PER_PAGE);
+        query.setMaxResults(ROWS_PER_PAGE);
         return query.getResultList();
     }
 
@@ -81,10 +89,8 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<SoundCarrier> query = entityManager.createQuery("SELECT DISTINCT sc FROM SoundCarrier sc JOIN sc.album a JOIN a.songs s WHERE lower(s.title) = lower(:song)", SoundCarrier.class);
         query.setParameter("song", song);
-        int firstResult = (pageNr - 1) * ROWS_PER_PAGE;
-        int maxResults = calcMaxResults(totResultsBySongName(song).intValue(), pageNr);
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
+        query.setFirstResult((pageNr - 1) * ROWS_PER_PAGE);
+        query.setMaxResults(ROWS_PER_PAGE);
         return query.getResultList();
     }
 
@@ -103,15 +109,5 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         TypedQuery<SoundCarrier> query = entityManager.createQuery("from SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
         query.setParameter("articleId", articleId);
         return query.getSingleResult();
-    }
-
-    private int calcMaxResults(int totResultsInMatch, int pageNr) {
-        int maxResults;
-        if ((totResultsInMatch / (ROWS_PER_PAGE * pageNr)) > 0) {
-            maxResults = ROWS_PER_PAGE;
-        } else {
-            maxResults = totResultsInMatch % ROWS_PER_PAGE;
-        }
-        return maxResults;
     }
 }
