@@ -520,21 +520,21 @@ INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('auk6104', 'Abdul
 INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('zsa2157', 'Zikrihan', 'Sahin', 'ADMINISTRATOR');
 INSERT INTO clientUser (cn, firstname, lastname, role) VALUES ('tf-test', 'Test', 'Test', 'ADMINISTRATOR');
 
-INSERT INTO clientuser_topics(cn, topics) VALUES ('har9090', 'System.Messages');
+INSERT INTO clientuser_topics(cn, topics) VALUES ('har9090', 'System.Message');
 INSERT INTO clientuser_topics(cn, topics) VALUES ('har9090', 'Pop');
 INSERT INTO clientuser_topics(cn, topics) VALUES ('har9090', 'Rock');
 
-INSERT INTO clientuser_topics(cn, topics) VALUES ('lbo3144', 'System.Messages');
+INSERT INTO clientuser_topics(cn, topics) VALUES ('lbo3144', 'System.Message');
 INSERT INTO clientuser_topics(cn, topics) VALUES ('lbo3144', 'Rock');
 INSERT INTO clientuser_topics(cn, topics) VALUES ('lbo3144', 'Order');
 
-INSERT INTO clientuser_topics(cn, topics) VALUES ('yce5586', 'System.Messages');
+INSERT INTO clientuser_topics(cn, topics) VALUES ('yce5586', 'System.Message');
 INSERT INTO clientuser_topics(cn, topics) VALUES ('yce5586', 'Rock');
 
-INSERT INTO clientuser_topics(cn, topics) VALUES ('auk6104', 'System.Messages');
+INSERT INTO clientuser_topics(cn, topics) VALUES ('auk6104', 'System.Message');
 INSERT INTO clientuser_topics(cn, topics) VALUES ('auk6104', 'Pop');
 
-INSERT INTO clientuser_topics(cn, topics) VALUES ('zsa2157', 'System.Messages');
+INSERT INTO clientuser_topics(cn, topics) VALUES ('zsa2157', 'System.Message');
 INSERT INTO clientuser_topics(cn, topics) VALUES ('zsa2157', 'Pop');
 
 INSERT INTO clientuser_topics(cn, topics) VALUES ('aci9089', 'Order');

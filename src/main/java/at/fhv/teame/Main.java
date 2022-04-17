@@ -20,12 +20,8 @@ public class Main {
             LocateRegistry.createRegistry(1100);
             RMIFactoryImpl rmiFactory = new RMIFactoryImpl();
             Naming.rebind("rmi://localhost:1100/rmiFactory", rmiFactory);
-            System.out.println("rmiFactory bound in registry");
-            MessagingServiceImpl messagingService = new MessagingServiceImpl();
-            PublishMessageDTO publishMessageDTO = new PublishMessageDTO("System.Message","Annanas", "Dies das!");
-            messagingService.publishMessage(publishMessageDTO, "1");
-            //messagingService.receiveMessage();
-        } catch (RemoteException | MalformedURLException | PublishingFailedException e) {
+            System.out.println("Backend started");
+        } catch (RemoteException | MalformedURLException e) {
             e.printStackTrace();
         }
     }

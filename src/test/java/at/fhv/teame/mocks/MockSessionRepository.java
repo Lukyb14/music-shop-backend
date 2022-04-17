@@ -5,6 +5,9 @@ import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.model.user.Role;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.rmi.Session;
+
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.UUID;
 
 public class MockSessionRepository implements SessionRepository {
@@ -21,6 +24,22 @@ public class MockSessionRepository implements SessionRepository {
     public Session sessionById(UUID sessionId) throws SessionNotFoundException {
         if(sessionId.toString().equals("b16c5200-bb0e-11ec-8422-0242ac120002")) {
             throw new SessionNotFoundException();
+        } else if (sessionId.toString().equals("b16c5200-bb0e-11ec-8422-0242ac120003")) {
+            ClientUser lukas = new ClientUser("lbo3144", "Lukas", "Boch", Role.OPERATOR);
+            Session session1 = new Session(lukas);
+
+            try {
+                List<String> topicList = List.of("Rock", "Order", "System.Message");
+
+                Field topics = ClientUser.class.getDeclaredField("topics");
+                topics.setAccessible(true);
+                topics.set(lukas, topicList);
+
+                return session1;
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new SessionNotFoundException();
+            }
+
         }
         return session;
     }
