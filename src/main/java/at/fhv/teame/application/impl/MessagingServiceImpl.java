@@ -1,7 +1,11 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.application.exceptions.SessionNotFoundException;
+import at.fhv.teame.domain.model.user.ClientUser;
+import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.UserRepository;
 import at.fhv.teame.infrastructure.HibernateUserRepository;
+import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.sharedlib.dto.PublishMessageDTO;
 import at.fhv.teame.sharedlib.rmi.MessageService;
 import at.fhv.teame.sharedlib.rmi.exceptions.PublishingFailedException;
@@ -13,18 +17,22 @@ import javax.naming.NamingException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+import java.util.UUID;
+
 
 public class MessagingServiceImpl extends UnicastRemoteObject implements MessageService {
     private final UserRepository userRepository;
+    private final SessionRepository sessionRepository;
 
     //default constructor with hibernate
     public MessagingServiceImpl() throws RemoteException {
-        this(new HibernateUserRepository());
+        this(new HibernateUserRepository(), new ListSessionRepository());
     }
 
     //for mocking
-    public MessagingServiceImpl(UserRepository userRepository) throws RemoteException {
+    public MessagingServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) throws RemoteException {
         this.userRepository = userRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override
@@ -61,18 +69,31 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
     }
 
 
-    public void receiveMessage() throws PublishingFailedException {
+    public void fetchMessages(String sessionId) throws PublishingFailedException, SessionNotFoundException {
+        try {
+            at.fhv.teame.rmi.Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            ClientUser clientUser = session.getUser();
+
+            for(String topic : clientUser.getTopics()) {
+                receiveAllTopicMessages(clientUser, topic);
+            }
+        } catch (SessionNotFoundException e){
+            throw new SessionNotFoundException();
+        }
+    }
+
+    private void receiveAllTopicMessages(ClientUser clientUser, String topic) throws PublishingFailedException {
         try {
             InitialContext ctx = new InitialContext();
             ConnectionFactory cf = (ConnectionFactory) ctx.lookup("connectionFactory");
-            Topic dest = (Topic) ctx.lookup("System.Message");
+            Topic dest = (Topic) ctx.lookup(topic);
             Connection con = cf.createConnection();
-            con.setClientID("DurableSubscriber");
+            con.setClientID(clientUser.getCn());
             Session sess = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
             // Start the connection: msg delivery can begin with existing consumer
             con.start();
             // Create a MessageConsumer
-            MessageConsumer consumer = sess.createDurableSubscriber(dest, "har9090");
+            MessageConsumer consumer = sess.createDurableSubscriber(dest, clientUser.getFullName());
             // Receive the messages sent to the destination
             TextMessage msg = (TextMessage) consumer.receive(1);
             if (msg != null) System.out.println(msg.getText());
@@ -83,6 +104,4 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
             throw new PublishingFailedException();
         }
     }
-
-
 }

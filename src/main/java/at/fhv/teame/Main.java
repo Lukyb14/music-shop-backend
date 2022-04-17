@@ -24,7 +24,7 @@ public class Main {
             MessagingServiceImpl messagingService = new MessagingServiceImpl();
             PublishMessageDTO publishMessageDTO = new PublishMessageDTO("System.Message","Annanas", "Dies das!");
             messagingService.publishMessage(publishMessageDTO, "1");
-            messagingService.receiveMessage();
+            //messagingService.receiveMessage();
         } catch (RemoteException | MalformedURLException | PublishingFailedException e) {
             e.printStackTrace();
         }

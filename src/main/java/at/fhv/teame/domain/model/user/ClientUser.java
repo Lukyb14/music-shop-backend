@@ -46,6 +46,10 @@ public class ClientUser {
         return lastName;
     }
 
+    public String getFullName() {
+        return lastName + " " + firstName;
+    }
+
     public Role getRole() {
         return role;
     }
