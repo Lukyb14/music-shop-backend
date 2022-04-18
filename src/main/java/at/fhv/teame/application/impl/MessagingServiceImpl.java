@@ -54,7 +54,7 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
             // Create a connection
             Connection con = cf.createConnection();
             // create a JMS session
-            Session sess = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Session sess = con.createSession(false, Session.CLIENT_ACKNOWLEDGE);
             // Create some Message and a MessageProducer with the session
             Message msg = sess.createTextMessage(messageDTO.getSubject() + "//" + messageDTO.getContent());
             MessageProducer prod = sess.createProducer(dest);
@@ -114,6 +114,7 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
                 msg = (TextMessage) consumer.receive(1);
                 if (msg != null && msg.getJMSMessageID().equals(messageId)) {
                     msg.acknowledge();
+                    break;
                 }
             } while (msg != null);
 
