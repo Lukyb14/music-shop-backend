@@ -106,7 +106,7 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
             Topic dest = (Topic) ctx.lookup(topic);
             Connection con = cf.createConnection();
             con.setClientID(clientUser.getCn());
-            Session sess = con.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+            Session sess = con.createSession(false, 4);     //4 -> IndividualAcknowledge
             con.start();
             MessageConsumer consumer = sess.createDurableSubscriber(dest, topic);
             TextMessage msg;
