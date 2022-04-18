@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class Session {
 
-    private static final int DURATION_OF_VALIDITY = 3600;
+    private static final int DURATION_OF_VALIDITY = 10;
 
     private UUID sessionId;
     private ClientUser clientUser;
