@@ -6,9 +6,9 @@ import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.UserRepository;
 import at.fhv.teame.infrastructure.HibernateUserRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
-import at.fhv.teame.sharedlib.dto.PublishMessageDTO;
-import at.fhv.teame.sharedlib.dto.ReceiveMessageDTO;
+import at.fhv.teame.sharedlib.dto.MessageDTO;
 import at.fhv.teame.sharedlib.rmi.MessageService;
+import at.fhv.teame.sharedlib.rmi.exceptions.DeletionFailedException;
 import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.rmi.exceptions.PublishingFailedException;
 import at.fhv.teame.sharedlib.rmi.exceptions.ReceiveFailedException;
@@ -40,7 +40,7 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
     }
 
     @Override
-    public void publishMessage(PublishMessageDTO publishMessageDTO, String sessionId) throws RemoteException, PublishingFailedException, InvalidSessionException {
+    public void publishMessage(MessageDTO messageDTO, String sessionId) throws RemoteException, PublishingFailedException, InvalidSessionException {
         try {
             at.fhv.teame.rmi.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
             if (!rmiSession.isOperator()) throw new InvalidSessionException();
@@ -50,13 +50,13 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
             // Get the ConnectionFactory by JNDI name
             ConnectionFactory cf = (ConnectionFactory) ctx.lookup("connectionFactory");
             // get the Destination used to send the message by JNDI name
-            Destination dest = (Destination) ctx.lookup(publishMessageDTO.getTopic());
+            Destination dest = (Destination) ctx.lookup(messageDTO.getTopic());
             // Create a connection
             Connection con = cf.createConnection();
             // create a JMS session
             Session sess = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
             // Create some Message and a MessageProducer with the session
-            Message msg = sess.createTextMessage(publishMessageDTO.getTitle() + "/*/*" + publishMessageDTO.getContent());
+            Message msg = sess.createTextMessage(messageDTO.getSubject() + "//" + messageDTO.getContent());
             MessageProducer prod = sess.createProducer(dest);
             // send the message to the destination
             prod.send(msg);
@@ -82,26 +82,24 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
     }
 
     @Override
-    public List<ReceiveMessageDTO> fetchMessages(String sessionId) throws RemoteException, ReceiveFailedException, InvalidSessionException {
+    public void deleteMessage(String messageId, String sessionId) throws RemoteException, InvalidSessionException, DeletionFailedException {
         try {
             at.fhv.teame.rmi.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
             ClientUser clientUser = rmiSession.getUser();
-
-            List<ReceiveMessageDTO> messages = new LinkedList<>();
-
-            for(String topic : clientUser.getTopics()) {
-                messages.addAll(receiveAllTopicMessages(clientUser, topic));
+            for (String topic : clientUser.getTopics()) {
+                searchMessageToAcknowledge(clientUser, topic, messageId);
             }
 
-            messages.sort(Comparator.comparing(ReceiveMessageDTO::getTimestamp).reversed());
-            return messages;
-
-        } catch (SessionNotFoundException e){
+        } catch (DeletionFailedException e) {
+            e.printStackTrace();
+            throw new DeletionFailedException();
+        } catch (SessionNotFoundException e) {
             throw new InvalidSessionException();
         }
     }
 
-    private List<ReceiveMessageDTO> receiveAllTopicMessages(ClientUser clientUser, String topic) throws ReceiveFailedException {
+
+    private void searchMessageToAcknowledge(ClientUser clientUser, String topic, String messageId) throws DeletionFailedException {
         try {
             InitialContext ctx = new InitialContext();
             ConnectionFactory cf = (ConnectionFactory) ctx.lookup("connectionFactory");
@@ -109,17 +107,57 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
             Connection con = cf.createConnection();
             con.setClientID(clientUser.getCn());
             Session sess = con.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-            // Start the connection: msg delivery can begin with existing consumer
             con.start();
-            // Create a MessageConsumer
             MessageConsumer consumer = sess.createDurableSubscriber(dest, topic);
-            // Receive the messages sent to the destination
-            List<ReceiveMessageDTO> messageDTOs = new LinkedList<>();
+            TextMessage msg;
+            do {
+                msg = (TextMessage) consumer.receive(1);
+                if (msg != null && msg.getJMSMessageID().equals(messageId)) {
+                    msg.acknowledge();
+                }
+            } while (msg != null);
+
+            // Close the connection
+            con.close();
+        } catch (JMSException | NamingException e) {
+            throw new DeletionFailedException();
+        }
+    }
+
+    @Override
+    public List<MessageDTO> fetchMessages(String sessionId) throws RemoteException, ReceiveFailedException, InvalidSessionException {
+        try {
+            at.fhv.teame.rmi.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
+            ClientUser clientUser = rmiSession.getUser();
+
+            List<MessageDTO> messages = new LinkedList<>();
+            for (String topic : clientUser.getTopics()) {
+                messages.addAll(receiveAllTopicMessages(clientUser, topic));
+            }
+
+            messages.sort(Comparator.comparing(MessageDTO::getTimestamp).reversed());
+            return messages;
+        } catch (SessionNotFoundException e) {
+            throw new InvalidSessionException();
+        }
+    }
+
+    private List<MessageDTO> receiveAllTopicMessages(ClientUser clientUser, String topic) throws ReceiveFailedException {
+        try {
+            InitialContext ctx = new InitialContext();
+            ConnectionFactory cf = (ConnectionFactory) ctx.lookup("connectionFactory");
+            Topic dest = (Topic) ctx.lookup(topic);
+            Connection con = cf.createConnection();
+            con.setClientID(clientUser.getCn());
+            Session sess = con.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+            con.start();
+            MessageConsumer consumer = sess.createDurableSubscriber(dest, topic);
+            List<MessageDTO> messageDTOs = new LinkedList<>();
             TextMessage msg;
             do {
                 msg = (TextMessage) consumer.receive(1);
                 if (msg != null) {
-                    messageDTOs.add(new ReceiveMessageDTO(topic, splitSubjectFromMessage(msg.getText()), splitContentFromMessage(msg.getText()), msg.getJMSTimestamp()));
+                    messageDTOs.add(new MessageDTO(msg.getJMSMessageID(), topic, splitSubjectFromMessage(msg.getText()), splitContentFromMessage(msg.getText()), msg.getJMSTimestamp()));
                 }
             } while (msg != null);
 
@@ -131,17 +169,15 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
         }
     }
 
-    // TODO fix subject / content splitting
-
     private String splitContentFromMessage(String message) {
         try {
-            return message.split("\\*\\/\\*\\/")[1];
+            return message.split("//")[1];
         } catch (ArrayIndexOutOfBoundsException e) {
             return message;
         }
     }
 
     private String splitSubjectFromMessage(String message) {
-        return message.split("\\*\\/\\*\\/")[0];
+        return message.split("//")[0];
     }
 }

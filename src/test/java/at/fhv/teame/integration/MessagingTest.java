@@ -3,7 +3,7 @@ package at.fhv.teame.integration;
 import at.fhv.teame.application.impl.MessagingServiceImpl;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockUserRepository;
-import at.fhv.teame.sharedlib.dto.ReceiveMessageDTO;
+import at.fhv.teame.sharedlib.dto.MessageDTO;
 import at.fhv.teame.sharedlib.rmi.MessageService;
 import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.rmi.exceptions.ReceiveFailedException;
@@ -43,7 +43,7 @@ class MessagingTest {
 
     @Test
     void fetchMessages() throws InvalidSessionException, RemoteException, ReceiveFailedException {
-        List<ReceiveMessageDTO> receiveMessageDTOS = messageService.fetchMessages("b16c5200-bb0e-11ec-8422-0242ac120003");
+        List<MessageDTO> receiveMessageDTOS = messageService.fetchMessages("b16c5200-bb0e-11ec-8422-0242ac120003");
         assertTrue(receiveMessageDTOS.size() > 0);
     }
 }

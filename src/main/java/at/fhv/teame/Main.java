@@ -1,11 +1,7 @@
 package at.fhv.teame;
 
-import at.fhv.teame.application.impl.MessagingServiceImpl;
-import at.fhv.teame.application.impl.SearchSoundCarrierServiceImpl;
 import at.fhv.teame.rmi.RMIClient;
 import at.fhv.teame.rmi.RMIFactoryImpl;
-import at.fhv.teame.sharedlib.dto.PublishMessageDTO;
-import at.fhv.teame.sharedlib.rmi.exceptions.PublishingFailedException;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
