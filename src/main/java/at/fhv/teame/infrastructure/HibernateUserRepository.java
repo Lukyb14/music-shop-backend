@@ -7,6 +7,7 @@ import at.fhv.teame.domain.repositories.UserRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class HibernateUserRepository implements UserRepository {
 
@@ -27,5 +28,11 @@ public class HibernateUserRepository implements UserRepository {
         } else {
             return clientUser;
         }
+    }
+
+    @Override
+    public List<String> allTopics() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        return entityManager.createNativeQuery("SELECT DISTINCT topics FROM clientuser_topics WHERE topics != 'Order' ORDER BY topics;").getResultList();
     }
 }

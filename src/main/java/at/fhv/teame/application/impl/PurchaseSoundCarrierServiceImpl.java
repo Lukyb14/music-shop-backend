@@ -43,36 +43,27 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
     }
 
     @Override
-    public void confirmPurchase(ShoppingCartDTO shoppingCartDTO, String sessionId)
-            throws PurchaseFailedException, InvalidSessionException, RemoteException {
-
+    public void confirmPurchase(ShoppingCartDTO shoppingCartDTO, String sessionId) throws PurchaseFailedException, InvalidSessionException, RemoteException {
         try {
             Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
             if (!session.isSeller()) throw new InvalidSessionException();
         } catch (SessionNotFoundException ignored) {
             throw new InvalidSessionException();
         }
-
         if (shoppingCartDTO.getPurchasedItems().isEmpty()) {
             throw new PurchaseFailedException();
         }
         try {
             soundCarrierRepository.processPurchase(shoppingCartDTO.getPurchasedItems());
-            Invoice invoice = createInvoice(shoppingCartDTO);
-            invoiceRepository.add(invoice);
+            invoiceRepository.add(createInvoice(shoppingCartDTO));
         } catch (Exception e) {
             e.printStackTrace();
             throw new PurchaseFailedException();
         }
     }
 
-    public Invoice createInvoice(ShoppingCartDTO shoppingCartDTO) {
-        // start with totalPrice of 0
-        BigDecimal totalPrice = new BigDecimal(0);
-        List<InvoiceLine> purchasedItems = new ArrayList<>();
-
+    private Invoice createInvoice(ShoppingCartDTO shoppingCartDTO) {
         Invoice invoice;
-
         if (shoppingCartDTO.getCustomerLastName().equalsIgnoreCase("guest")) {
             invoice = new Invoice(
                     LocalDate.now(),
@@ -88,10 +79,10 @@ public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject impleme
             );
         }
 
-        // get every item in shopping cart and calc their price
-        // create a invoiceline with the information gathered from the shoppingcart item
-        // calculate total price for invoice
-        // key = articleId, value = quantity
+
+        // start with totalPrice of 0
+        BigDecimal totalPrice = new BigDecimal(0);
+        List<InvoiceLine> purchasedItems = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : shoppingCartDTO.getPurchasedItems().entrySet()) {
             SoundCarrier soundCarrier = soundCarrierRepository.soundCarrierByArticleId(entry.getKey());
 
