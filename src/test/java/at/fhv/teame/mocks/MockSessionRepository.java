@@ -5,6 +5,8 @@ import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.model.user.Role;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.rmi.Session;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class MockSessionRepository implements SessionRepository {

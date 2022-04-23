@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SoundCarrierTest {
 
-
-
     private HibernateSoundCarrierRepository soundCarrierRepository;
 
 
@@ -34,6 +32,33 @@ class SoundCarrierTest {
         soundCarrierRepository = new HibernateSoundCarrierRepository();
     }
 
+    @Test
+    void testSoundCarrierConstructor () {
+        //given
+        List<Song> songs = new ArrayList<>();
+        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
+        songs.add(song1);
+
+        Album album = new Album("Testname", "TestLabel",
+                                LocalDate.of(1985,1,1),
+                                songs, "Rock", "TestArtist");
+
+        SoundCarrier soundCarrier = new SoundCarrier("1011", album, Medium.CD, new BigDecimal("31.69"), 10);
+
+        //when...then
+        assertEquals("1011", soundCarrier.getArticleId());
+        assertEquals(album, soundCarrier.getAlbum());
+        assertEquals(Medium.CD.toString(), soundCarrier.getMedium());
+        assertEquals(new BigDecimal("31.69"), soundCarrier.getPrice());
+        assertEquals(10, soundCarrier.getStock());
+        assertEquals("Testname", soundCarrier.getAlbumName());
+        assertEquals("TestLabel", soundCarrier.getAlbumLabel());
+        assertEquals("TestArtist", soundCarrier.getAlbumArtist());
+        assertEquals(songs, soundCarrier.getAlbumSongs());
+        assertEquals("Rock", soundCarrier.getAlbumGenre());
+
+
+    }
 
     @Test
     void outOfStockException()  {
@@ -58,6 +83,12 @@ class SoundCarrierTest {
         //when...then
         assertThrows(InvalidAmountException.class, () -> soundCarrierRepository.processPurchase(purchasedItems));
     }
+
+
+
+/*
+
+
 
 
 
@@ -156,67 +187,10 @@ class SoundCarrierTest {
         assertEquals(actualPrice, expectedPrice);
         //assertEquals(expectedSongs, actualSongs);
 
-    }
-
-
-
-    @Test
-    void testSoundCarrierConstructor () {
-        //given
-        List<Song> songs = new ArrayList<>();
-        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
-        songs.add(song1);
-
-        Album album = new Album("Testname", "TestLabel",
-                                LocalDate.of(1985,1,1),
-                                songs, "Rock", "TestArtist");
-
-        SoundCarrier soundCarrier = new SoundCarrier("1011", album, Medium.CD, new BigDecimal(31.69), 10);
-
-        //when...then
-        assertEquals("1011", soundCarrier.getArticleId());
-        assertEquals(album, soundCarrier.getAlbum());
-        assertEquals(Medium.CD.toString(), soundCarrier.getMedium());
-        assertEquals(new BigDecimal(31.69), soundCarrier.getPrice());
-        assertEquals(10, soundCarrier.getStock());
-
-
-
-    }
-
-    //Album
-    @Test
-    void testAlbumSongsAndReleaseDate() {
-        //given
-        List<Song> expectedSongs = new ArrayList<>();
-        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "04:31");
-        expectedSongs.add(song1);
-        Album album = new Album("Testname", "TestLabel",
-                LocalDate.of(1985,1,1),
-                expectedSongs, "Rock", "TestArtist");
+    }*/
 
 
 
 
 
-        //when...then
-        assertEquals(LocalDate.of(1985,1,1), album.getRelease());
-        assertEquals(expectedSongs, album.getSongs());
-    }
-
-    //Song
-    @Test
-    void testSongConstructor() {
-        //given
-        String songTitle = "Perfect Strangers";
-        LocalDate releaseDate = LocalDate.of(2010,1,1);
-
-        //when
-        Song song = new Song("Perfect Strangers", LocalDate.of(2010,1,1), "04:17");
-
-        //then
-        assertEquals(songTitle, song.getTitle());
-        assertEquals(releaseDate, song.getRelease());
-
-    }
 }
