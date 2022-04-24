@@ -1,6 +1,5 @@
-package at.fhv.teame.integration;
+package at.fhv.teame.application.impl;
 
-import at.fhv.teame.application.impl.MessagingServiceImpl;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockUserRepository;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
@@ -17,7 +16,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MessagingTest {
+class MessagingServiceTest {
     private MessageService messageService;
 
     @BeforeEach
@@ -31,7 +30,7 @@ class MessagingTest {
         List<String> topicsExpected = List.of(
                 "Pop",
                 "Rock",
-                "System.Messages"
+                "System.Message"
         );
 
         //when

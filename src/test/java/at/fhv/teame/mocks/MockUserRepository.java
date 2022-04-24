@@ -14,6 +14,6 @@ public class MockUserRepository implements UserRepository {
 
     @Override
     public List<String> allTopics() {
-        return null;
+        return List.of("Pop", "Rock", "System.Message");
     }
 }
