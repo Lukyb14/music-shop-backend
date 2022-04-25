@@ -70,9 +70,9 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
     }
 
     private void notifyAllTopicConsumers(String topic) throws RemoteException {
-        for (Map.Entry<LoggedInClient, ClientUser> set : AuthenticationServiceImpl.loggedInClientsMap.entrySet()) {
-            if(set.getValue().getTopics().contains(topic)) {
-                set.getKey().inform();
+        for (Map.Entry<ClientUser, LoggedInClient> set : AuthenticationServiceImpl.loggedInClientsMap.entrySet()) {
+            if(set.getKey().getTopics().contains(topic)) {
+                set.getValue().inform();
             }
         }
     }

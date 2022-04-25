@@ -26,7 +26,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
 
-    public static Map<LoggedInClient, ClientUser> loggedInClientsMap;
+    public static Map<ClientUser, LoggedInClient> loggedInClientsMap;
 
     public AuthenticationServiceImpl() throws RemoteException {
         this(new HibernateUserRepository(), new ListSessionRepository());
@@ -40,7 +40,6 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
 
     @Override
     public SessionDTO login(String username, String password) throws RemoteException, LoginFailedException {
-
         Properties properties = new Properties();
         properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         properties.put(Context.PROVIDER_URL, PROVIDER_URL);
@@ -71,7 +70,6 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
                 return new SessionDTO(session.getSessionId().toString(), clientUser.getRole().toString());
             } catch (Exception e) {
                 // invalid password
-                e.printStackTrace();
                 throw new LoginFailedException();
             } finally {
                 ctx.close();
@@ -85,17 +83,20 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     @Override
     public void logout(String sessionId) throws RemoteException {
         try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            loggedInClientsMap.remove(session.getUser());
             sessionRepository.deleteSession(UUID.fromString(sessionId));
-        } catch (IllegalArgumentException ignored) {
+        } catch (IllegalArgumentException | SessionNotFoundException ignored) {
             // if we can't create a UUID from the string, it is invalid and therefore does not exist anyway
         }
     }
+
 
     @Override
     public void rememberClient(LoggedInClient loggedInClient, String sessionId) throws RemoteException, InvalidSessionException {
         try {
             Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            loggedInClientsMap.put(loggedInClient, session.getUser());
+            loggedInClientsMap.put(session.getUser(), loggedInClient);
         } catch (SessionNotFoundException e) {
             throw new InvalidSessionException();
         }
