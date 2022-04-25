@@ -34,14 +34,6 @@ public class Session {
         }
     }
 
-    public boolean isAdmin() {
-        if (Instant.now().isAfter(expiryDate)) {
-            return false;
-        }
-
-        return clientUser.getRole().equals(Role.ADMINISTRATOR);
-    }
-
     public boolean isOperator() {
         if (Instant.now().isAfter(expiryDate)) {
             return false;
