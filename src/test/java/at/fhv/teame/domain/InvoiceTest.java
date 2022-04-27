@@ -46,9 +46,9 @@ class InvoiceTest {
         //when...then
         assertEquals(LocalDate.of(2022,4,4), invoice.getDateOfPurchase());
         assertEquals(PaymentMethod.CASH, invoice.getPaymentMethod());
-        assertEquals("Umut", invoice.getCustomerFirstName());
-        assertEquals("Mueller", invoice.getCustomerLastName());
-        assertEquals("Kanal31, 6900 Bregenz", invoice.getCustomerAddress());
+        assertEquals("Umut", invoice.getCustomerFirstName().orElse(""));
+        assertEquals("Mueller", invoice.getCustomerLastName().orElse(""));
+        assertEquals("Kanal31, 6900 Bregenz", invoice.getCustomerAddress().orElse(""));
 
     }
 
