@@ -16,7 +16,7 @@ public class Main {
             LocateRegistry.createRegistry(1100);
             RMIFactoryImpl rmiFactory = new RMIFactoryImpl();
             Naming.rebind("rmi://localhost:1100/rmiFactory", rmiFactory);
-            System.out.println("rmiFactory bound in registry");
+            System.out.println("Backend started");
         } catch (RemoteException | MalformedURLException e) {
             e.printStackTrace();
         }

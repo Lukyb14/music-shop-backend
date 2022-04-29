@@ -1,5 +1,6 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.UserRepository;
@@ -8,6 +9,8 @@ import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.rmi.Session;
 import at.fhv.teame.sharedlib.dto.SessionDTO;
 import at.fhv.teame.sharedlib.rmi.AuthenticationService;
+import at.fhv.teame.sharedlib.rmi.LoggedInClient;
+import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.rmi.exceptions.LoginFailedException;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -15,8 +18,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 public class AuthenticationServiceImpl extends UnicastRemoteObject implements AuthenticationService {
 
@@ -24,8 +26,11 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
 
+    public static Map<ClientUser, LoggedInClient> loggedInClientsMap;
+
     public AuthenticationServiceImpl() throws RemoteException {
         this(new HibernateUserRepository(), new ListSessionRepository());
+        loggedInClientsMap = new HashMap();
     }
 
     public AuthenticationServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) throws RemoteException {
@@ -35,7 +40,6 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
 
     @Override
     public SessionDTO login(String username, String password) throws RemoteException, LoginFailedException {
-
         Properties properties = new Properties();
         properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         properties.put(Context.PROVIDER_URL, PROVIDER_URL);
@@ -63,11 +67,9 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
                 ClientUser clientUser = userRepository.userByCn(username);
                 Session session = sessionRepository.createSession(clientUser);
 
-
                 return new SessionDTO(session.getSessionId().toString(), clientUser.getRole().toString());
             } catch (Exception e) {
                 // invalid password
-                e.printStackTrace();
                 throw new LoginFailedException();
             } finally {
                 ctx.close();
@@ -81,9 +83,22 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     @Override
     public void logout(String sessionId) throws RemoteException {
         try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            loggedInClientsMap.remove(session.getUser());
             sessionRepository.deleteSession(UUID.fromString(sessionId));
-        } catch (IllegalArgumentException ignored) {
+        } catch (IllegalArgumentException | SessionNotFoundException ignored) {
             // if we can't create a UUID from the string, it is invalid and therefore does not exist anyway
+        }
+    }
+
+
+    @Override
+    public void rememberClient(LoggedInClient loggedInClient, String sessionId) throws RemoteException, InvalidSessionException {
+        try {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            loggedInClientsMap.put(session.getUser(), loggedInClient);
+        } catch (SessionNotFoundException e) {
+            throw new InvalidSessionException();
         }
     }
 

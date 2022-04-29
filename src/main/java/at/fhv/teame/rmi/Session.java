@@ -21,9 +21,7 @@ public class Session {
     }
 
     public boolean isSeller() {
-        if (Instant.now().isAfter(expiryDate)) {
-            return false;
-        }
+        if (isExpired()) return false;
 
         switch (clientUser.getRole()) {
             case SELLER:
@@ -34,18 +32,8 @@ public class Session {
         }
     }
 
-    public boolean isAdmin() {
-        if (Instant.now().isAfter(expiryDate)) {
-            return false;
-        }
-
-        return clientUser.getRole().equals(Role.ADMINISTRATOR);
-    }
-
     public boolean isOperator() {
-        if (Instant.now().isAfter(expiryDate)) {
-            return false;
-        }
+        if (isExpired()) return false;
 
         switch (clientUser.getRole()) {
             case OPERATOR:
@@ -56,6 +44,10 @@ public class Session {
         }
     }
 
+    public boolean isExpired() {
+        return Instant.now().isAfter(expiryDate);
+    }
+
     public UUID getSessionId() {
         return sessionId;
     }
@@ -64,7 +56,4 @@ public class Session {
         return clientUser;
     }
 
-    public Instant getExpiryDate() {
-        return expiryDate;
-    }
 }

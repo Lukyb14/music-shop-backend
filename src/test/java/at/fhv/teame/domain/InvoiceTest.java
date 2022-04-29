@@ -1,7 +1,6 @@
 package at.fhv.teame.domain;
 
-import at.fhv.teame.application.impl.PurchaseSoundCarrierServiceImpl;
-import at.fhv.teame.application.impl.SearchInvoiceServiceImpl;
+
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.model.invoice.PaymentMethod;
@@ -9,18 +8,8 @@ import at.fhv.teame.domain.model.soundcarrier.Album;
 import at.fhv.teame.domain.model.soundcarrier.Medium;
 import at.fhv.teame.domain.model.soundcarrier.Song;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
-import at.fhv.teame.domain.repositories.SoundCarrierRepository;
-import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
-import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
-import at.fhv.teame.sharedlib.dto.InvoiceDTO;
-import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -28,27 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InvoiceTest {
 
-    private SearchInvoiceServiceImpl searchInvoiceService;
-    private PurchaseSoundCarrierServiceImpl purchaseSoundCarrierService;
-    private HibernateInvoiceRepository invoiceRepository;
-
-    @BeforeEach
-    void setup() throws IOException {
-        searchInvoiceService = new SearchInvoiceServiceImpl();
-        purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl();
-        invoiceRepository = new HibernateInvoiceRepository();
-    }
-
     @Test
     void getInvoiceById() {
-        // given
-        Long invoiceIdExpected = Long.valueOf(20001);
+        Long invoiceIdExpected = null;
+        Invoice invoice = new Invoice(LocalDate.of(2022,4,16), PaymentMethod.CASH, "Hiranur", "Mueller", "Wildschwansteig 24, 13503 Berlin");
 
-        // when
-        Invoice invoice = invoiceRepository.invoiceById(invoiceIdExpected);
-        Long invoiceIdActual = invoice.getInvoiceId();
-        // then
-        assertEquals(invoiceIdExpected, invoiceIdActual);
+
+        assertEquals(invoiceIdExpected, invoice.getInvoiceId());
+
     }
 
     @Test
@@ -57,6 +33,7 @@ class InvoiceTest {
         Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
 
         //when...then
+
         assertEquals(LocalDate.of(2022,4,4), invoice.getDateOfPurchase());
         assertEquals(PaymentMethod.CASH, invoice.getPaymentMethod());
     }
@@ -69,10 +46,67 @@ class InvoiceTest {
         //when...then
         assertEquals(LocalDate.of(2022,4,4), invoice.getDateOfPurchase());
         assertEquals(PaymentMethod.CASH, invoice.getPaymentMethod());
-        assertEquals("Umut", invoice.getCustomerFirstName());
-        assertEquals("Mueller", invoice.getCustomerLastName());
-        assertEquals("Kanal31, 6900 Bregenz", invoice.getCustomerAddress());
+        assertEquals("Umut", invoice.getCustomerFirstName().orElse(""));
+        assertEquals("Mueller", invoice.getCustomerLastName().orElse(""));
+        assertEquals("Kanal31, 6900 Bregenz", invoice.getCustomerAddress().orElse(""));
 
+    }
+
+    @Test
+    void testPurchasedItems() {
+        BigDecimal totPrice = new BigDecimal("31.31");
+        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
+        List<Song> songs = new ArrayList<>();
+        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
+        songs.add(song1);
+
+        Album album = new Album("Testname", "TestLabel",
+                LocalDate.of(1985,1,1),
+                songs, "Rock", "TestArtist");
+
+        SoundCarrier soundCarrier = new SoundCarrier("1011", album, Medium.CD, new BigDecimal("31.31"), 10);
+        int quantity = 3;
+        List<InvoiceLine> purchasedItems = new ArrayList<>();
+        InvoiceLine invoiceLine1 = new InvoiceLine(invoice, soundCarrier, quantity, totPrice);
+        purchasedItems.add(invoiceLine1);
+        invoice.setPurchasedItems(purchasedItems);
+
+        assertEquals(purchasedItems, invoice.getPurchasedItems());
+
+
+
+    }
+
+    @Test
+    void testTotalPrice() {
+        BigDecimal totPrice = new BigDecimal("31.31");
+        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
+
+        invoice.setTotalPrice(totPrice);
+
+
+        assertEquals(totPrice, invoice.getTotalPrice());
+
+
+
+
+    }
+
+
+
+
+
+
+   /*
+
+    private SearchInvoiceServiceImpl searchInvoiceService;
+    private PurchaseSoundCarrierServiceImpl purchaseSoundCarrierService;
+    private HibernateInvoiceRepository invoiceRepository;
+    @BeforeEach
+    void setup() throws IOException {
+        searchInvoiceService = new SearchInvoiceServiceImpl();
+        purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl();
+        invoiceRepository = new HibernateInvoiceRepository();
     }
 
     @Test
@@ -88,10 +122,22 @@ class InvoiceTest {
         assertEquals(new BigDecimal(15.99).setScale(2, RoundingMode.HALF_UP), actualTotalPrice);
     }
 
+        @Test
+    void getInvoiceByIdRepo() {
+        // given
+        Long invoiceIdExpected = Long.valueOf(20000);
+
+        // when
+        Invoice invoice = invoiceRepository.invoiceById(invoiceIdExpected);
+        Long invoiceIdActual = invoice.getInvoiceId();
+        // then
+        assertEquals(invoiceIdExpected, invoiceIdActual);
+    }
+
     @Test
     void testPriceToRefund() {
         // given
-        Long invoiceId = Long.valueOf(20001);
+        Long invoiceId = Long.valueOf(20000);
 
         // when
         Invoice invoice = invoiceRepository.invoiceById(invoiceId);
@@ -104,7 +150,7 @@ class InvoiceTest {
 
 
 
-/* WIP
+
     @Test
     void testInvoiceLineConstructor() {
         //given
@@ -173,11 +219,11 @@ class InvoiceTest {
         invoiceRepository.add(invoice);
 
         System.out.println(invoice.getInvoiceId());
-    }*/
+    }
 
 
 
-/*    @Test
+    @Test
     void invoiceNumberTest() {
         SoundCarrierRepository soundCarrierRepository = new HibernateSoundCarrierRepository();
 

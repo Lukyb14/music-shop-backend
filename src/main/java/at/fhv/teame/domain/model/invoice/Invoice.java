@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Invoice {
@@ -66,16 +67,16 @@ public class Invoice {
         return invoiceId;
     }
 
-    public String getCustomerFirstName() {
-        return customerFirstName;
+    public Optional<String> getCustomerFirstName() {
+        return Optional.ofNullable(customerFirstName);
     }
 
-    public String getCustomerLastName() {
-        return customerLastName;
+    public Optional<String> getCustomerLastName() {
+        return Optional.ofNullable(customerLastName);
     }
 
-    public String getCustomerAddress() {
-        return customerAddress;
+    public Optional<String> getCustomerAddress() {
+        return Optional.ofNullable(customerAddress);
     }
 
     public LocalDate getDateOfPurchase() {
