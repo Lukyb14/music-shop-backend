@@ -6,7 +6,7 @@ import at.fhv.teame.mocks.MockInvoiceRepository;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

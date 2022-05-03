@@ -19,7 +19,7 @@ import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
 import at.fhv.teame.sharedlib.exceptions.PublishingFailedException;
 import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
 import at.fhv.teame.sharedlib.rmi.*;
-import at.fhv.teame.sharedlib.rmi.exceptions.*;
+import at.fhv.teame.sharedlib.exceptions.*;
 import at.fhv.teame.sharedlib.rmi.factory.RMIFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
