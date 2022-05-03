@@ -11,7 +11,7 @@ import at.fhv.teame.mocks.MockSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.SongDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;

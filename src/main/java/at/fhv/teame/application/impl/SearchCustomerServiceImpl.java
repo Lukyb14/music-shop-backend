@@ -9,7 +9,7 @@ import at.fhv.teame.rmi.Session;
 import at.fhv.teame.sharedlib.dto.CustomerDTO;
 import at.fhv.teame.sharedlib.rmi.CustomerService;
 import at.fhv.teame.sharedlib.rmi.SearchCustomerService;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

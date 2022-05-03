@@ -14,6 +14,10 @@ import at.fhv.teame.sharedlib.dto.CustomerDTO;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
 import at.fhv.teame.sharedlib.dto.SessionDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
+import at.fhv.teame.sharedlib.exceptions.PublishingFailedException;
+import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
 import at.fhv.teame.sharedlib.rmi.*;
 import at.fhv.teame.sharedlib.rmi.exceptions.*;
 import at.fhv.teame.sharedlib.rmi.factory.RMIFactory;
@@ -188,7 +192,8 @@ class IntegrationTest {
 
         List<MessageDTO> messagesBeforeDeletion = messagingService.fetchMessages(sessionDTO.getSessionId());
         String deletedMessageId = messagesBeforeDeletion.get(0).getId();
-        messagingService.deleteMessage(deletedMessageId, sessionDTO.getSessionId());
+        String deletedMessageTopic = messagesBeforeDeletion.get(0).getTopic();
+        messagingService.deleteMessage(deletedMessageTopic, deletedMessageId, sessionDTO.getSessionId());
 
         // wait 4 seconds for ActiveMQ to update itself
         Thread.sleep(4000);

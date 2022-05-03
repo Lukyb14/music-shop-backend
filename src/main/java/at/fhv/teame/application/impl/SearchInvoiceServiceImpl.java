@@ -11,7 +11,7 @@ import at.fhv.teame.rmi.Session;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
 import at.fhv.teame.sharedlib.rmi.SearchInvoiceService;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 
 import javax.persistence.NoResultException;
 import java.rmi.RemoteException;

@@ -4,8 +4,8 @@ import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockUserRepository;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
 import at.fhv.teame.sharedlib.rmi.MessageService;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
-import at.fhv.teame.sharedlib.rmi.exceptions.ReceiveFailedException;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,14 +1,13 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.model.user.Role;
 import at.fhv.teame.mocks.MockInvoiceRepository;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
-import at.fhv.teame.sharedlib.rmi.exceptions.PurchaseFailedException;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.rmi.RemoteException;
