@@ -41,7 +41,7 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
     public void publishMessage(MessageDTO messageDTO, String sessionId) throws RemoteException, PublishingFailedException, InvalidSessionException {
         try {
             at.fhv.teame.rmi.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!rmiSession.isOperator()) throw new InvalidSessionException();
+            if (!rmiSession.isOperator() && !messageDTO.getTopic().equalsIgnoreCase("order")) throw new InvalidSessionException();
             // Get the JNDI Initial Context to do JNDI lookups
             InitialContext ctx = new InitialContext();
             // Get the ConnectionFactory by JNDI name
