@@ -18,7 +18,8 @@ public class Main {
     @PostConstruct
     public static void main(String[] args) {
         try {
-            RMIClient.startRMIClient();
+            //RMIClient.startRMIClient();
+            EJBClient.initialEJB();
             LocateRegistry.createRegistry(1100);
             RMIFactoryImpl rmiFactory = new RMIFactoryImpl();
             Naming.rebind("rmi://localhost:1100/rmiFactory", rmiFactory);
