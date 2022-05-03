@@ -1,4 +1,4 @@
-package at.fhv.teame.application.impl;
+package at.fhv.teame.application.impl.ejb;
 
 import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.invoice.Invoice;
@@ -10,32 +10,32 @@ import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.connection.Session;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
-import at.fhv.teame.sharedlib.rmi.SearchInvoiceService;
+import at.fhv.teame.sharedlib.ejb.SearchInvoiceServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 
+import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.UUID;
 
-public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements SearchInvoiceService {
+@Stateless
+public class SearchInvoiceServiceEJB implements SearchInvoiceServiceRemote {
     private final InvoiceRepository invoiceRepository;
     private final SessionRepository sessionRepository;
 
     // default constructor with hibernate
-    public SearchInvoiceServiceImpl() throws RemoteException {
+    public SearchInvoiceServiceEJB() {
         this(new HibernateInvoiceRepository(), new ListSessionRepository());
     }
 
     //for mocking
-    public SearchInvoiceServiceImpl(InvoiceRepository invoiceRepository, SessionRepository sessionRepository) throws RemoteException {
+    public SearchInvoiceServiceEJB(InvoiceRepository invoiceRepository, SessionRepository sessionRepository) {
         this.invoiceRepository = invoiceRepository;
         this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public InvoiceDTO invoiceById(String invoiceId, String sessionId) throws RemoteException, InvalidSessionException {
+    public InvoiceDTO invoiceById(String invoiceId, String sessionId) throws InvalidSessionException {
         try {
             Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
             if (!session.isSeller()) throw new InvalidSessionException();

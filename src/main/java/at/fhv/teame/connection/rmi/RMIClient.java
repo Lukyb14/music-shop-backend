@@ -1,4 +1,4 @@
-package at.fhv.teame.rmi;
+package at.fhv.teame.connection.rmi;
 
 import at.fhv.teame.sharedlib.rmi.CustomerService;
 

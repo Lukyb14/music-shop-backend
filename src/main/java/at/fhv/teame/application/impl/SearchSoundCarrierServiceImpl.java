@@ -7,7 +7,7 @@ import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
-import at.fhv.teame.rmi.Session;
+import at.fhv.teame.connection.Session;
 import at.fhv.teame.sharedlib.dto.SongDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
