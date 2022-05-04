@@ -1,6 +1,11 @@
 plugins {
     id 'java'
     id 'jacoco'
+    id 'application'
+}
+
+application {
+    mainClassName = 'at.fhv.teame.Main'
 }
 
 group 'org.example'
