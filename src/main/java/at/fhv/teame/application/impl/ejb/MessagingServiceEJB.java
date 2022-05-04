@@ -13,7 +13,6 @@ import at.fhv.teame.sharedlib.exceptions.DeletionFailedException;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.PublishingFailedException;
 import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
-
 import javax.ejb.Stateless;
 import javax.jms.*;
 import javax.naming.InitialContext;

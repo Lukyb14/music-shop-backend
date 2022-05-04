@@ -13,7 +13,6 @@ import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
 import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
-
 import javax.ejb.Stateless;
 import java.util.LinkedList;
 import java.util.List;
