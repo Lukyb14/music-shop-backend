@@ -3,6 +3,7 @@ package at.fhv.teame.application.impl;
 import at.fhv.teame.mocks.MockInvoiceRepository;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockSoundCarrierRepository;
+import at.fhv.teame.sharedlib.ejb.WithdrawSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.rmi.WithdrawSoundCarrierService;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.WithdrawalFailedException;
@@ -16,10 +17,10 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WithdrawalSoundCarrierServiceTest {
-    private WithdrawSoundCarrierService withdrawSoundCarrierService;
+    private WithdrawSoundCarrierServiceRemote withdrawSoundCarrierService;
 
     @BeforeEach
-    void setup() throws RemoteException {
+    void setup() {
         withdrawSoundCarrierService = new WithdrawalSoundCarrierServiceImpl(
                 new MockSoundCarrierRepository(),
                 new MockInvoiceRepository(),
@@ -28,7 +29,7 @@ public class WithdrawalSoundCarrierServiceTest {
     }
 
     @Test
-    void withdrawSoundCarrier() throws InvalidSessionException, WithdrawalFailedException, RemoteException {
+    void withdrawSoundCarrier() throws InvalidSessionException, WithdrawalFailedException {
         String invoiceId = "20000";
         Map<String, Integer> returnedSoundCarriers = Map.of(
                 "1000", 2,

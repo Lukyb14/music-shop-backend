@@ -14,36 +14,40 @@ import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.connection.Session;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
-import at.fhv.teame.sharedlib.rmi.PurchaseSoundCarrierService;
+import at.fhv.teame.sharedlib.ejb.PurchaseSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
+
+import javax.ejb.Stateless;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-public class PurchaseSoundCarrierServiceImpl extends UnicastRemoteObject implements PurchaseSoundCarrierService {
+@Stateless
+public class PurchaseSoundCarrierServiceImpl implements PurchaseSoundCarrierServiceRemote {
 
     private final SoundCarrierRepository soundCarrierRepository;
     private final InvoiceRepository invoiceRepository;
     private final SessionRepository sessionRepository;
 
     // default constructor with hibernate
-    public PurchaseSoundCarrierServiceImpl() throws RemoteException {
+    public PurchaseSoundCarrierServiceImpl() {
         this(new HibernateInvoiceRepository(), new HibernateSoundCarrierRepository(), new ListSessionRepository());
     }
 
     // for mocking
-    public PurchaseSoundCarrierServiceImpl(InvoiceRepository invoiceRepository, SoundCarrierRepository soundCarrierRepository, SessionRepository sessionRepository) throws RemoteException {
+    public PurchaseSoundCarrierServiceImpl(InvoiceRepository invoiceRepository, SoundCarrierRepository soundCarrierRepository, SessionRepository sessionRepository){
         this.soundCarrierRepository = soundCarrierRepository;
         this.invoiceRepository = invoiceRepository;
         this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public void confirmPurchase(ShoppingCartDTO shoppingCartDTO, String sessionId) throws PurchaseFailedException, InvalidSessionException, RemoteException {
+    public void confirmPurchase(ShoppingCartDTO shoppingCartDTO, String sessionId) throws PurchaseFailedException, InvalidSessionException{
         try {
             Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
             if (!session.isSeller()) throw new InvalidSessionException();

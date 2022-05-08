@@ -11,6 +11,7 @@ import at.fhv.teame.mocks.MockSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.SongDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
+import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,19 +24,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SearchSoundCarrierServiceTest {
 
-    private SearchSoundCarrierServiceImpl searchSoundCarrierService;
+    private SearchSoundCarrierServiceRemote searchSoundCarrierService;
 
     private MockSessionRepository mockSessionRepository;
 
 
     @BeforeEach
-    void beforeEach() throws RemoteException {
+    void beforeEach() {
         mockSessionRepository = new MockSessionRepository();
         searchSoundCarrierService = new SearchSoundCarrierServiceImpl(new MockSoundCarrierRepository(), mockSessionRepository);
     }
 
     @Test
-    void given_2soundcarriersinrepository_when_soundcarriersByAlbumName_then_expectsoundcarrierssequals() throws RemoteException, InvalidSessionException {
+    void given_2soundcarriersinrepository_when_soundcarriersByAlbumName_then_expectsoundcarrierssequals() throws InvalidSessionException {
         //given
         List<SoundCarrier> soundCarriers = Arrays.asList(
                 createSoundCarrierDummy(),

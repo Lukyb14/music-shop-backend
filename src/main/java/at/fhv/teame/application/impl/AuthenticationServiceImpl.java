@@ -8,38 +8,41 @@ import at.fhv.teame.infrastructure.HibernateUserRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.connection.Session;
 import at.fhv.teame.sharedlib.dto.SessionDTO;
+import at.fhv.teame.sharedlib.ejb.AuthenticationServiceRemote;
+import at.fhv.teame.sharedlib.ejb.LoggedInClientRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
-import at.fhv.teame.sharedlib.rmi.AuthenticationService;
-import at.fhv.teame.sharedlib.rmi.LoggedInClient;
+import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
 
-public class AuthenticationServiceImpl extends UnicastRemoteObject implements AuthenticationService {
+@Stateless
+public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
 
     private static final String PROVIDER_URL = "ldap://10.0.40.169:389";
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
 
-    public static Map<ClientUser, LoggedInClient> loggedInClientsMap;
+    public static Map<ClientUser, LoggedInClientRemote> loggedInClientsMap;
 
-    public AuthenticationServiceImpl() throws RemoteException {
+    public AuthenticationServiceImpl() {
         this(new HibernateUserRepository(), new ListSessionRepository());
         loggedInClientsMap = new HashMap();
     }
 
-    public AuthenticationServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) throws RemoteException {
+    public AuthenticationServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) {
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public SessionDTO login(String username, String password) throws RemoteException, LoginFailedException {
+    public SessionDTO login(String username, String password) throws LoginFailedException {
         Properties properties = new Properties();
         properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         properties.put(Context.PROVIDER_URL, PROVIDER_URL);
@@ -81,7 +84,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     }
 
     @Override
-    public void logout(String sessionId) throws RemoteException {
+    public void logout(String sessionId) {
         try {
             Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
             loggedInClientsMap.remove(session.getUser());
@@ -93,7 +96,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
 
 
     @Override
-    public void rememberClient(LoggedInClient loggedInClient, String sessionId) throws RemoteException, InvalidSessionException {
+    public void rememberClient(LoggedInClientRemote loggedInClient, String sessionId) throws InvalidSessionException {
         try {
             Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
             loggedInClientsMap.put(session.getUser(), loggedInClient);

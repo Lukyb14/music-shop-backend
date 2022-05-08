@@ -8,7 +8,6 @@ import at.fhv.teame.domain.repositories.UserRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateUserRepository;
-import at.fhv.teame.connection.rmi.RMIFactoryImpl;
 import at.fhv.teame.sharedlib.dto.CustomerDTO;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
 import at.fhv.teame.sharedlib.dto.SessionDTO;

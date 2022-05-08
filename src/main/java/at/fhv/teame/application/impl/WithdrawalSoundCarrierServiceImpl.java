@@ -8,32 +8,33 @@ import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.connection.Session;
-import at.fhv.teame.sharedlib.rmi.WithdrawSoundCarrierService;
+import at.fhv.teame.sharedlib.ejb.WithdrawSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.WithdrawalFailedException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+
+import javax.ejb.Stateless;
 import java.util.Map;
 import java.util.UUID;
 
-public class WithdrawalSoundCarrierServiceImpl extends UnicastRemoteObject implements WithdrawSoundCarrierService {
+@Stateless
+public class WithdrawalSoundCarrierServiceImpl implements WithdrawSoundCarrierServiceRemote {
 
     private final SoundCarrierRepository soundCarrierRepository;
     private final InvoiceRepository invoiceRepository;
     private final SessionRepository sessionRepository;
 
-    public WithdrawalSoundCarrierServiceImpl() throws RemoteException {
+    public WithdrawalSoundCarrierServiceImpl(){
         this(new HibernateSoundCarrierRepository(), new HibernateInvoiceRepository(), new ListSessionRepository());
     }
 
-    public WithdrawalSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, InvoiceRepository invoiceRepository, SessionRepository sessionRepository) throws RemoteException {
+    public WithdrawalSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, InvoiceRepository invoiceRepository, SessionRepository sessionRepository){
         this.soundCarrierRepository = soundCarrierRepository;
         this.invoiceRepository = invoiceRepository;
         this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public void withdrawSoundCarrier(String invoiceId, Map<String, Integer> soundCarrierReturnAmountMap, String sessionId) throws WithdrawalFailedException, RemoteException, InvalidSessionException {
+    public void withdrawSoundCarrier(String invoiceId, Map<String, Integer> soundCarrierReturnAmountMap, String sessionId) throws WithdrawalFailedException, InvalidSessionException {
         try {
             Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
             if (!session.isSeller()) throw new InvalidSessionException();

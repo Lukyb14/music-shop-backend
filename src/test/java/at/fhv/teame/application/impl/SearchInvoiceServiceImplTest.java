@@ -6,6 +6,7 @@ import at.fhv.teame.mocks.MockInvoiceRepository;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
+import at.fhv.teame.sharedlib.ejb.SearchInvoiceServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SearchInvoiceServiceImplTest {
-    static SearchInvoiceServiceImpl searchInvoiceService;
+    static SearchInvoiceServiceRemote searchInvoiceService;
 
     @BeforeAll
-    static void beforeAll() throws RemoteException{
+    static void beforeAll() {
         searchInvoiceService = new SearchInvoiceServiceImpl(new MockInvoiceRepository(), new MockSessionRepository());
     }
 
     @Test
-    void given_2invoiceinrepository_when_invoiceById_then_expectInvoiceequals() throws RemoteException, InvalidSessionException {
+    void given_2invoiceinrepository_when_invoiceById_then_expectInvoiceequals() throws InvalidSessionException {
         //given
         InvoiceLineDTO[] invoiceLineDTOExpected = new InvoiceLineDTO[1];
         InvoiceLineDTO.Builder builder = InvoiceLineDTO.builder();

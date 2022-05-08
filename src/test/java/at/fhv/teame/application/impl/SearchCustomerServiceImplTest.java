@@ -1,6 +1,7 @@
 package at.fhv.teame.application.impl;
 
 import at.fhv.teame.sharedlib.dto.CustomerDTO;
+import at.fhv.teame.sharedlib.ejb.SearchInvoiceServiceRemote;
 import at.fhv.teame.sharedlib.rmi.SearchCustomerService;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 class SearchCustomerServiceImplTest {
 
-    private SearchCustomerService searchCustomerService;
+    private SearchInvoiceServiceRemote searchCustomerService;
 
 /*    @Test
     void getCustomerByFullName() throws RemoteException {
