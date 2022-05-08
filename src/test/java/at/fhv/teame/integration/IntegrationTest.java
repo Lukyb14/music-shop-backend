@@ -170,7 +170,7 @@ class IntegrationTest {
         messagingService.publishMessage(new MessageDTO("Rock", "New Concert", randomValue), sessionDTO.getSessionId());
 
         // wait 1 second for ActiveMQ to update itself
-        Thread.sleep(1000);
+        Thread.sleep(6000);
 
         List<MessageDTO> messagesAfter = messagingService.fetchMessages(sessionDTO.getSessionId());
         boolean isMessagePresent = false;
@@ -191,10 +191,11 @@ class IntegrationTest {
         List<MessageDTO> messagesBeforeDeletion = messagingService.fetchMessages(sessionDTO.getSessionId());
         String deletedMessageId = messagesBeforeDeletion.get(0).getId();
         String deletedMessageTopic = messagesBeforeDeletion.get(0).getTopic();
+      
         messagingService.deleteMessage(deletedMessageTopic, deletedMessageId, sessionDTO.getSessionId());
 
         // wait 4 seconds for ActiveMQ to update itself
-        Thread.sleep(4000);
+        Thread.sleep(6000);
 
         List<MessageDTO> messagesAfterDeletion = messagingService.fetchMessages(sessionDTO.getSessionId());
         boolean isMessagePresent = false;
