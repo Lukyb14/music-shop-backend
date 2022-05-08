@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'application'
+    id 'war'
 }
 
 application {
@@ -15,17 +16,20 @@ repositories {
     mavenCentral()
     maven {
         url 'https://jitpack.io'
-        credentials {username 'jp_r2pd1rhpk1m11g30nut6aima76'}
     }
 }
 
 dependencies {
+    compileOnly('javax.enterprise:cdi-api:2.0.SP1')
+    compileOnly('javax.ejb:javax.ejb-api:3.2.2')
+    compileOnly('javax.ws.rs:javax.ws.rs-api:2.1.1')
+    compileOnly('javax.servlet:javax.servlet-api:4.0.1')
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.4.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     implementation 'org.hibernate:hibernate-core:5.6.5.Final'
     implementation 'org.postgresql:postgresql:42.3.3'
-    implementation 'com.github.Lukyb14:music-shop-sharedlib:v1.1.15'
+    implementation 'com.github.Lukyb14:music-shop-sharedlib:1.2.10'
     implementation group: 'org.apache.activemq', name: 'activemq-all', version: '5.17.0'
     implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
     implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
@@ -61,4 +65,8 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+application {
+    mainClass.set('at.fhv.teame.Main')
 }

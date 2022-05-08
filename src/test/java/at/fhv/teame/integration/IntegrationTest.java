@@ -1,6 +1,5 @@
 package at.fhv.teame.integration;
 
-import at.fhv.teame.application.impl.*;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
@@ -9,13 +8,16 @@ import at.fhv.teame.domain.repositories.UserRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateUserRepository;
-import at.fhv.teame.rmi.RMIFactoryImpl;
 import at.fhv.teame.sharedlib.dto.CustomerDTO;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
 import at.fhv.teame.sharedlib.dto.SessionDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
+import at.fhv.teame.sharedlib.exceptions.PublishingFailedException;
+import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
 import at.fhv.teame.sharedlib.rmi.*;
-import at.fhv.teame.sharedlib.rmi.exceptions.*;
+import at.fhv.teame.sharedlib.exceptions.*;
 import at.fhv.teame.sharedlib.rmi.factory.RMIFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -189,7 +191,8 @@ class IntegrationTest {
         List<MessageDTO> messagesBeforeDeletion = messagingService.fetchMessages(sessionDTO.getSessionId());
         String deletedMessageId = messagesBeforeDeletion.get(0).getId();
         String deletedMessageTopic = messagesBeforeDeletion.get(0).getTopic();
-        messagingService.deleteMessage(deletedMessageTopic ,deletedMessageId, sessionDTO.getSessionId());
+      
+        messagingService.deleteMessage(deletedMessageTopic, deletedMessageId, sessionDTO.getSessionId());
 
         // wait 4 seconds for ActiveMQ to update itself
         Thread.sleep(6000);
