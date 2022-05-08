@@ -1,4 +1,4 @@
-package at.fhv.teame.rmi;
+package at.fhv.teame.connection;
 
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.model.user.Role;

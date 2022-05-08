@@ -7,41 +7,40 @@ import at.fhv.teame.domain.repositories.UserRepository;
 import at.fhv.teame.infrastructure.HibernateUserRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
-import at.fhv.teame.sharedlib.rmi.LoggedInClient;
-import at.fhv.teame.sharedlib.rmi.MessageService;
-import at.fhv.teame.sharedlib.rmi.exceptions.DeletionFailedException;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
-import at.fhv.teame.sharedlib.rmi.exceptions.PublishingFailedException;
-import at.fhv.teame.sharedlib.rmi.exceptions.ReceiveFailedException;
+import at.fhv.teame.sharedlib.ejb.LoggedInClientRemote;
+import at.fhv.teame.sharedlib.ejb.MessageServiceRemote;
+import at.fhv.teame.sharedlib.exceptions.DeletionFailedException;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.PublishingFailedException;
+import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
+import javax.ejb.Stateless;
 import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
-
-public class MessagingServiceImpl extends UnicastRemoteObject implements MessageService {
+@Stateless
+public class MessagingServiceImpl implements MessageServiceRemote {
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
 
     //default constructor with hibernate
-    public MessagingServiceImpl() throws RemoteException {
+    public MessagingServiceImpl() {
         this(new HibernateUserRepository(), new ListSessionRepository());
 
     }
 
     //for mocking
-    public MessagingServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) throws RemoteException {
+    public MessagingServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) {
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public void publishMessage(MessageDTO messageDTO, String sessionId) throws RemoteException, PublishingFailedException, InvalidSessionException {
+    public void publishMessage(MessageDTO messageDTO, String sessionId) throws PublishingFailedException, InvalidSessionException {
         try {
-            at.fhv.teame.rmi.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!rmiSession.isOperator() && !messageDTO.getTopic().equalsIgnoreCase("order")) throw new InvalidSessionException();
+            at.fhv.teame.connection.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if (!rmiSession.isOperator()) throw new InvalidSessionException();
             // Get the JNDI Initial Context to do JNDI lookups
             InitialContext ctx = new InitialContext();
             // Get the ConnectionFactory by JNDI name
@@ -69,9 +68,9 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
         }
     }
 
-    private void notifyAllTopicConsumers(String topic) throws RemoteException {
-        for (Map.Entry<ClientUser, LoggedInClient> set : AuthenticationServiceImpl.loggedInClientsMap.entrySet()) {
-            if(set.getKey().getTopics().contains(topic)) {
+    private void notifyAllTopicConsumers(String topic) {
+        for (Map.Entry<ClientUser, LoggedInClientRemote> set : AuthenticationServiceImpl.loggedInClientsMap.entrySet()) {
+            if (set.getKey().getTopics().contains(topic)) {
                 set.getValue().inform();
             }
         }
@@ -88,9 +87,9 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
     }
 
     @Override
-    public void deleteMessage(String topic, String messageId, String sessionId) throws RemoteException, InvalidSessionException, DeletionFailedException {
+    public void deleteMessage(String topic, String messageId, String sessionId) throws InvalidSessionException, DeletionFailedException {
         try {
-            at.fhv.teame.rmi.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
+            at.fhv.teame.connection.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
             ClientUser clientUser = rmiSession.getUser();
             searchMessageToAcknowledge(clientUser, topic, messageId);
 
@@ -130,9 +129,9 @@ public class MessagingServiceImpl extends UnicastRemoteObject implements Message
     }
 
     @Override
-    public List<MessageDTO> fetchMessages(String sessionId) throws RemoteException, ReceiveFailedException, InvalidSessionException {
+    public List<MessageDTO> fetchMessages(String sessionId) throws ReceiveFailedException, InvalidSessionException {
         try {
-            at.fhv.teame.rmi.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
+            at.fhv.teame.connection.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
             ClientUser clientUser = rmiSession.getUser();
 
             List<MessageDTO> messages = new LinkedList<>();
