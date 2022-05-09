@@ -1,6 +1,7 @@
 package at.fhv.teame.application.impl;
 
 import at.fhv.teame.application.exceptions.SessionNotFoundException;
+import at.fhv.teame.application.exceptions.UserNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.UserRepository;
