@@ -96,6 +96,43 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
         }
     }
 
+
+    public ClientUser loginClient(String username, String password) throws LoginFailedException {
+        Properties properties = new Properties();
+        properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        properties.put(Context.PROVIDER_URL, PROVIDER_URL);
+
+        try {
+            InitialDirContext ctx = new InitialDirContext(properties);
+            String base = " ,dc=ad,dc=teame,dc=net";
+
+
+            String distinguishedName = searchUserInBase(ctx, username, "ou=employees" + base);
+            if (distinguishedName != null);
+
+
+            if(distinguishedName == null) throw new LoginFailedException();
+
+            properties.put(Context.SECURITY_PRINCIPAL, distinguishedName);
+            properties.put(Context.SECURITY_CREDENTIALS, password);
+            try {
+                ctx = new InitialDirContext(properties);
+                System.out.println("Connection to LDAP System successful");
+
+                ClientUser clientUser = userRepository.userByCn(username);
+                return clientUser;
+            } catch (Exception e) {
+                // invalid password
+                throw new LoginFailedException();
+            } finally {
+                ctx.close();
+            }
+        } catch (NamingException e) {
+            // invalid user or password
+            throw new LoginFailedException();
+        }
+    }
+
     @Override
     public void logout(String sessionId) {
         try {

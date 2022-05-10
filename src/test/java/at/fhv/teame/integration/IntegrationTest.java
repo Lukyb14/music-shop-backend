@@ -44,14 +44,14 @@ class IntegrationTest {
 
     @BeforeAll
     static void setup() throws IOException {
-        RMIFactory rmiFactory = new RMIFactoryImpl();
-        authenticationService = rmiFactory.createSearchAuthenticationServiceImpl();
-        messagingService = rmiFactory.createMessageServiceImpl();
-        purchaseSoundCarrierService = rmiFactory.createPurchaseSoundCarrierServiceImpl();
-        searchCustomerService = rmiFactory.createSearchCustomerServiceImpl();
-        searchInvoiceService = rmiFactory.createSearchInvoiceServiceImpl();
-        searchSoundCarrierService = rmiFactory.createSearchSoundCarrierServiceImpl();
-        withdrawSoundCarrierService = rmiFactory.createWithdrawSoundCarrierServiceImpl();
+       // RMIFactory rmiFactory = new RMIFactoryImpl();
+//        authenticationService = rmiFactory.createSearchAuthenticationServiceImpl();
+//        messagingService = rmiFactory.createMessageServiceImpl();
+//        purchaseSoundCarrierService = rmiFactory.createPurchaseSoundCarrierServiceImpl();
+//        searchCustomerService = rmiFactory.createSearchCustomerServiceImpl();
+//        searchInvoiceService = rmiFactory.createSearchInvoiceServiceImpl();
+//        searchSoundCarrierService = rmiFactory.createSearchSoundCarrierServiceImpl();
+//        withdrawSoundCarrierService = rmiFactory.createWithdrawSoundCarrierServiceImpl();
 
         soundCarrierRepository = new HibernateSoundCarrierRepository();
         invoiceRepository = new HibernateInvoiceRepository();
