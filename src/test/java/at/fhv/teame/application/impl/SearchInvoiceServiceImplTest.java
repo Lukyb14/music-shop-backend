@@ -23,7 +23,7 @@ class SearchInvoiceServiceImplTest {
 
     @BeforeAll
     static void beforeAll() {
-        searchInvoiceService = new SearchInvoiceServiceImpl(new MockInvoiceRepository(), new MockSessionRepository());
+        searchInvoiceService = new SearchInvoiceServiceImpl(new MockInvoiceRepository());
     }
 
     @Test
@@ -37,7 +37,7 @@ class SearchInvoiceServiceImplTest {
         InvoiceDTO invoiceDTOExpected = InvoiceDTO.builder().withInvoiceEntity("20000", "2022.04.10", "Cash", "3", invoiceLineDTOExpected).build();
 
         //when
-        InvoiceDTO invoiceDTOActual = searchInvoiceService.invoiceById("20000", UUID.randomUUID().toString());
+        InvoiceDTO invoiceDTOActual = searchInvoiceService.invoiceById("20000");
 
 
         //then

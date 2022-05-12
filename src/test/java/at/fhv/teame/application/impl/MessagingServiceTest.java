@@ -24,7 +24,7 @@ class MessagingServiceTest {
     }
 
     @Test
-    void getAllTopics() throws InvalidSessionException {
+    void getAllTopics() {
         //given
         List<String> topicsExpected = List.of(
                 "Pop",
@@ -33,7 +33,7 @@ class MessagingServiceTest {
         );
 
         //when
-        List<String> topicsActual = messageService.allTopics(UUID.randomUUID().toString());
+        List<String> topicsActual = messageService.allTopics();
 
         //then
         assertEquals(topicsExpected, topicsActual);

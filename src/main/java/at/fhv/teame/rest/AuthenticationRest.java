@@ -23,13 +23,12 @@ public class AuthenticationRest {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes("application/json")
     public String login(final MyLoginBean loginBean) throws LoginFailedException {
-        ClientUser clientUser = authenticationService.loginClient(loginBean.username, loginBean.password);
+        ClientUser clientUser = authenticationService.loginCustomer(loginBean.username, loginBean.password);
         Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
         return Jwts.builder()
                 .setSubject(clientUser.getCn())
                 .claim("role", clientUser.getRole().toString())
-                .claim("Session-ID", UUID.randomUUID().toString())
                 .signWith(key)
                 .setId(UUID.randomUUID().toString())
                 .compact();

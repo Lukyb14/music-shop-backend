@@ -1,25 +1,20 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.application.exceptions.UserNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.UserRepository;
 import at.fhv.teame.infrastructure.HibernateUserRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
-import at.fhv.teame.connection.Session;
+import at.fhv.teame.session.Session;
 import at.fhv.teame.sharedlib.dto.SessionDTO;
 import at.fhv.teame.sharedlib.ejb.AuthenticationServiceRemote;
-import at.fhv.teame.sharedlib.ejb.LoggedInClientRemote;
-import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
 import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -30,11 +25,8 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
 
-    public static Map<ClientUser, LoggedInClientRemote> loggedInClientsMap;
-
     public AuthenticationServiceImpl() {
         this(new HibernateUserRepository(), new ListSessionRepository());
-        loggedInClientsMap = new HashMap();
     }
 
     public AuthenticationServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) {
@@ -97,7 +89,7 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
     }
 
 
-    public ClientUser loginClient(String username, String password) throws LoginFailedException {
+    public ClientUser loginCustomer(String username, String password) throws LoginFailedException {
         Properties properties = new Properties();
         properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         properties.put(Context.PROVIDER_URL, PROVIDER_URL);
@@ -136,25 +128,11 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
     @Override
     public void logout(String sessionId) {
         try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            loggedInClientsMap.remove(session.getUser());
             sessionRepository.deleteSession(UUID.fromString(sessionId));
-        } catch (IllegalArgumentException | SessionNotFoundException ignored) {
+        } catch (IllegalArgumentException ignored) {
             // if we can't create a UUID from the string, it is invalid and therefore does not exist anyway
         }
     }
-
-
-    @Override
-    public void rememberClient(LoggedInClientRemote loggedInClient, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            loggedInClientsMap.put(session.getUser(), loggedInClient);
-        } catch (SessionNotFoundException e) {
-            throw new InvalidSessionException();
-        }
-    }
-
 
     private String searchUserInBase(InitialDirContext ctx, String username, String base) throws NamingException {
         Attributes match = new BasicAttributes();

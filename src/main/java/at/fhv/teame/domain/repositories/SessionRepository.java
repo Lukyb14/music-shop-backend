@@ -2,7 +2,7 @@ package at.fhv.teame.domain.repositories;
 
 import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
-import at.fhv.teame.connection.Session;
+import at.fhv.teame.session.Session;
 
 import java.util.UUID;
 

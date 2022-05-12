@@ -17,17 +17,15 @@ public class PurchaseSoundCarrierRest {
 
 
     private PurchaseSoundCarrierServiceRemote purchaseSoundCarrierService;
-    private AuthenticationServiceImpl authenticationImpl;
 
     public PurchaseSoundCarrierRest() {
-        authenticationImpl = new AuthenticationServiceImpl();
         purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl();
     }
 
     @POST
     @Consumes("application/json")
-    public void PurchaseSoundCarrier(ShoppingCartDTO shoppingCartDTO) throws InvalidSessionException, PurchaseFailedException {
-        purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO, authenticationImpl.backdoorLogin("yce5586").getSessionId());
+    public void PurchaseSoundCarrier(ShoppingCartDTO shoppingCartDTO) throws PurchaseFailedException {
+        purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
     }
 }
 
