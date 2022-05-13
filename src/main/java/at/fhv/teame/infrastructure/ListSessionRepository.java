@@ -5,10 +5,12 @@ import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.session.Session;
 
+import javax.ejb.Stateless;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Stateless
 public class ListSessionRepository implements SessionRepository {
 
     private static final Set<Session> sessions = new HashSet<>();

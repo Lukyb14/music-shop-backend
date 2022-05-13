@@ -4,17 +4,15 @@ import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+@Stateless
 public class HibernateInvoiceRepository implements InvoiceRepository {
-    private final EntityManagerFactory entityManagerFactory;
-
-    public HibernateInvoiceRepository() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
-    }
+    private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
 
     @Override
     public void add(Invoice invoice) {

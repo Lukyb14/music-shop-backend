@@ -11,9 +11,9 @@ import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.rmi.RemoteException;
+
 import java.util.HashMap;
-import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -69,7 +69,7 @@ public class PurchaseSoundCarrierServiceTest {
     }
 
     @Test
-    void given_ShoppingCartDtAndGuest_when_confirmPurchase_then_NoException() throws PurchaseFailedException, InvalidSessionException {
+    void given_ShoppingCartDtAndGuest_when_confirmPurchase_then_NoException() throws PurchaseFailedException {
         //given
         HashMap<String, Integer> expectedPurchasedItems = new HashMap<>();
         expectedPurchasedItems.put("100001", 1);
@@ -90,7 +90,7 @@ public class PurchaseSoundCarrierServiceTest {
     }
 
     @Test
-    void given_ShoppingCartDtoAndPurchasedItems_when_confirmPurchase_then_NoException() throws PurchaseFailedException, InvalidSessionException {
+    void given_ShoppingCartDtoAndPurchasedItems_when_confirmPurchase_then_NoException() throws PurchaseFailedException {
         //given
         ShoppingCartDTO shoppingCartDTO = buildShoppingCartDto();
 

@@ -2,28 +2,30 @@ package at.fhv.teame.application.impl;
 
 import at.fhv.teame.domain.model.soundcarrier.Song;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
+import at.fhv.teame.domain.repositories.InvoiceRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
-import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.SongDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
 import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;
-
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.LinkedList;
 import java.util.List;
 
 @Stateless
 public class SearchSoundCarrierServiceImpl implements SearchSoundCarrierServiceRemote {
-    private final SoundCarrierRepository soundCarrierRepository;
+    @EJB
+    private SoundCarrierRepository soundCarrierRepository;
 
-    public SearchSoundCarrierServiceImpl() {
-        this(new HibernateSoundCarrierRepository());
-    }
+    //default constructor with hibernate
+    public SearchSoundCarrierServiceImpl() { }
 
+    //for mocking
     public SearchSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository) {
         this.soundCarrierRepository = soundCarrierRepository;
     }
+
 
     @Override
     public List<SoundCarrierDTO> soundCarriersByAlbumName(String album, int pageNr) {

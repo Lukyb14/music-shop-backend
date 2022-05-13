@@ -3,28 +3,30 @@ package at.fhv.teame.application.impl;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
+import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
 import at.fhv.teame.sharedlib.ejb.SearchInvoiceServiceRemote;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import java.util.List;
 
 @Stateless
 public class SearchInvoiceServiceImpl implements SearchInvoiceServiceRemote {
-    private final InvoiceRepository invoiceRepository;
+    @EJB
+    private InvoiceRepository invoiceRepository;
 
     // default constructor with hibernate
-    public SearchInvoiceServiceImpl() {
-        this(new HibernateInvoiceRepository());
-    }
+    public SearchInvoiceServiceImpl() {}
 
     //for mocking
     public SearchInvoiceServiceImpl(InvoiceRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;
     }
+
 
     @Override
     public InvoiceDTO invoiceById(String invoiceId) {

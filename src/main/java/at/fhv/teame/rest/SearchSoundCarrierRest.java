@@ -1,23 +1,17 @@
 package at.fhv.teame.rest;
 
-import at.fhv.teame.application.impl.AuthenticationServiceImpl;
-import at.fhv.teame.application.impl.SearchSoundCarrierServiceImpl;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;
-import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 
+import javax.ejb.EJB;
 import javax.ws.rs.*;
 import java.util.List;
 
 @Path("/soundCarrier/search")
 public class SearchSoundCarrierRest {
 
-
-    private SearchSoundCarrierServiceImpl searchSoundCarrierService;
-
-    public SearchSoundCarrierRest() {
-        searchSoundCarrierService = new SearchSoundCarrierServiceImpl();
-    }
+    @EJB
+    private SearchSoundCarrierServiceRemote searchSoundCarrierService;
 
     @GET
     @Path("/artist/{artist}")
@@ -31,7 +25,7 @@ public class SearchSoundCarrierRest {
             pageNr = 1;
         }
 
-        return searchSoundCarrierService.soundCarriersByAlbumName(artist, pageNr);
+        return searchSoundCarrierService.soundCarriersByArtistName(artist, pageNr);
     }
 
     @GET
@@ -39,7 +33,6 @@ public class SearchSoundCarrierRest {
     @Produces("application/json")
     @Consumes("text/plain")
     public List<SoundCarrierDTO> searchByAlbum(@PathParam("album") String album, @QueryParam("pageNr") String pageNrStr) {
-
         int pageNr;
         try {
             pageNr = Integer.parseInt(pageNrStr);

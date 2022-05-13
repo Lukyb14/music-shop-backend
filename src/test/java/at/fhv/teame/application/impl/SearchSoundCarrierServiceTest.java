@@ -4,39 +4,34 @@ import at.fhv.teame.domain.model.soundcarrier.Album;
 import at.fhv.teame.domain.model.soundcarrier.Medium;
 import at.fhv.teame.domain.model.soundcarrier.Song;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
-import at.fhv.teame.domain.model.user.ClientUser;
-import at.fhv.teame.domain.model.user.Role;
-import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.SongDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
 import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;
-import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SearchSoundCarrierServiceTest {
 
     private SearchSoundCarrierServiceRemote searchSoundCarrierService;
 
-    private MockSessionRepository mockSessionRepository;
-
 
     @BeforeEach
     void beforeEach() {
-        mockSessionRepository = new MockSessionRepository();
         searchSoundCarrierService = new SearchSoundCarrierServiceImpl(new MockSoundCarrierRepository());
     }
 
     @Test
-    void given_2soundcarriersinrepository_when_soundcarriersByAlbumName_then_expectsoundcarrierssequals() throws InvalidSessionException {
+    void given_2soundcarriersinrepository_when_soundcarriersByAlbumName_then_expectsoundcarrierssequals() {
         //given
         List<SoundCarrier> soundCarriers = Arrays.asList(
                 createSoundCarrierDummy(),
@@ -61,28 +56,10 @@ class SearchSoundCarrierServiceTest {
         }
     }
 
-    @Test
-    void given_invalidsessionrole_when_soundcarriersByAlbumName_then_throws() {
-        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
 
-        //when..then
-        assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1);
-        }, "InvalidSessionException was expected");
-    }
 
     @Test
-    void given_invalidsessionId_when_soundcarriersByAlbumName_then_throws() {
-        //when..then
-        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
-
-        assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1);
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_totResultsExpected_when_totResultsByAlbumName_then_totResultsequals() throws RemoteException, InvalidSessionException {
+    void given_totResultsExpected_when_totResultsByAlbumName_then_totResultsequals() {
         //given
         int totResultsExpected = 2;
 
@@ -93,25 +70,6 @@ class SearchSoundCarrierServiceTest {
         assertEquals(totResultsExpected, totResultsActual);
     }
 
-    @Test
-    void given_invalidsessionrole_when_totResultsByAlbumName_then_throws() {
-        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
-
-        //when..then
-        assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsByAlbumName("Black and White");
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_invalidsessionId_when_totResultsByAlbumName_then_throws() {
-        //when..then
-        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
-
-        assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsByAlbumName("Black and White");
-        }, "InvalidSessionException was expected");
-    }
 
     @Test
     void given_2soundcarriersinrepository_when_soundcarriersByArtistName_then_expectsoundscarriersequals() {
@@ -140,26 +98,6 @@ class SearchSoundCarrierServiceTest {
     }
 
     @Test
-    void given_invalidsessionrole_when_soundCarriersByArtistName_then_throws() {
-        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
-
-        //when..then
-        assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByArtistName("Bob", 1);
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_invalidsessionId_when_soundCarriersByArtistName_then_throws() {
-        //when..then
-        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
-
-        assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByArtistName("Bob", 1);
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
     void given_totResultsExpected_when_totResultsByArtistName_then_totResultsequals() {
         //given
         int totResultsExpected = 2;
@@ -169,26 +107,6 @@ class SearchSoundCarrierServiceTest {
 
         //then
         assertEquals(totResultsExpected, totResultsActual);
-    }
-
-    @Test
-    void given_invalidsessionrole_when_totResultsByArtistName_then_throws() {
-        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
-
-        //when..then
-        assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsByArtistName("Bob");
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_invalidsessionId_when_totResultsByArtistName_then_throws() {
-        //when..then
-        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
-
-        assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsByArtistName("Bob");
-        }, "InvalidSessionException was expected");
     }
 
     @Test
@@ -218,27 +136,7 @@ class SearchSoundCarrierServiceTest {
     }
 
     @Test
-    void given_invalidsessionrole_when_soundCarriersBySongName_then_throws() {
-        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
-
-        //when..then
-        assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersBySongName("Understruck", 1);
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_invalidsessionId_when_soundCarriersBySongName_then_throws() {
-        //when..then
-        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
-
-        assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersBySongName("Bob", 1);
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_totResultsExpected_when_totResultsBySongName_then_totResultsequals() throws RemoteException, InvalidSessionException {
+    void given_totResultsExpected_when_totResultsBySongName_then_totResultsequals() {
         //given
         int totResultsExpected = 2;
 
@@ -247,26 +145,6 @@ class SearchSoundCarrierServiceTest {
 
         //then
         assertEquals(totResultsExpected, totResultsActual);
-    }
-
-    @Test
-    void given_invalidsessionrole_when_totResultsBySongName_then_throws() {
-        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
-
-        //when..then
-        assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsBySongName("Hello World");
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_invalidsessionId_when_totResultsBySongName_then_throws() {
-        //when..then
-        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
-
-        assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsBySongName("Hello World");
-        }, "InvalidSessionException was expected");
     }
 
     @Test
@@ -285,27 +163,6 @@ class SearchSoundCarrierServiceTest {
         //then
         assertEquals(soundCarrierDetailsDTOExpected, soundCarrierDetailsDTOActual);
     }
-
-    @Test
-    void given_invalidsessionrole_when_soundCarrierDetailsByArticleId_then_throws() {
-        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
-
-        //when..then
-        assertThrows(InvalidSessionException.class, () -> {
-            SoundCarrierDetailsDTO soundCarrierDetailsDTO = searchSoundCarrierService.soundCarrierDetailsByArticleId("Understruck");
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_invalidsessionId_when_soundCarrierDetailsByArticleId_then_throws() {
-        //when..then
-        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
-
-        assertThrows(InvalidSessionException.class, () -> {
-            SoundCarrierDetailsDTO soundCarrierDetailsDTO = searchSoundCarrierService.soundCarrierDetailsByArticleId("Bob");
-        }, "InvalidSessionException was expected");
-    }
-
 
     private SoundCarrier createSoundCarrierDummy() {
         return new SoundCarrier(

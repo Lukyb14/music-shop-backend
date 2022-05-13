@@ -12,7 +12,7 @@ import at.fhv.teame.sharedlib.exceptions.DeletionFailedException;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.PublishingFailedException;
 import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
-
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jms.*;
 import javax.naming.InitialContext;
@@ -24,20 +24,21 @@ import java.util.UUID;
 
 @Stateless
 public class MessagingServiceImpl implements MessageServiceRemote {
-    private final UserRepository userRepository;
-    private final SessionRepository sessionRepository;
+    @EJB
+    private UserRepository userRepository;
+
+    @EJB
+    private SessionRepository sessionRepository;
 
     //default constructor with hibernate
-    public MessagingServiceImpl() {
-        this(new HibernateUserRepository(), new ListSessionRepository());
-
-    }
+    public MessagingServiceImpl() { }
 
     //for mocking
     public MessagingServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) {
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
     }
+
 
     @Override
     public void publishMessage(MessageDTO messageDTO) throws PublishingFailedException {

@@ -1,15 +1,15 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.application.api.AuthenticationServiceLocal;
 import at.fhv.teame.application.exceptions.UserNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.UserRepository;
-import at.fhv.teame.infrastructure.HibernateUserRepository;
-import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.session.Session;
 import at.fhv.teame.sharedlib.dto.SessionDTO;
 import at.fhv.teame.sharedlib.ejb.AuthenticationServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -19,20 +19,12 @@ import java.util.Properties;
 import java.util.UUID;
 
 @Stateless
-public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
-
+public class AuthenticationServiceImpl implements AuthenticationServiceRemote, AuthenticationServiceLocal {
+    @EJB
+    private UserRepository userRepository;
+    @EJB
+    private SessionRepository sessionRepository;
     private static final String PROVIDER_URL = "ldap://10.0.40.169:389";
-    private final UserRepository userRepository;
-    private final SessionRepository sessionRepository;
-
-    public AuthenticationServiceImpl() {
-        this(new HibernateUserRepository(), new ListSessionRepository());
-    }
-
-    public AuthenticationServiceImpl(UserRepository userRepository, SessionRepository sessionRepository) {
-        this.userRepository = userRepository;
-        this.sessionRepository = sessionRepository;
-    }
 
     public SessionDTO backdoorLogin(String username) {
         // TODO remove in production
@@ -54,19 +46,13 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
 
         try {
             InitialDirContext ctx = new InitialDirContext(properties);
-            String base = " ,dc=ad,dc=teame,dc=net";
+            String base = "ou=employees,dc=ad,dc=teame,dc=net";
 
-            //Search in different ous for user
-            String[] ous = {"ou=employees"};
-            String distinguishedName = null;
-            for (int i = 0; i < ous.length; i++) {
-                distinguishedName = searchUserInBase(ctx, username, ous[i] + base);
-                if (distinguishedName != null) break;
-            }
+            String uid = searchUserInBase(ctx, username, base);
 
-            if(distinguishedName == null) throw new LoginFailedException();
+            if(uid == null) throw new LoginFailedException();
 
-            properties.put(Context.SECURITY_PRINCIPAL, distinguishedName);
+            properties.put(Context.SECURITY_PRINCIPAL, uid);
             properties.put(Context.SECURITY_CREDENTIALS, password);
             try {
                 ctx = new InitialDirContext(properties);
@@ -88,8 +74,8 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
         }
     }
 
-
-    public ClientUser loginCustomer(String username, String password) throws LoginFailedException {
+    @Override
+    public String loginCustomer(String username, String password) throws LoginFailedException {
         Properties properties = new Properties();
         properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         properties.put(Context.PROVIDER_URL, PROVIDER_URL);
@@ -98,21 +84,22 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
             InitialDirContext ctx = new InitialDirContext(properties);
             String base = " ,dc=ad,dc=teame,dc=net";
 
+            //Search in different ous for user
+            String[] ous = {"ou=customer", "ou=licensee"};
+            String uid = null;
+            for (int i = 0; i < ous.length; i++) {
+                uid = searchUserInBase(ctx, username, ous[i] + base);
+                if (uid != null) break;
+            }
 
-            String distinguishedName = searchUserInBase(ctx, username, "ou=employees" + base);
-            if (distinguishedName != null);
+            if(uid == null) throw new LoginFailedException();
 
-
-            if(distinguishedName == null) throw new LoginFailedException();
-
-            properties.put(Context.SECURITY_PRINCIPAL, distinguishedName);
+            properties.put(Context.SECURITY_PRINCIPAL, uid);
             properties.put(Context.SECURITY_CREDENTIALS, password);
             try {
                 ctx = new InitialDirContext(properties);
                 System.out.println("Connection to LDAP System successful");
-
-                ClientUser clientUser = userRepository.userByCn(username);
-                return clientUser;
+                return uid;
             } catch (Exception e) {
                 // invalid password
                 throw new LoginFailedException();
@@ -137,15 +124,15 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote {
     private String searchUserInBase(InitialDirContext ctx, String username, String base) throws NamingException {
         Attributes match = new BasicAttributes();
         //3. Search the directory using an appropriate filter to identify the record for the specific login name provided
-        match.put(new BasicAttribute("cn", username));
+        match.put(new BasicAttribute("uid", username));
         NamingEnumeration<SearchResult> searchResults = ctx.search(base, match);
 
-        String distinguishedName;
+        String uid;
         //4. If exactly one entry is returned, get the DN of the entry
         if (searchResults.hasMore()) {
             SearchResult result = searchResults.next();
-            distinguishedName = result.getNameInNamespace();
-            return distinguishedName;
+            uid = result.getNameInNamespace();
+            return uid;
         } else {  //if zero, or more than one entries are returned → output: "no such user"
             System.out.println("no such user");
             return null;
