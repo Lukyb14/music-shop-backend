@@ -1,6 +1,7 @@
-package at.fhv.teame.session;
+package at.fhv.teame.application.impl;
 
 import at.fhv.teame.application.exceptions.SessionNotFoundException;
+import at.fhv.teame.domain.model.session.Session;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.sharedlib.ejb.SessionValidationRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
@@ -10,12 +11,12 @@ import javax.ejb.Stateless;
 import java.util.UUID;
 
 @Stateless
-public class SessionValidation implements SessionValidationRemote {
+public class SessionValidationImpl implements SessionValidationRemote {
 
     @EJB
     private SessionRepository sessionRepository;
 
-    public SessionValidation() { }
+    public SessionValidationImpl() { }
 
 
     @Override

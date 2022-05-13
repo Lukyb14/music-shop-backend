@@ -1,4 +1,4 @@
-package at.fhv.teame.rest;
+package at.fhv.teame.application.rest;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

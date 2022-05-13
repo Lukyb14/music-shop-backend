@@ -1,4 +1,4 @@
-package at.fhv.teame.rest;
+package at.fhv.teame.application.rest;
 
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;

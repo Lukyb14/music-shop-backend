@@ -1,9 +1,6 @@
-package at.fhv.teame.rest;
+package at.fhv.teame.application.rest;
 
 import at.fhv.teame.application.api.AuthenticationServiceLocal;
-import at.fhv.teame.application.impl.AuthenticationServiceImpl;
-import at.fhv.teame.domain.model.user.ClientUser;
-import at.fhv.teame.sharedlib.ejb.AuthenticationServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

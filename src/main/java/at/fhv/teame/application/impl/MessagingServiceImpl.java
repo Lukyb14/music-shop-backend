@@ -4,8 +4,6 @@ import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.UserRepository;
-import at.fhv.teame.infrastructure.HibernateUserRepository;
-import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
 import at.fhv.teame.sharedlib.ejb.MessageServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.DeletionFailedException;
@@ -75,7 +73,7 @@ public class MessagingServiceImpl implements MessageServiceRemote {
     @Override
     public void deleteMessage(String topic, String messageId, String sessionId) throws InvalidSessionException, DeletionFailedException {
         try {
-            at.fhv.teame.session.Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            at.fhv.teame.domain.model.session.Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
             ClientUser clientUser = session.getUser();
             searchMessageToAcknowledge(clientUser, topic, messageId);
 
@@ -117,7 +115,7 @@ public class MessagingServiceImpl implements MessageServiceRemote {
     @Override
     public List<MessageDTO> fetchMessages(String sessionId) throws ReceiveFailedException, InvalidSessionException {
         try {
-            at.fhv.teame.session.Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            at.fhv.teame.domain.model.session.Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
             ClientUser clientUser = session.getUser();
 
             List<MessageDTO> messages = new LinkedList<>();

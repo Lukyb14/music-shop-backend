@@ -5,7 +5,7 @@ import at.fhv.teame.application.exceptions.UserNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.UserRepository;
-import at.fhv.teame.session.Session;
+import at.fhv.teame.domain.model.session.Session;
 import at.fhv.teame.sharedlib.dto.SessionDTO;
 import at.fhv.teame.sharedlib.ejb.AuthenticationServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.LoginFailedException;

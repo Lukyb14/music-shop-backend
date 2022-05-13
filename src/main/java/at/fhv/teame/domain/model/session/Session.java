@@ -1,4 +1,4 @@
-package at.fhv.teame.session;
+package at.fhv.teame.domain.model.session;
 
 import at.fhv.teame.domain.model.user.ClientUser;
 
