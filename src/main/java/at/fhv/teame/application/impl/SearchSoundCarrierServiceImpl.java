@@ -1,121 +1,66 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.soundcarrier.Song;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
-import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
-import at.fhv.teame.infrastructure.ListSessionRepository;
-import at.fhv.teame.connection.Session;
 import at.fhv.teame.sharedlib.dto.SongDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
 import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;
-import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
+
 import javax.ejb.Stateless;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 @Stateless
 public class SearchSoundCarrierServiceImpl implements SearchSoundCarrierServiceRemote {
     private final SoundCarrierRepository soundCarrierRepository;
-    private final SessionRepository sessionRepository;
 
     public SearchSoundCarrierServiceImpl() {
-        this(new HibernateSoundCarrierRepository(), new ListSessionRepository());
+        this(new HibernateSoundCarrierRepository());
     }
 
-    public SearchSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, SessionRepository sessionRepository) {
+    public SearchSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository) {
         this.soundCarrierRepository = soundCarrierRepository;
-        this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public List<SoundCarrierDTO> soundCarriersByAlbumName(String album, int pageNr, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public List<SoundCarrierDTO> soundCarriersByAlbumName(String album, int pageNr) {
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByAlbumName(album, pageNr);
         return buildSoundCarrierDtos(soundCarriers);
     }
 
-    @Override
-    public List<SoundCarrierDTO> soundCarriersByArtistName(String artist, int pageNr, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
 
+    @Override
+    public List<SoundCarrierDTO> soundCarriersByArtistName(String artist, int pageNr) {
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersByArtistName(artist, pageNr);
         return buildSoundCarrierDtos(soundCarriers);
     }
 
     @Override
-    public List<SoundCarrierDTO> soundCarriersBySongName(String song, int pageNr, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public List<SoundCarrierDTO> soundCarriersBySongName(String song, int pageNr) {
         List<SoundCarrier> soundCarriers = soundCarrierRepository.soundCarriersBySongName(song, pageNr);
         return buildSoundCarrierDtos(soundCarriers);
     }
 
     @Override
-    public int totResultsByAlbumName(String album, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public int totResultsByAlbumName(String album) {
         return soundCarrierRepository.totResultsByAlbumName(album).intValue();
     }
 
     @Override
-    public int totResultsByArtistName(String artist, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public int totResultsByArtistName(String artist) {
         return soundCarrierRepository.totResultsByArtistName(artist).intValue();
     }
 
     @Override
-    public int totResultsBySongName(String song, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public int totResultsBySongName(String song) {
         return soundCarrierRepository.totResultsBySongName(song).intValue();
     }
 
     @Override
-    public SoundCarrierDetailsDTO soundCarrierDetailsByArticleId(String articleId, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public SoundCarrierDetailsDTO soundCarrierDetailsByArticleId(String articleId) {
         SoundCarrier soundCarrier = soundCarrierRepository.soundCarrierByArticleId(articleId);
         return buildSoundCarrierDetailsDto(soundCarrier);
     }

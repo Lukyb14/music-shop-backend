@@ -4,7 +4,7 @@ import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.model.user.Role;
 import at.fhv.teame.domain.repositories.SessionRepository;
-import at.fhv.teame.connection.Session;
+import at.fhv.teame.session.Session;
 
 import java.lang.reflect.Field;
 import java.util.List;

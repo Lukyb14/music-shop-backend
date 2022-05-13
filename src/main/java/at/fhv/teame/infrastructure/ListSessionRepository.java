@@ -3,7 +3,7 @@ package at.fhv.teame.infrastructure;
 import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.repositories.SessionRepository;
-import at.fhv.teame.connection.Session;
+import at.fhv.teame.session.Session;
 
 import java.util.HashSet;
 import java.util.Set;

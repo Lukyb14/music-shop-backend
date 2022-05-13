@@ -1,14 +1,9 @@
 package at.fhv.teame.application.impl;
 
 
-import at.fhv.teame.application.exceptions.SessionNotFoundException;
-import at.fhv.teame.connection.Session;
-import at.fhv.teame.domain.repositories.SessionRepository;
-import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.sharedlib.dto.CustomerDTO;
 import at.fhv.teame.sharedlib.ejb.CustomerServiceRemote;
 import at.fhv.teame.sharedlib.ejb.SearchCustomerServiceRemote;
-import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 
 import javax.ejb.Stateless;
 import javax.naming.Context;
@@ -16,13 +11,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.List;
 import java.util.Properties;
-import java.util.UUID;
 
 @Stateless
 public class SearchCustomerServiceImpl implements SearchCustomerServiceRemote {
 
     private final CustomerServiceRemote searchCustomerServiceRemoteStub;
-    private final SessionRepository sessionRepository;
 
     public SearchCustomerServiceImpl(){
         Object obj = null;
@@ -36,60 +29,30 @@ public class SearchCustomerServiceImpl implements SearchCustomerServiceRemote {
             e.printStackTrace();
         } finally {
             searchCustomerServiceRemoteStub = (CustomerServiceRemote) obj;
-            sessionRepository = new ListSessionRepository();
         }
     }
 
-    public SearchCustomerServiceImpl(CustomerServiceRemote customerService, SessionRepository sessionRepository){
+    public SearchCustomerServiceImpl(CustomerServiceRemote customerService){
         this.searchCustomerServiceRemoteStub = customerService;
-        this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public List<CustomerDTO> getCustomerByFullName(String givenName, String familyName, int pageNr, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public List<CustomerDTO> getCustomerByFullName(String givenName, String familyName, int pageNr) {
         return searchCustomerServiceRemoteStub.getCustomerByFullName(givenName, familyName, pageNr);
     }
 
     @Override
-    public List<CustomerDTO> getCustomerByFamilyName(String familyName, int pageNr, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public List<CustomerDTO> getCustomerByFamilyName(String familyName, int pageNr) {
         return searchCustomerServiceRemoteStub.getCustomerByFamilyName(familyName, pageNr);
     }
 
     @Override
-    public int totResultsByFullName(String givenName, String familyName, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public int totResultsByFullName(String givenName, String familyName) {
         return searchCustomerServiceRemoteStub.totResultsByFullName(givenName, familyName);
     }
 
     @Override
-    public int totResultsByFamilyName(String familyName, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
-
+    public int totResultsByFamilyName(String familyName) {
         return searchCustomerServiceRemoteStub.totResultsByFamilyName(familyName);
     }
 }

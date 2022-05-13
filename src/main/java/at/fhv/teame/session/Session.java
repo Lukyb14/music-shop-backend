@@ -1,7 +1,6 @@
-package at.fhv.teame.connection;
+package at.fhv.teame.session;
 
 import at.fhv.teame.domain.model.user.ClientUser;
-import at.fhv.teame.domain.model.user.Role;
 
 import java.time.Instant;
 import java.util.UUID;

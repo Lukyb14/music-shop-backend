@@ -1,59 +1,42 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
-import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
-import at.fhv.teame.infrastructure.ListSessionRepository;
-import at.fhv.teame.connection.Session;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
 import at.fhv.teame.sharedlib.ejb.SearchInvoiceServiceRemote;
-import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import java.util.List;
-import java.util.UUID;
 
 @Stateless
 public class SearchInvoiceServiceImpl implements SearchInvoiceServiceRemote {
     private final InvoiceRepository invoiceRepository;
-    private final SessionRepository sessionRepository;
 
     // default constructor with hibernate
     public SearchInvoiceServiceImpl() {
-        this(new HibernateInvoiceRepository(), new ListSessionRepository());
+        this(new HibernateInvoiceRepository());
     }
 
     //for mocking
-    public SearchInvoiceServiceImpl(InvoiceRepository invoiceRepository, SessionRepository sessionRepository) {
+    public SearchInvoiceServiceImpl(InvoiceRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;
-        this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public InvoiceDTO invoiceById(String invoiceId, String sessionId) throws InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
+    public InvoiceDTO invoiceById(String invoiceId) {
         try{
             Invoice invoice = invoiceRepository.invoiceById(Long.valueOf(invoiceId));
             return buildInvoiceDTO(invoice);
         } catch (NoResultException noResultException){
             return null;
         }
-
-
     }
 
     private InvoiceDTO buildInvoiceDTO(Invoice invoice) {
-
         return InvoiceDTO.builder().withInvoiceEntity(invoice.getInvoiceId().toString(),
                         invoice.getDateOfPurchase().toString(),
                         invoice.getPaymentMethod().toString(),
@@ -66,7 +49,6 @@ public class SearchInvoiceServiceImpl implements SearchInvoiceServiceRemote {
     }
 
     private InvoiceLineDTO[] buildInvoiceLineDTO (List<InvoiceLine> invoiceLines) {
-
         InvoiceLineDTO[] invoiceLineDto = new InvoiceLineDTO[invoiceLines.size()];
 
         for(int i = 0; i <invoiceLineDto.length; i++){

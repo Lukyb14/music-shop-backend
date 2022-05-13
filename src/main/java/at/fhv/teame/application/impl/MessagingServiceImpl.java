@@ -7,17 +7,20 @@ import at.fhv.teame.domain.repositories.UserRepository;
 import at.fhv.teame.infrastructure.HibernateUserRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
-import at.fhv.teame.sharedlib.ejb.LoggedInClientRemote;
 import at.fhv.teame.sharedlib.ejb.MessageServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.DeletionFailedException;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.PublishingFailedException;
 import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
+
 import javax.ejb.Stateless;
 import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 @Stateless
 public class MessagingServiceImpl implements MessageServiceRemote {
@@ -37,10 +40,8 @@ public class MessagingServiceImpl implements MessageServiceRemote {
     }
 
     @Override
-    public void publishMessage(MessageDTO messageDTO, String sessionId) throws PublishingFailedException, InvalidSessionException {
+    public void publishMessage(MessageDTO messageDTO) throws PublishingFailedException {
         try {
-            at.fhv.teame.connection.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!rmiSession.isOperator()) throw new InvalidSessionException();
             // Get the JNDI Initial Context to do JNDI lookups
             InitialContext ctx = new InitialContext();
             // Get the ConnectionFactory by JNDI name
@@ -56,41 +57,25 @@ public class MessagingServiceImpl implements MessageServiceRemote {
             MessageProducer prod = sess.createProducer(dest);
             // send the message to the destination
             prod.send(msg);
-            notifyAllTopicConsumers(messageDTO.getTopic());
             // Close the connection
             con.close();
             sess.close();
         } catch (JMSException | NamingException e) {
             e.printStackTrace();
             throw new PublishingFailedException();
-        } catch (SessionNotFoundException e) {
-            throw new InvalidSessionException();
-        }
-    }
-
-    private void notifyAllTopicConsumers(String topic) {
-        for (Map.Entry<ClientUser, LoggedInClientRemote> set : AuthenticationServiceImpl.loggedInClientsMap.entrySet()) {
-            if (set.getKey().getTopics().contains(topic)) {
-                set.getValue().inform();
-            }
         }
     }
 
     @Override
-    public List<String> allTopics(String sessionId) throws InvalidSessionException {
-        try {
-            sessionRepository.sessionById(UUID.fromString(sessionId));
-            return userRepository.allTopics();
-        } catch (SessionNotFoundException e) {
-            throw new InvalidSessionException();
-        }
+    public List<String> allTopics() {
+        return userRepository.allTopics();
     }
 
     @Override
     public void deleteMessage(String topic, String messageId, String sessionId) throws InvalidSessionException, DeletionFailedException {
         try {
-            at.fhv.teame.connection.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
-            ClientUser clientUser = rmiSession.getUser();
+            at.fhv.teame.session.Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            ClientUser clientUser = session.getUser();
             searchMessageToAcknowledge(clientUser, topic, messageId);
 
         } catch (DeletionFailedException e) {
@@ -131,8 +116,8 @@ public class MessagingServiceImpl implements MessageServiceRemote {
     @Override
     public List<MessageDTO> fetchMessages(String sessionId) throws ReceiveFailedException, InvalidSessionException {
         try {
-            at.fhv.teame.connection.Session rmiSession = sessionRepository.sessionById(UUID.fromString(sessionId));
-            ClientUser clientUser = rmiSession.getUser();
+            at.fhv.teame.session.Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            ClientUser clientUser = session.getUser();
 
             List<MessageDTO> messages = new LinkedList<>();
             for (String topic : clientUser.getTopics()) {

@@ -32,7 +32,7 @@ class SearchSoundCarrierServiceTest {
     @BeforeEach
     void beforeEach() {
         mockSessionRepository = new MockSessionRepository();
-        searchSoundCarrierService = new SearchSoundCarrierServiceImpl(new MockSoundCarrierRepository(), mockSessionRepository);
+        searchSoundCarrierService = new SearchSoundCarrierServiceImpl(new MockSoundCarrierRepository());
     }
 
     @Test
@@ -53,7 +53,7 @@ class SearchSoundCarrierServiceTest {
         }
 
         //when
-        List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1, UUID.randomUUID().toString());
+        List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1);
 
         //then
         for (SoundCarrierDTO s : soundCarriersDtoActual) {
@@ -67,7 +67,7 @@ class SearchSoundCarrierServiceTest {
 
         //when..then
         assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1, UUID.randomUUID().toString());
+            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1);
         }, "InvalidSessionException was expected");
     }
 
@@ -77,7 +77,7 @@ class SearchSoundCarrierServiceTest {
         String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
 
         assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1, invalidSession);
+            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByAlbumName("Black and White", 1);
         }, "InvalidSessionException was expected");
     }
 
@@ -87,7 +87,7 @@ class SearchSoundCarrierServiceTest {
         int totResultsExpected = 2;
 
         //when
-        int totResultsActual = searchSoundCarrierService.totResultsByAlbumName("Black and White", UUID.randomUUID().toString());
+        int totResultsActual = searchSoundCarrierService.totResultsByAlbumName("Black and White");
 
         //then
         assertEquals(totResultsExpected, totResultsActual);
@@ -99,7 +99,7 @@ class SearchSoundCarrierServiceTest {
 
         //when..then
         assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsByAlbumName("Black and White", UUID.randomUUID().toString());
+            int totResultsActual = searchSoundCarrierService.totResultsByAlbumName("Black and White");
         }, "InvalidSessionException was expected");
     }
 
@@ -109,12 +109,12 @@ class SearchSoundCarrierServiceTest {
         String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
 
         assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsByAlbumName("Black and White", invalidSession);
+            int totResultsActual = searchSoundCarrierService.totResultsByAlbumName("Black and White");
         }, "InvalidSessionException was expected");
     }
 
     @Test
-    void given_2soundcarriersinrepository_when_soundcarriersByArtistName_then_expectsoundscarriersequals() throws RemoteException, InvalidSessionException {
+    void given_2soundcarriersinrepository_when_soundcarriersByArtistName_then_expectsoundscarriersequals() {
         //given
         List<SoundCarrier> soundCarriers = Arrays.asList(
                 createSoundCarrierDummy(),
@@ -131,7 +131,7 @@ class SearchSoundCarrierServiceTest {
         }
 
         //when
-        List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByArtistName("Bob", 1, UUID.randomUUID().toString());
+        List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByArtistName("Bob", 1);
 
         //then
         for (SoundCarrierDTO s : soundCarriersDtoActual) {
@@ -145,7 +145,7 @@ class SearchSoundCarrierServiceTest {
 
         //when..then
         assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByArtistName("Bob", 1, UUID.randomUUID().toString());
+            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByArtistName("Bob", 1);
         }, "InvalidSessionException was expected");
     }
 
@@ -155,17 +155,17 @@ class SearchSoundCarrierServiceTest {
         String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
 
         assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByArtistName("Bob", 1, invalidSession);
+            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersByArtistName("Bob", 1);
         }, "InvalidSessionException was expected");
     }
 
     @Test
-    void given_totResultsExpected_when_totResultsByArtistName_then_totResultsequals() throws RemoteException, InvalidSessionException {
+    void given_totResultsExpected_when_totResultsByArtistName_then_totResultsequals() {
         //given
         int totResultsExpected = 2;
 
         //when
-        int totResultsActual = searchSoundCarrierService.totResultsByArtistName("Bob", UUID.randomUUID().toString());
+        int totResultsActual = searchSoundCarrierService.totResultsByArtistName("Bob");
 
         //then
         assertEquals(totResultsExpected, totResultsActual);
@@ -177,7 +177,7 @@ class SearchSoundCarrierServiceTest {
 
         //when..then
         assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsByArtistName("Bob", UUID.randomUUID().toString());
+            int totResultsActual = searchSoundCarrierService.totResultsByArtistName("Bob");
         }, "InvalidSessionException was expected");
     }
 
@@ -187,12 +187,12 @@ class SearchSoundCarrierServiceTest {
         String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
 
         assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsByArtistName("Bob", invalidSession);
+            int totResultsActual = searchSoundCarrierService.totResultsByArtistName("Bob");
         }, "InvalidSessionException was expected");
     }
 
     @Test
-    void given_2soundcarriersinrepository_when_soundcarriersBySongName_then_expectsoundscarriersequals() throws RemoteException, InvalidSessionException {
+    void given_2soundcarriersinrepository_when_soundcarriersBySongName_then_expectsoundscarriersequals() {
         //given
         List<SoundCarrier> soundCarriers = Arrays.asList(
                 createSoundCarrierDummy(),
@@ -209,7 +209,7 @@ class SearchSoundCarrierServiceTest {
         }
 
         //when
-        List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersBySongName("Apple M1", 1, UUID.randomUUID().toString());
+        List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersBySongName("Apple M1", 1);
 
         //then
         for (SoundCarrierDTO s : soundCarriersDtoActual) {
@@ -223,7 +223,7 @@ class SearchSoundCarrierServiceTest {
 
         //when..then
         assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersBySongName("Understruck", 1, UUID.randomUUID().toString());
+            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersBySongName("Understruck", 1);
         }, "InvalidSessionException was expected");
     }
 
@@ -233,7 +233,7 @@ class SearchSoundCarrierServiceTest {
         String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
 
         assertThrows(InvalidSessionException.class, () -> {
-            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersBySongName("Bob", 1, invalidSession);
+            List<SoundCarrierDTO> soundCarriersDtoActual = searchSoundCarrierService.soundCarriersBySongName("Bob", 1);
         }, "InvalidSessionException was expected");
     }
 
@@ -243,7 +243,7 @@ class SearchSoundCarrierServiceTest {
         int totResultsExpected = 2;
 
         //when
-        int totResultsActual = searchSoundCarrierService.totResultsBySongName("Hello World", UUID.randomUUID().toString());
+        int totResultsActual = searchSoundCarrierService.totResultsBySongName("Hello World");
 
         //then
         assertEquals(totResultsExpected, totResultsActual);
@@ -255,7 +255,7 @@ class SearchSoundCarrierServiceTest {
 
         //when..then
         assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsBySongName("Hello World", UUID.randomUUID().toString());
+            int totResultsActual = searchSoundCarrierService.totResultsBySongName("Hello World");
         }, "InvalidSessionException was expected");
     }
 
@@ -265,12 +265,12 @@ class SearchSoundCarrierServiceTest {
         String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
 
         assertThrows(InvalidSessionException.class, () -> {
-            int totResultsActual = searchSoundCarrierService.totResultsBySongName("Hello World", invalidSession);
+            int totResultsActual = searchSoundCarrierService.totResultsBySongName("Hello World");
         }, "InvalidSessionException was expected");
     }
 
     @Test
-    void given_soundcarrierinrepository_when_soundcarrierdetailsByArticleId_then_detailsequals() throws RemoteException, InvalidSessionException {
+    void given_soundcarrierinrepository_when_soundcarrierdetailsByArticleId_then_detailsequals() {
         //given
         SoundCarrier s = createSoundCarrierDummy();
 
@@ -280,7 +280,7 @@ class SearchSoundCarrierServiceTest {
                 .build();
 
         //when
-        SoundCarrierDetailsDTO soundCarrierDetailsDTOActual = searchSoundCarrierService.soundCarrierDetailsByArticleId("100", UUID.randomUUID().toString());
+        SoundCarrierDetailsDTO soundCarrierDetailsDTOActual = searchSoundCarrierService.soundCarrierDetailsByArticleId("100");
 
         //then
         assertEquals(soundCarrierDetailsDTOExpected, soundCarrierDetailsDTOActual);
@@ -292,7 +292,7 @@ class SearchSoundCarrierServiceTest {
 
         //when..then
         assertThrows(InvalidSessionException.class, () -> {
-            SoundCarrierDetailsDTO soundCarrierDetailsDTO = searchSoundCarrierService.soundCarrierDetailsByArticleId("Understruck", UUID.randomUUID().toString());
+            SoundCarrierDetailsDTO soundCarrierDetailsDTO = searchSoundCarrierService.soundCarrierDetailsByArticleId("Understruck");
         }, "InvalidSessionException was expected");
     }
 
@@ -302,7 +302,7 @@ class SearchSoundCarrierServiceTest {
         String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
 
         assertThrows(InvalidSessionException.class, () -> {
-            SoundCarrierDetailsDTO soundCarrierDetailsDTO = searchSoundCarrierService.soundCarrierDetailsByArticleId("Bob", invalidSession);
+            SoundCarrierDetailsDTO soundCarrierDetailsDTO = searchSoundCarrierService.soundCarrierDetailsByArticleId("Bob");
         }, "InvalidSessionException was expected");
     }
 

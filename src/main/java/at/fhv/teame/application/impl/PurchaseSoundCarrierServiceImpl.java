@@ -1,21 +1,16 @@
 package at.fhv.teame.application.impl;
 
 
-import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.model.invoice.PaymentMethod;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
-import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
-import at.fhv.teame.infrastructure.ListSessionRepository;
-import at.fhv.teame.connection.Session;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import at.fhv.teame.sharedlib.ejb.PurchaseSoundCarrierServiceRemote;
-import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
 
 import javax.ejb.Stateless;
@@ -25,35 +20,26 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Stateless
 public class PurchaseSoundCarrierServiceImpl implements PurchaseSoundCarrierServiceRemote {
 
     private final SoundCarrierRepository soundCarrierRepository;
     private final InvoiceRepository invoiceRepository;
-    private final SessionRepository sessionRepository;
 
     // default constructor with hibernate
     public PurchaseSoundCarrierServiceImpl() {
-        this(new HibernateInvoiceRepository(), new HibernateSoundCarrierRepository(), new ListSessionRepository());
+        this(new HibernateInvoiceRepository(), new HibernateSoundCarrierRepository());
     }
 
     // for mocking
-    public PurchaseSoundCarrierServiceImpl(InvoiceRepository invoiceRepository, SoundCarrierRepository soundCarrierRepository, SessionRepository sessionRepository){
+    public PurchaseSoundCarrierServiceImpl(InvoiceRepository invoiceRepository, SoundCarrierRepository soundCarrierRepository){
         this.soundCarrierRepository = soundCarrierRepository;
         this.invoiceRepository = invoiceRepository;
-        this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public void confirmPurchase(ShoppingCartDTO shoppingCartDTO, String sessionId) throws PurchaseFailedException, InvalidSessionException{
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
+    public void confirmPurchase(ShoppingCartDTO shoppingCartDTO) throws PurchaseFailedException {
         if (shoppingCartDTO.getPurchasedItems().isEmpty()) {
             throw new PurchaseFailedException();
         }
