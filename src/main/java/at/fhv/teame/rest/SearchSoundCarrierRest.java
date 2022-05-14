@@ -31,7 +31,7 @@ public class SearchSoundCarrierRest {
             pageNr = 1;
         }
 
-        return searchSoundCarrierService.soundCarriersByAlbumName(artist, pageNr);
+        return searchSoundCarrierService.soundCarriersByArtistName(artist, pageNr);
     }
 
     @GET
