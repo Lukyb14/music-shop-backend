@@ -35,9 +35,11 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5', 'io.jsonwebtoken:jjwt-jackson:0.11.5' // or 'io.jsonwebtoken:jjwt-gson:0.11.5' for gson
+    implementation 'com.auth0:java-jwt:3.19.2'
     // https://mvnrepository.com/artifact/io.swagger.codegen.v3/swagger-codegen-generators
     implementation group: 'io.swagger.codegen.v3', name: 'swagger-codegen-generators', version: '1.0.34'
-
+    // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-jaxrs2
+    implementation group: 'io.swagger.core.v3', name: 'swagger-jaxrs2', version: '2.2.0'
 }
 
 test {

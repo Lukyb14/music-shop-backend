@@ -99,7 +99,7 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
             try {
                 ctx = new InitialDirContext(properties);
                 System.out.println("Connection to LDAP System successful");
-                return uid;
+                return username;
             } catch (Exception e) {
                 // invalid password
                 throw new LoginFailedException();

@@ -1,11 +1,7 @@
 package at.fhv.teame.application.impl;
 
 import at.fhv.teame.domain.repositories.InvoiceRepository;
-import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
-import at.fhv.teame.domain.repositories.UserRepository;
-import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
-import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.sharedlib.ejb.WithdrawSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.WithdrawalFailedException;
 

@@ -1,6 +1,5 @@
 package at.fhv.teame.application.rest;
 
-import at.fhv.teame.application.impl.PurchaseSoundCarrierServiceImpl;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import at.fhv.teame.sharedlib.ejb.PurchaseSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
