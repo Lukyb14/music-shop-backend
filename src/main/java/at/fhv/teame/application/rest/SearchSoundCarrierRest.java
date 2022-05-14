@@ -54,31 +54,62 @@ public class SearchSoundCarrierRest {
 
     @GET
     @Path("/album/{album}")
-    @Produces("application/json")
-    @Consumes("text/plain")
-    public List<SoundCarrierDTO> searchByAlbum(@PathParam("album") String album, @QueryParam("pageNr") String pageNrStr) {
-        int pageNr;
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Operation(summary = "Get Sound Carriers by album name")
+    @ApiResponse(description = "List of SoundCarrierDTOs",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = SoundCarrierDTO.class)))
+    @ApiResponse(responseCode = "401", description = "Token verification failed")
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    public Response searchByAlbum(@PathParam("album") String album, @QueryParam("pageNr") String pageNrStr, @CookieParam("token") String token) {
         try {
-            pageNr = Integer.parseInt(pageNrStr);
-        } catch (NumberFormatException e) {
-            pageNr = 1;
-        }
+            if (album == null || pageNrStr == null || token == null)
+                return Response.status(Response.Status.BAD_REQUEST).build();
 
-        return searchSoundCarrierService.soundCarriersByAlbumName(album, pageNr);
+            JaxRsApplication.verifyToken(token);
+            int pageNr = Integer.parseInt(pageNrStr);
+
+            List<SoundCarrierDTO> soundCarrierDTOS = searchSoundCarrierService.soundCarriersByAlbumName(album, pageNr);
+            return Response.ok(soundCarrierDTOS, MediaType.APPLICATION_JSON).build();
+        } catch (JWTVerificationException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GET
     @Path("/song/{song}")
-    @Produces("application/json")
-    @Consumes("text/plain")
-    public List<SoundCarrierDTO> searchBySong(@PathParam("song") String song, @QueryParam("pageNr") String pageNrStr) {
-        int pageNr;
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Operation(summary = "Get Sound Carriers by song name")
+    @ApiResponse(description = "List of SoundCarrierDTOs",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = SoundCarrierDTO.class)))
+    @ApiResponse(responseCode = "401", description = "Token verification failed")
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    public Response searchBySong(@PathParam("song") String song, @QueryParam("pageNr") String pageNrStr, @CookieParam("token") String token) {
         try {
-            pageNr = Integer.parseInt(pageNrStr);
+            if (song == null || pageNrStr == null || token == null)
+                return Response.status(Response.Status.BAD_REQUEST).build();
+
+            JaxRsApplication.verifyToken(token);
+            int pageNr = Integer.parseInt(pageNrStr);
+
+            List<SoundCarrierDTO> soundCarrierDTOS = searchSoundCarrierService.soundCarriersBySongName(song, pageNr);
+            return Response.ok(soundCarrierDTOS, MediaType.APPLICATION_JSON).build();
+        } catch (JWTVerificationException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         } catch (NumberFormatException e) {
-            pageNr = 1;
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-        return searchSoundCarrierService.soundCarriersBySongName(song, pageNr);
     }
 
 }
