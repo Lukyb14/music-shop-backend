@@ -4,16 +4,15 @@ import at.fhv.teame.application.api.AuthenticationServiceLocal;
 import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
 import com.auth0.jwt.JWT;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.json.JSONObject;
+
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -27,16 +26,12 @@ public class AuthenticationRest {
     private AuthenticationServiceLocal authenticationService;
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get token with username and password",
-            responses = {
-                    @ApiResponse(description = "The Token",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = String.class))),
-                    @ApiResponse(responseCode = "401", description = "Login failed"),
-                    @ApiResponse(responseCode = "400", description = "Bad Request"),
-                    @ApiResponse(responseCode = "500", description = "Internal Server Error")})
+    @Operation(summary = "Login with username and password, returns token as cookie")
+    @ApiResponse(responseCode = "204", description = "Login successful", headers = { @Header(name = "Set-Cookie", description = "Auth token") })
+    @ApiResponse(responseCode = "401", description = "Login failed")
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
     public Response login(final LoginSchema login) {
         try {
             if(login.username == null || login.password == null) return Response.status(Response.Status.BAD_REQUEST).build();
@@ -48,9 +43,9 @@ public class AuthenticationRest {
                     .withExpiresAt(Date.from(Instant.now().plus(12, ChronoUnit.HOURS)))
                     .sign(algorithm);
 
-            JSONObject tokenJson = new JSONObject("{\"token\":" + "\"" + token + "\"}");
-
-            return Response.ok(tokenJson.toString(), MediaType.APPLICATION_JSON)
+            return Response
+                    .status(Response.Status.NO_CONTENT)
+                    .cookie(new NewCookie("token", token))
                     .build();
 
         } catch (LoginFailedException e) {

@@ -9,14 +9,18 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.security.Key;
 
-@OpenAPIDefinition(info = @Info(
-        title = "Music Shop",
-        version = "1",
-        description = "REST APIs of the Music Shop application"))
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Music Shop",
+                version = "1",
+                description = "REST APIs of the Music Shop application"
+        )
+)
 @ApplicationPath("/rest")
 public class JaxRsApplication extends Application {
     private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
@@ -27,7 +31,7 @@ public class JaxRsApplication extends Application {
         try {
             JWTVerifier verifier = JWT.require(algorithm).build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(token);
-        } catch (JWTVerificationException | NullPointerException exception){
+        } catch (JWTVerificationException | NullPointerException exception) {
             //Invalid signature/claims
             throw new JWTVerificationException("Verification failed");
         }

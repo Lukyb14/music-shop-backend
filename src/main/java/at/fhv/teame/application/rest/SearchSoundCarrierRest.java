@@ -24,14 +24,18 @@ public class SearchSoundCarrierRest {
     @Path("/artist/{artist}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
-    @Operation(summary = "Get Sound Carriers by artist name",
-            responses = {
-                    @ApiResponse(description = "List of SoundCarrierDTOs",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = SoundCarrierDTO.class))),
-                    @ApiResponse(responseCode = "401", description = "Token verification failed"),
-                    @ApiResponse(responseCode = "400", description = "Bad Request"),
-                    @ApiResponse(responseCode = "500", description = "Internal Server Error")})
+    @Operation(summary = "Get Sound Carriers by artist name")
+    @ApiResponse(
+            responseCode = "200",
+            description = "List of SoundCarrierDTOs",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = SoundCarrierDTO.class)
+            )
+    )
+    @ApiResponse(responseCode = "401", description = "Token verification failed")
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
     public Response searchByArtist(@PathParam("artist") String artist, @QueryParam("pageNr") String pageNrStr, @CookieParam("token") String token) {
         try {
             if (artist == null || pageNrStr == null || token == null)
@@ -57,9 +61,14 @@ public class SearchSoundCarrierRest {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Operation(summary = "Get Sound Carriers by album name")
-    @ApiResponse(description = "List of SoundCarrierDTOs",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = SoundCarrierDTO.class)))
+    @ApiResponse(
+            responseCode = "200",
+            description = "List of SoundCarrierDTOs",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = SoundCarrierDTO.class)
+            )
+    )
     @ApiResponse(responseCode = "401", description = "Token verification failed")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
@@ -87,9 +96,14 @@ public class SearchSoundCarrierRest {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Operation(summary = "Get Sound Carriers by song name")
-    @ApiResponse(description = "List of SoundCarrierDTOs",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = SoundCarrierDTO.class)))
+    @ApiResponse(
+            responseCode = "200",
+            description = "List of SoundCarrierDTOs",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = SoundCarrierDTO.class)
+            )
+    )
     @ApiResponse(responseCode = "401", description = "Token verification failed")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
