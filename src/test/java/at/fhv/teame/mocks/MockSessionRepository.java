@@ -4,11 +4,10 @@ import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.model.user.Role;
 import at.fhv.teame.domain.repositories.SessionRepository;
-import at.fhv.teame.rmi.Session;
+import at.fhv.teame.domain.model.session.Session;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class MockSessionRepository implements SessionRepository {

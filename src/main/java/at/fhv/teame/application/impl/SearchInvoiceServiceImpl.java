@@ -1,59 +1,44 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
-import at.fhv.teame.domain.repositories.SessionRepository;
+import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
-import at.fhv.teame.infrastructure.ListSessionRepository;
-import at.fhv.teame.rmi.Session;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
-import at.fhv.teame.sharedlib.rmi.SearchInvoiceService;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.ejb.SearchInvoiceServiceRemote;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
-import java.util.UUID;
 
-public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements SearchInvoiceService {
-    private final InvoiceRepository invoiceRepository;
-    private final SessionRepository sessionRepository;
+@Stateless
+public class SearchInvoiceServiceImpl implements SearchInvoiceServiceRemote {
+    @EJB
+    private InvoiceRepository invoiceRepository;
 
     // default constructor with hibernate
-    public SearchInvoiceServiceImpl() throws RemoteException {
-        this(new HibernateInvoiceRepository(), new ListSessionRepository());
-    }
+    public SearchInvoiceServiceImpl() {}
 
     //for mocking
-    public SearchInvoiceServiceImpl(InvoiceRepository invoiceRepository, SessionRepository sessionRepository) throws RemoteException {
+    public SearchInvoiceServiceImpl(InvoiceRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;
-        this.sessionRepository = sessionRepository;
     }
 
+
     @Override
-    public InvoiceDTO invoiceById(String invoiceId, String sessionId) throws RemoteException, InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
+    public InvoiceDTO invoiceById(String invoiceId) {
         try{
             Invoice invoice = invoiceRepository.invoiceById(Long.valueOf(invoiceId));
             return buildInvoiceDTO(invoice);
         } catch (NoResultException noResultException){
             return null;
         }
-
-
     }
 
     private InvoiceDTO buildInvoiceDTO(Invoice invoice) {
-
         return InvoiceDTO.builder().withInvoiceEntity(invoice.getInvoiceId().toString(),
                         invoice.getDateOfPurchase().toString(),
                         invoice.getPaymentMethod().toString(),
@@ -66,7 +51,6 @@ public class SearchInvoiceServiceImpl extends UnicastRemoteObject implements Sea
     }
 
     private InvoiceLineDTO[] buildInvoiceLineDTO (List<InvoiceLine> invoiceLines) {
-
         InvoiceLineDTO[] invoiceLineDto = new InvoiceLineDTO[invoiceLines.size()];
 
         for(int i = 0; i <invoiceLineDto.length; i++){

@@ -1,32 +1,32 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.model.user.ClientUser;
 import at.fhv.teame.domain.model.user.Role;
 import at.fhv.teame.mocks.MockInvoiceRepository;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
-import at.fhv.teame.sharedlib.rmi.exceptions.PurchaseFailedException;
+import at.fhv.teame.sharedlib.ejb.PurchaseSoundCarrierServiceRemote;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.rmi.RemoteException;
+
 import java.util.HashMap;
-import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PurchaseSoundCarrierServiceTest {
 
-    private PurchaseSoundCarrierServiceImpl purchaseSoundCarrierService;
+    private PurchaseSoundCarrierServiceRemote purchaseSoundCarrierService;
 
     private MockSessionRepository mockSessionRepository;
 
     @BeforeEach
-    void beforeEach() throws RemoteException {
+    void beforeEach() {
         mockSessionRepository = new MockSessionRepository();
-        purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl(new MockInvoiceRepository(), new MockSoundCarrierRepository(), mockSessionRepository);
+        purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl(new MockInvoiceRepository(), new MockSoundCarrierRepository());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class PurchaseSoundCarrierServiceTest {
 
         //then
         assertThrows(PurchaseFailedException.class, () -> {
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO, UUID.randomUUID().toString());
+            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
         });
     }
 
@@ -64,12 +64,12 @@ public class PurchaseSoundCarrierServiceTest {
 
         //when..then
         assertThrows(PurchaseFailedException.class, () -> {
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO, UUID.randomUUID().toString());
+            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
         }, "PurchaseFailedException was expected");
     }
 
     @Test
-    void given_ShoppingCartDtAndGuest_when_confirmPurchase_then_NoException() throws RemoteException, PurchaseFailedException, InvalidSessionException {
+    void given_ShoppingCartDtAndGuest_when_confirmPurchase_then_NoException() throws PurchaseFailedException {
         //given
         HashMap<String, Integer> expectedPurchasedItems = new HashMap<>();
         expectedPurchasedItems.put("100001", 1);
@@ -83,19 +83,19 @@ public class PurchaseSoundCarrierServiceTest {
                 .build();
 
         //when
-        purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO, UUID.randomUUID().toString());
+        purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
 
         //then
         assertDoesNotThrow(PurchaseFailedException::new);
     }
 
     @Test
-    void given_ShoppingCartDtoAndPurchasedItems_when_confirmPurchase_then_NoException() throws RemoteException, PurchaseFailedException, InvalidSessionException {
+    void given_ShoppingCartDtoAndPurchasedItems_when_confirmPurchase_then_NoException() throws PurchaseFailedException {
         //given
         ShoppingCartDTO shoppingCartDTO = buildShoppingCartDto();
 
         //when
-        purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO, UUID.randomUUID().toString());
+        purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
 
         //then
         assertDoesNotThrow(PurchaseFailedException::new);
@@ -110,7 +110,7 @@ public class PurchaseSoundCarrierServiceTest {
 
         //when..then
         assertThrows(InvalidSessionException.class, () -> {
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO, UUID.randomUUID().toString());
+            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
         }, "InvalidSessionException was expected");
     }
 
@@ -122,7 +122,7 @@ public class PurchaseSoundCarrierServiceTest {
         ShoppingCartDTO shoppingCartDTO = buildShoppingCartDto();
 
         assertThrows(InvalidSessionException.class, () -> {
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO, invalidSession);
+            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
         }, "InvalidSessionException was expected");
     }
 

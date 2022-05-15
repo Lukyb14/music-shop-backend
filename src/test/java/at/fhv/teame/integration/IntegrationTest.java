@@ -1,6 +1,5 @@
 package at.fhv.teame.integration;
 
-import at.fhv.teame.application.impl.*;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
@@ -9,13 +8,16 @@ import at.fhv.teame.domain.repositories.UserRepository;
 import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
 import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.infrastructure.HibernateUserRepository;
-import at.fhv.teame.rmi.RMIFactoryImpl;
 import at.fhv.teame.sharedlib.dto.CustomerDTO;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
 import at.fhv.teame.sharedlib.dto.SessionDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
+import at.fhv.teame.sharedlib.exceptions.PublishingFailedException;
+import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
 import at.fhv.teame.sharedlib.rmi.*;
-import at.fhv.teame.sharedlib.rmi.exceptions.*;
+import at.fhv.teame.sharedlib.exceptions.*;
 import at.fhv.teame.sharedlib.rmi.factory.RMIFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -42,14 +44,14 @@ class IntegrationTest {
 
     @BeforeAll
     static void setup() throws IOException {
-        RMIFactory rmiFactory = new RMIFactoryImpl();
-        authenticationService = rmiFactory.createSearchAuthenticationServiceImpl();
-        messagingService = rmiFactory.createMessageServiceImpl();
-        purchaseSoundCarrierService = rmiFactory.createPurchaseSoundCarrierServiceImpl();
-        searchCustomerService = rmiFactory.createSearchCustomerServiceImpl();
-        searchInvoiceService = rmiFactory.createSearchInvoiceServiceImpl();
-        searchSoundCarrierService = rmiFactory.createSearchSoundCarrierServiceImpl();
-        withdrawSoundCarrierService = rmiFactory.createWithdrawSoundCarrierServiceImpl();
+       // RMIFactory rmiFactory = new RMIFactoryImpl();
+//        authenticationService = rmiFactory.createSearchAuthenticationServiceImpl();
+//        messagingService = rmiFactory.createMessageServiceImpl();
+//        purchaseSoundCarrierService = rmiFactory.createPurchaseSoundCarrierServiceImpl();
+//        searchCustomerService = rmiFactory.createSearchCustomerServiceImpl();
+//        searchInvoiceService = rmiFactory.createSearchInvoiceServiceImpl();
+//        searchSoundCarrierService = rmiFactory.createSearchSoundCarrierServiceImpl();
+//        withdrawSoundCarrierService = rmiFactory.createWithdrawSoundCarrierServiceImpl();
 
         soundCarrierRepository = new HibernateSoundCarrierRepository();
         invoiceRepository = new HibernateInvoiceRepository();
@@ -168,7 +170,7 @@ class IntegrationTest {
         messagingService.publishMessage(new MessageDTO("Rock", "New Concert", randomValue), sessionDTO.getSessionId());
 
         // wait 1 second for ActiveMQ to update itself
-        Thread.sleep(1000);
+        Thread.sleep(6000);
 
         List<MessageDTO> messagesAfter = messagingService.fetchMessages(sessionDTO.getSessionId());
         boolean isMessagePresent = false;
@@ -188,10 +190,12 @@ class IntegrationTest {
 
         List<MessageDTO> messagesBeforeDeletion = messagingService.fetchMessages(sessionDTO.getSessionId());
         String deletedMessageId = messagesBeforeDeletion.get(0).getId();
-        messagingService.deleteMessage(deletedMessageId, sessionDTO.getSessionId());
+        String deletedMessageTopic = messagesBeforeDeletion.get(0).getTopic();
+      
+        messagingService.deleteMessage(deletedMessageTopic, deletedMessageId, sessionDTO.getSessionId());
 
         // wait 4 seconds for ActiveMQ to update itself
-        Thread.sleep(4000);
+        Thread.sleep(6000);
 
         List<MessageDTO> messagesAfterDeletion = messagingService.fetchMessages(sessionDTO.getSessionId());
         boolean isMessagePresent = false;

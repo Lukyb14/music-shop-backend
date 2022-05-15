@@ -1,45 +1,33 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
-import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
-import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
-import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
-import at.fhv.teame.infrastructure.ListSessionRepository;
-import at.fhv.teame.rmi.Session;
-import at.fhv.teame.sharedlib.rmi.WithdrawSoundCarrierService;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
-import at.fhv.teame.sharedlib.rmi.exceptions.WithdrawalFailedException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import at.fhv.teame.sharedlib.ejb.WithdrawSoundCarrierServiceRemote;
+import at.fhv.teame.sharedlib.exceptions.WithdrawalFailedException;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.Map;
-import java.util.UUID;
 
-public class WithdrawalSoundCarrierServiceImpl extends UnicastRemoteObject implements WithdrawSoundCarrierService {
+@Stateless
+public class WithdrawalSoundCarrierServiceImpl implements WithdrawSoundCarrierServiceRemote {
 
-    private final SoundCarrierRepository soundCarrierRepository;
-    private final InvoiceRepository invoiceRepository;
-    private final SessionRepository sessionRepository;
+    @EJB
+    private SoundCarrierRepository soundCarrierRepository;
+    @EJB
+    private InvoiceRepository invoiceRepository;
 
-    public WithdrawalSoundCarrierServiceImpl() throws RemoteException {
-        this(new HibernateSoundCarrierRepository(), new HibernateInvoiceRepository(), new ListSessionRepository());
-    }
+    //default constructor with hibernate
+    public WithdrawalSoundCarrierServiceImpl() { }
 
-    public WithdrawalSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, InvoiceRepository invoiceRepository, SessionRepository sessionRepository) throws RemoteException {
+    //for mocking
+    public WithdrawalSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, InvoiceRepository invoiceRepository) {
         this.soundCarrierRepository = soundCarrierRepository;
         this.invoiceRepository = invoiceRepository;
-        this.sessionRepository = sessionRepository;
     }
 
     @Override
-    public void withdrawSoundCarrier(String invoiceId, Map<String, Integer> soundCarrierReturnAmountMap, String sessionId) throws WithdrawalFailedException, RemoteException, InvalidSessionException {
-        try {
-            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
-            throw new InvalidSessionException();
-        }
+    public void withdrawSoundCarrier(String invoiceId, Map<String, Integer> soundCarrierReturnAmountMap) throws WithdrawalFailedException {
         if (soundCarrierReturnAmountMap.isEmpty()) {
             throw new WithdrawalFailedException();
         }
@@ -57,5 +45,4 @@ public class WithdrawalSoundCarrierServiceImpl extends UnicastRemoteObject imple
             throw new WithdrawalFailedException();
         }
     }
-
 }

@@ -1,6 +1,12 @@
 plugins {
     id 'java'
     id 'jacoco'
+    id 'application'
+    id 'war'
+}
+
+application {
+    mainClassName = 'at.fhv.teame.Main'
 }
 
 group 'org.example'
@@ -10,20 +16,30 @@ repositories {
     mavenCentral()
     maven {
         url 'https://jitpack.io'
-        credentials {username 'jp_r2pd1rhpk1m11g30nut6aima76'}
     }
 }
 
 dependencies {
+    compileOnly('javax.enterprise:cdi-api:2.0.SP1')
+    implementation('javax.ejb:javax.ejb-api:3.2.2')
+    compileOnly('javax.ws.rs:javax.ws.rs-api:2.1.1')
+    compileOnly('javax.servlet:javax.servlet-api:4.0.1')
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.4.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     implementation 'org.hibernate:hibernate-core:5.6.5.Final'
     implementation 'org.postgresql:postgresql:42.3.3'
-    implementation 'com.github.Lukyb14:music-shop-sharedlib:v1.1.15'
+    implementation 'com.github.Lukyb14:music-shop-sharedlib:v1.2.15'
     implementation group: 'org.apache.activemq', name: 'activemq-all', version: '5.17.0'
     implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
     implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5', 'io.jsonwebtoken:jjwt-jackson:0.11.5' // or 'io.jsonwebtoken:jjwt-gson:0.11.5' for gson
+    implementation 'com.auth0:java-jwt:3.19.2'
+    // https://mvnrepository.com/artifact/io.swagger.codegen.v3/swagger-codegen-generators
+    implementation 'io.swagger.codegen.v3:swagger-codegen-generators:1.0.34'
+    // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-jaxrs2
+    implementation 'io.swagger.core.v3:swagger-jaxrs2:2.2.0'
 }
 
 test {
@@ -56,4 +72,8 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+application {
+    mainClass.set('at.fhv.teame.Main')
 }

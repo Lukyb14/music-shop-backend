@@ -6,7 +6,8 @@ import at.fhv.teame.mocks.MockInvoiceRepository;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.sharedlib.dto.InvoiceDTO;
 import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
-import at.fhv.teame.sharedlib.rmi.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.ejb.SearchInvoiceServiceRemote;
+import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -18,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SearchInvoiceServiceImplTest {
-    static SearchInvoiceServiceImpl searchInvoiceService;
+    static SearchInvoiceServiceRemote searchInvoiceService;
 
     @BeforeAll
-    static void beforeAll() throws RemoteException{
-        searchInvoiceService = new SearchInvoiceServiceImpl(new MockInvoiceRepository(), new MockSessionRepository());
+    static void beforeAll() {
+        searchInvoiceService = new SearchInvoiceServiceImpl(new MockInvoiceRepository());
     }
 
     @Test
-    void given_2invoiceinrepository_when_invoiceById_then_expectInvoiceequals() throws RemoteException, InvalidSessionException {
+    void given_2invoiceinrepository_when_invoiceById_then_expectInvoiceequals() throws InvalidSessionException {
         //given
         InvoiceLineDTO[] invoiceLineDTOExpected = new InvoiceLineDTO[1];
         InvoiceLineDTO.Builder builder = InvoiceLineDTO.builder();
@@ -36,7 +37,7 @@ class SearchInvoiceServiceImplTest {
         InvoiceDTO invoiceDTOExpected = InvoiceDTO.builder().withInvoiceEntity("20000", "2022.04.10", "Cash", "3", invoiceLineDTOExpected).build();
 
         //when
-        InvoiceDTO invoiceDTOActual = searchInvoiceService.invoiceById("20000", UUID.randomUUID().toString());
+        InvoiceDTO invoiceDTOActual = searchInvoiceService.invoiceById("20000");
 
 
         //then
