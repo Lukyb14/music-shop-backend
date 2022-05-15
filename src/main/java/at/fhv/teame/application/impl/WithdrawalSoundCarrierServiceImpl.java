@@ -2,24 +2,26 @@ package at.fhv.teame.application.impl;
 
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
-import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
-import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.sharedlib.ejb.WithdrawSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.WithdrawalFailedException;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Map;
 
 @Stateless
 public class WithdrawalSoundCarrierServiceImpl implements WithdrawSoundCarrierServiceRemote {
 
-    private final SoundCarrierRepository soundCarrierRepository;
-    private final InvoiceRepository invoiceRepository;
-    public WithdrawalSoundCarrierServiceImpl(){
-        this(new HibernateSoundCarrierRepository(), new HibernateInvoiceRepository());
-    }
+    @EJB
+    private SoundCarrierRepository soundCarrierRepository;
+    @EJB
+    private InvoiceRepository invoiceRepository;
 
-    public WithdrawalSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, InvoiceRepository invoiceRepository){
+    //default constructor with hibernate
+    public WithdrawalSoundCarrierServiceImpl() { }
+
+    //for mocking
+    public WithdrawalSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, InvoiceRepository invoiceRepository) {
         this.soundCarrierRepository = soundCarrierRepository;
         this.invoiceRepository = invoiceRepository;
     }

@@ -3,7 +3,6 @@ package at.fhv.teame.application.impl;
 import at.fhv.teame.mocks.MockInvoiceRepository;
 import at.fhv.teame.mocks.MockSoundCarrierRepository;
 import at.fhv.teame.sharedlib.ejb.WithdrawSoundCarrierServiceRemote;
-import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.WithdrawalFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

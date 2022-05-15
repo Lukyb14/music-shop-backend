@@ -1,5 +1,7 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.infrastructure.HibernateUserRepository;
+import at.fhv.teame.infrastructure.ListSessionRepository;
 import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockUserRepository;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
@@ -15,12 +17,12 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MessagingServiceTest {
+public class MessagingServiceTest {
     private MessageServiceRemote messageService;
 
     @BeforeEach
     void setup() {
-        messageService = new MessagingServiceImpl(new MockUserRepository(), new MockSessionRepository());
+        messageService = new MessagingServiceImpl(new HibernateUserRepository(), new ListSessionRepository());
     }
 
     @Test

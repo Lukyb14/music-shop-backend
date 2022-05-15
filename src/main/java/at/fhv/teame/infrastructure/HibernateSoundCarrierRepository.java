@@ -4,17 +4,16 @@ import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.exceptions.OutOfStockException;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
+
+import javax.ejb.Stateless;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 
+@Stateless
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
-    private final EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
     private static final int ROWS_PER_PAGE = 10;
-
-    public HibernateSoundCarrierRepository() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
-    }
 
     @Override
     public void processPurchase(Map<String, Integer> shoppingCartItems) throws OutOfStockException, InvalidAmountException {

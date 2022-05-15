@@ -13,6 +13,7 @@ import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import at.fhv.teame.sharedlib.ejb.PurchaseSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,13 +25,13 @@ import java.util.Map;
 @Stateless
 public class PurchaseSoundCarrierServiceImpl implements PurchaseSoundCarrierServiceRemote {
 
-    private final SoundCarrierRepository soundCarrierRepository;
-    private final InvoiceRepository invoiceRepository;
+    @EJB
+    private SoundCarrierRepository soundCarrierRepository;
+    @EJB
+    private InvoiceRepository invoiceRepository;
 
     // default constructor with hibernate
-    public PurchaseSoundCarrierServiceImpl() {
-        this(new HibernateInvoiceRepository(), new HibernateSoundCarrierRepository());
-    }
+    public PurchaseSoundCarrierServiceImpl() { }
 
     // for mocking
     public PurchaseSoundCarrierServiceImpl(InvoiceRepository invoiceRepository, SoundCarrierRepository soundCarrierRepository){
