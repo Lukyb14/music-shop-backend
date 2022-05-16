@@ -8,9 +8,8 @@ import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import javax.ejb.EJB;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -20,15 +19,16 @@ import java.util.Date;
 
 import static at.fhv.teame.application.rest.JaxRsApplication.algorithm;
 
-@Path("/login")
+@Path("/")
 public class AuthenticationRest {
     @EJB
     private AuthenticationServiceLocal authenticationService;
 
     @POST
+    @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Login with username and password, returns token as cookie")
-    @ApiResponse(responseCode = "204", description = "Login successful", headers = { @Header(name = "Set-Cookie", description = "Auth token") })
+    @ApiResponse(responseCode = "200", description = "Login successful", headers = { @Header(name = "Set-Cookie", description = "Auth token") })
     @ApiResponse(responseCode = "401", description = "Login failed")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
@@ -44,7 +44,7 @@ public class AuthenticationRest {
                     .sign(algorithm);
 
             return Response
-                    .status(Response.Status.NO_CONTENT)
+                    .ok()
                     .cookie(new NewCookie("token", token))
                     .build();
 
@@ -53,5 +53,19 @@ public class AuthenticationRest {
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @DELETE
+    @Path("/logout")
+    @Operation(summary = "Logout by deleting the cookie")
+    @ApiResponse(responseCode = "200", description = "Logout successful")
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    public Response logout(@CookieParam("token") Cookie cookie) {
+        if (cookie == null) return Response.status(Response.Status.BAD_REQUEST).build();
+
+        return Response
+                .ok()
+                .cookie(new NewCookie(cookie, "delete cookie", 0, false))
+                .build();
     }
 }
