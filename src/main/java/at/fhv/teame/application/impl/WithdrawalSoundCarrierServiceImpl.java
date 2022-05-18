@@ -17,7 +17,6 @@ public class WithdrawalSoundCarrierServiceImpl implements WithdrawSoundCarrierSe
     @EJB
     private InvoiceRepository invoiceRepository;
 
-    //default constructor with hibernate
     public WithdrawalSoundCarrierServiceImpl() { }
 
     //for mocking

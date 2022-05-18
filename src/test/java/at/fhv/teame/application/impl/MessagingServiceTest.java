@@ -2,8 +2,7 @@ package at.fhv.teame.application.impl;
 
 import at.fhv.teame.infrastructure.HibernateUserRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
-import at.fhv.teame.mocks.MockSessionRepository;
-import at.fhv.teame.mocks.MockUserRepository;
+import at.fhv.teame.middleware.MessagingServiceImpl;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
 import at.fhv.teame.sharedlib.ejb.MessageServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

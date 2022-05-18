@@ -18,7 +18,6 @@ public class SessionValidationImpl implements SessionValidationRemote {
 
     public SessionValidationImpl() { }
 
-
     @Override
     public void validateAny(String sessionId) throws InvalidSessionException {
         try {
