@@ -21,7 +21,7 @@ public class SearchSoundCarrierRest {
     private SearchSoundCarrierServiceRemote searchSoundCarrierService;
 
     @GET
-    @Path("/artist/{artist}")
+    @Path("/v1/artist/{artist}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Operation(summary = "Get Sound Carriers by artist name")
@@ -57,7 +57,7 @@ public class SearchSoundCarrierRest {
     }
 
     @GET
-    @Path("/album/{album}")
+    @Path("/v1/album/{album}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Operation(summary = "Get Sound Carriers by album name")
@@ -92,7 +92,7 @@ public class SearchSoundCarrierRest {
     }
 
     @GET
-    @Path("/song/{song}")
+    @Path("/v1/song/{song}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Operation(summary = "Get Sound Carriers by song name")

@@ -1,10 +1,13 @@
 package at.fhv.teame.application.rest;
 
 import at.fhv.teame.application.api.AuthenticationServiceLocal;
+import at.fhv.teame.application.rest.schema.LoginSchema;
+import at.fhv.teame.application.rest.schema.TokenSchema;
 import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
 import com.auth0.jwt.JWT;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import javax.ejb.EJB;
@@ -25,10 +28,18 @@ public class AuthenticationRest {
     private AuthenticationServiceLocal authenticationService;
 
     @POST
-    @Path("/login")
+    @Path("/v1/login")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Login with username and password, returns token as cookie")
-    @ApiResponse(responseCode = "200", description = "Login successful", headers = { @Header(name = "Set-Cookie", description = "Auth token") })
+    @ApiResponse(
+            responseCode = "200",
+            description = "Login successful",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = TokenSchema.class)
+            )
+    )
     @ApiResponse(responseCode = "401", description = "Login failed")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
@@ -44,8 +55,7 @@ public class AuthenticationRest {
                     .sign(algorithm);
 
             return Response
-                    .ok()
-                    .cookie(new NewCookie("token", token))
+                    .ok("{token: '" + token + "'}", MediaType.APPLICATION_JSON)
                     .build();
 
         } catch (LoginFailedException e) {

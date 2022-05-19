@@ -21,7 +21,7 @@ import java.security.Key;
                 description = "REST APIs of the Music Shop application"
         )
 )
-@ApplicationPath("/rest")
+@ApplicationPath("/api")
 public class JaxRsApplication extends Application {
     private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     //'standalone.bat -c standalone-microprofile.xml'

@@ -21,6 +21,7 @@ public class PurchaseSoundCarrierRest {
     private PurchaseSoundCarrierServiceRemote purchaseSoundCarrierService;
 
     @POST
+    @Path("/v1")
     @Consumes("application/json")
     @Operation(summary = "Make a purchase with the given Sound Carriers")
     @ApiResponse(responseCode = "204", description = "Purchase successfully completed")
