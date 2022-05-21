@@ -1,9 +1,7 @@
 package at.fhv.teame.application.rest;
 
-import at.fhv.teame.application.rest.schema.TokenSchema;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
