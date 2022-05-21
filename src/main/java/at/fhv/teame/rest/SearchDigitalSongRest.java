@@ -12,7 +12,6 @@ import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @Path("/v1/soundCarrier/search")
 public class SearchDigitalSongRest {
@@ -41,7 +40,7 @@ public class SearchDigitalSongRest {
 
             int pageNr = Integer.parseInt(pageNrStr);
 
-            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByArtist(artist));
+            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByArtist(artist, pageNr));
             return Response.ok(digitalSongListDTOS, MediaType.APPLICATION_JSON).build();
 
         } catch (NumberFormatException e) {
@@ -60,20 +59,20 @@ public class SearchDigitalSongRest {
             description = "List of SoundCarrierDTOs",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = SoundCarrierDTO.class)
+                    schema = @Schema(implementation = DigitalSongListSchema.class)
             )
     )
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
-    public Response searchByAlbum(@PathParam("album") String album, @QueryParam("pageNr") String pageNrStr) {
+    public Response searchByGenre(@PathParam("album") String genre, @QueryParam("pageNr") String pageNrStr) {
         try {
-            if (album == null || pageNrStr == null)
+            if (genre == null || pageNrStr == null)
                 return Response.status(Response.Status.BAD_REQUEST).build();
 
             int pageNr = Integer.parseInt(pageNrStr);
 
-            List<SoundCarrierDTO> soundCarrierDTOS = searchSoundCarrierService.soundCarriersByAlbumName(album, pageNr);
-            return Response.ok(soundCarrierDTOS, MediaType.APPLICATION_JSON).build();
+            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByGenre(genre, pageNr));
+            return Response.ok(digitalSongListDTOS, MediaType.APPLICATION_JSON).build();
         } catch (NumberFormatException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         } catch (Exception e) {
@@ -102,8 +101,8 @@ public class SearchDigitalSongRest {
 
             int pageNr = Integer.parseInt(pageNrStr);
 
-            List<SoundCarrierDTO> soundCarrierDTOS = searchSoundCarrierService.soundCarriersBySongName(song, pageNr);
-            return Response.ok(soundCarrierDTOS, MediaType.APPLICATION_JSON).build();
+            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByTitle(song, pageNr));
+            return Response.ok(digitalSongListDTOS, MediaType.APPLICATION_JSON).build();
         } catch (NumberFormatException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         } catch (Exception e) {

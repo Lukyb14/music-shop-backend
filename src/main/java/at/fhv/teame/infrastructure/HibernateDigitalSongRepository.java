@@ -14,16 +14,20 @@ import java.util.List;
 public class HibernateDigitalSongRepository implements DigitalSongRepository {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
 
+    private static final int ROWS_PER_PAGE = 10;
+
     @Override
-    public List<DigitalSong> digitalSongByTitle(String title) {
+    public List<DigitalSong> digitalSongByTitle(String title, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<DigitalSong> query = entityManager.createQuery("FROM DigitalSong WHERE lower(title) LIKE lower(:title)", DigitalSong.class);
         query.setParameter("title", title);
+        query.setFirstResult((pageNr - 1) * ROWS_PER_PAGE);
+        query.setMaxResults(ROWS_PER_PAGE);
         return query.getResultList();
     }
 
     @Override
-    public List<DigitalSong> digitalSongByArtist(String artist) {
+    public List<DigitalSong> digitalSongByArtist(String artist, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<DigitalSong> query = entityManager.createQuery("FROM DigitalSong WHERE lower(artist) LIKE lower(:artist)", DigitalSong.class);
         query.setParameter("artist", artist);
@@ -31,7 +35,7 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
     }
 
     @Override
-    public List<DigitalSong> digitalSongByGenre(String genre) {
+    public List<DigitalSong> digitalSongByGenre(String genre, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<DigitalSong> query = entityManager.createQuery("FROM DigitalSong WHERE lower(genre) LIKE lower(:genre)", DigitalSong.class);
         query.setParameter("genre", genre);
