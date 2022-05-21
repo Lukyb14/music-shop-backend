@@ -58,7 +58,7 @@ public class AuthenticationRest {
                     .sign(JaxRsApplication.algorithm);
 
             return Response
-                    .ok("{token: '" + token + "'}", MediaType.APPLICATION_JSON)
+                    .ok("{\"token\": \"" + token + "\"}", MediaType.APPLICATION_JSON)
                     .build();
 
         } catch (LoginFailedException e) {

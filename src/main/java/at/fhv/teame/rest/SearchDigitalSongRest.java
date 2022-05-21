@@ -1,7 +1,8 @@
 package at.fhv.teame.rest;
 
+import at.fhv.teame.rest.schema.DigitalSongListSchema;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
-import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;
+import at.fhv.teame.sharedlib.ejb.SearchDigitalSongServiceRemote;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,10 +15,10 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/v1/soundCarrier/search")
-public class SearchSoundCarrierRest {
+public class SearchDigitalSongRest {
 
     @EJB
-    private SearchSoundCarrierServiceRemote searchSoundCarrierService;
+    private SearchDigitalSongServiceRemote searchDigitalSongService;
 
     @GET
     @Path("/artist/{artist}")
@@ -28,7 +29,7 @@ public class SearchSoundCarrierRest {
             description = "List of SoundCarrierDTOs",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = SoundCarrierDTO.class)
+                    schema = @Schema(implementation = DigitalSongListSchema.class)
             )
     )
     @ApiResponse(responseCode = "400", description = "Bad Request")
@@ -40,8 +41,8 @@ public class SearchSoundCarrierRest {
 
             int pageNr = Integer.parseInt(pageNrStr);
 
-            List<SoundCarrierDTO> soundCarrierDTOS = searchSoundCarrierService.soundCarriersByArtistName(artist, pageNr);
-            return Response.ok(soundCarrierDTOS, MediaType.APPLICATION_JSON).build();
+            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByArtist(artist));
+            return Response.ok(digitalSongListDTOS, MediaType.APPLICATION_JSON).build();
 
         } catch (NumberFormatException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
