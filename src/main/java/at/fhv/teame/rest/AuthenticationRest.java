@@ -1,6 +1,8 @@
 package at.fhv.teame.rest;
 
 import at.fhv.teame.middleware.api.AuthenticationServiceLocal;
+import at.fhv.teame.rest.JaxRsApplication;
+import at.fhv.teame.rest.LoginSchema;
 import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
 import com.auth0.jwt.JWT;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +18,8 @@ import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+
+
 
 @Path("/")
 public class AuthenticationRest {
