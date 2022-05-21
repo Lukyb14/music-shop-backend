@@ -1,37 +1,48 @@
 package at.fhv.teame.rest;
 
 import at.fhv.teame.middleware.api.AuthenticationServiceLocal;
-import at.fhv.teame.rest.JaxRsApplication;
-import at.fhv.teame.rest.LoginSchema;
+import at.fhv.teame.rest.schema.LoginSchema;
+import at.fhv.teame.rest.schema.TokenSchema;
 import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import javax.ejb.EJB;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Cookie;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-
-
-@Path("/")
+@Path("/v1")
 public class AuthenticationRest {
     @EJB
     private AuthenticationServiceLocal authenticationService;
+    private static final Set<String> invalidTokenBlacklist = new HashSet<>();
 
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Login with username and password, returns token as cookie")
-    @ApiResponse(responseCode = "200", description = "Login successful", headers = { @Header(name = "Set-Cookie", description = "Auth token") })
+    @ApiResponse(
+            responseCode = "200",
+            description = "Login successful",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = TokenSchema.class)
+            )
+    )
     @ApiResponse(responseCode = "401", description = "Login failed")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
@@ -47,8 +58,7 @@ public class AuthenticationRest {
                     .sign(JaxRsApplication.algorithm);
 
             return Response
-                    .ok()
-                    .cookie(new NewCookie("token", token))
+                    .ok("{token: '" + token + "'}", MediaType.APPLICATION_JSON)
                     .build();
 
         } catch (LoginFailedException e) {
@@ -58,17 +68,27 @@ public class AuthenticationRest {
         }
     }
 
-    @DELETE
+    @POST
     @Path("/logout")
-    @Operation(summary = "Logout by deleting the cookie")
-    @ApiResponse(responseCode = "200", description = "Logout successful")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Logout by invalidating the token")
+    @ApiResponse(responseCode = "204", description = "Logout successful")
     @ApiResponse(responseCode = "400", description = "Bad Request")
-    public Response logout(@CookieParam("token") Cookie cookie) {
-        if (cookie == null) return Response.status(Response.Status.BAD_REQUEST).build();
+    public Response logout(final TokenSchema token) {
+        if (token == null || token.token == null) return Response.status(Response.Status.BAD_REQUEST).build();
+
+        try {
+            // only blacklist valid tokens
+            JaxRsApplication.verifyToken(token.token);
+            invalidTokenBlacklist.add(token.token);
+        } catch (JWTVerificationException ignored) {}
 
         return Response
-                .ok()
-                .cookie(new NewCookie(cookie, "delete cookie", 0, false))
+                .status(Response.Status.NO_CONTENT)
                 .build();
+    }
+
+    public static boolean isTokenInBlacklist(String token) {
+        return invalidTokenBlacklist.contains(token);
     }
 }

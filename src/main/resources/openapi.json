@@ -1,0 +1,5 @@
+{
+  "resourcePackages": [
+    "at.fhv.teame.rest", "at.fhv.teame.rest.schema"
+  ]
+}
