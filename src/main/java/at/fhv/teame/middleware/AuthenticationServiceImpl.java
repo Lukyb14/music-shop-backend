@@ -28,6 +28,12 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
 
     public AuthenticationServiceImpl() { };
 
+    // For testing
+    public AuthenticationServiceImpl(UserRepository userRepository, SessionRepository sessionRepository){
+        this.userRepository = userRepository;
+        this.sessionRepository = sessionRepository;
+    }
+
     @Override
     public SessionDTO login(String username, String password) throws LoginFailedException {
         Properties properties = new Properties();

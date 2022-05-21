@@ -101,30 +101,6 @@ public class PurchaseSoundCarrierServiceTest {
         assertDoesNotThrow(PurchaseFailedException::new);
     }
 
-    @Test
-    void given_invalidsessionrole_when_soundcarriersByAlbumName_then_throws() {
-        //given
-        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
-
-        ShoppingCartDTO shoppingCartDTO = buildShoppingCartDto();
-
-        //when..then
-        assertThrows(InvalidSessionException.class, () -> {
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_invalidsessionId_when_soundcarriersByAlbumName_then_throws() {
-        //when..then
-        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
-
-        ShoppingCartDTO shoppingCartDTO = buildShoppingCartDto();
-
-        assertThrows(InvalidSessionException.class, () -> {
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
-        }, "InvalidSessionException was expected");
-    }
 
     private ShoppingCartDTO buildShoppingCartDto() {
         HashMap<String, Integer> expectedPurchasedItems = new HashMap<>();

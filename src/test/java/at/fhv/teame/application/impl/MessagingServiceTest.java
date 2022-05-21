@@ -2,10 +2,14 @@ package at.fhv.teame.application.impl;
 
 import at.fhv.teame.infrastructure.HibernateUserRepository;
 import at.fhv.teame.infrastructure.ListSessionRepository;
+import at.fhv.teame.middleware.AuthenticationServiceImpl;
 import at.fhv.teame.middleware.MessagingServiceImpl;
 import at.fhv.teame.sharedlib.dto.MessageDTO;
+import at.fhv.teame.sharedlib.dto.SessionDTO;
+import at.fhv.teame.sharedlib.ejb.AuthenticationServiceRemote;
 import at.fhv.teame.sharedlib.ejb.MessageServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
+import at.fhv.teame.sharedlib.exceptions.LoginFailedException;
 import at.fhv.teame.sharedlib.exceptions.ReceiveFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessagingServiceTest {
     private MessageServiceRemote messageService;
+    private AuthenticationServiceRemote authenticationService;
 
     @BeforeEach
     void setup() {
         messageService = new MessagingServiceImpl(new HibernateUserRepository(), new ListSessionRepository());
+        authenticationService = new AuthenticationServiceImpl(new HibernateUserRepository(), new ListSessionRepository());
+
     }
 
     @Test
@@ -40,8 +47,9 @@ public class MessagingServiceTest {
     }
 
     @Test
-    void fetchMessages() throws InvalidSessionException, ReceiveFailedException {
-        List<MessageDTO> receiveMessageDTOS = messageService.fetchMessages("b16c5200-bb0e-11ec-8422-0242ac120003");
+    void fetchMessages() throws InvalidSessionException, ReceiveFailedException, LoginFailedException {
+        SessionDTO sessionDTO = authenticationService.login("har9090", "PssWrd");
+        List<MessageDTO> receiveMessageDTOS = messageService.fetchMessages(sessionDTO.getSessionId());
         assertTrue(receiveMessageDTOS.size() > 0);
     }
 }

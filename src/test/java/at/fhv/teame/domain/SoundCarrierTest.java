@@ -61,107 +61,121 @@ class SoundCarrierTest {
     }
 
     @Test
-    void outOfStockException()  {
+    void given_article_out_of_stock_when_retrieve_then_out_of_stock_exception() throws OutOfStockException, InvalidAmountException {
         //given
-        String articleId = "1014";
+        List<Song> songs = new ArrayList<>();
+        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
+        songs.add(song1);
+
+        Album album = new Album("Testname", "TestLabel",
+                LocalDate.of(1985,1,1),
+                songs, "Rock", "TestArtist");
+
+        SoundCarrier soundCarrier = new SoundCarrier("295748", album, Medium.CD, new BigDecimal("31.69"), 0);
+
         Map<String, Integer> purchasedItems = new HashMap<>();
-        purchasedItems.put(articleId, 1);
+        purchasedItems.put("295748", 1);
+        String paymentMethod = "cash";
+
+        //when ... then
+        assertThrows(OutOfStockException.class, () -> soundCarrier.retrieve(1));
+    }
+
+    @Test
+    void given_invalid_amount_when_retrieve_then_invalid_amount_exception() {
+        //given
+        List<Song> songs = new ArrayList<>();
+        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
+        songs.add(song1);
+
+        Album album = new Album("Testname", "TestLabel",
+                LocalDate.of(1985,1,1),
+                songs, "Rock", "TestArtist");
+
+        SoundCarrier soundCarrier = new SoundCarrier("295748", album, Medium.CD, new BigDecimal("31.69"), 10);
+
+        Map<String, Integer> purchasedItems = new HashMap<>();
+        purchasedItems.put("295748", -1);
         String paymentMethod = "cash";
 
         //when...then
-        assertThrows(OutOfStockException.class, () -> soundCarrierRepository.processPurchase(purchasedItems));
-    }
-
-    @Test
-    void invalidAmountException() {
-        //given
-        String articleId = "1023";
-        Map<String, Integer> purchasedItems = new HashMap<>();
-        purchasedItems.put(articleId, -1);
-        String paymentMethod = "cash";
-
-        //when...then
-        assertThrows(InvalidAmountException.class, () -> soundCarrierRepository.processPurchase(purchasedItems));
+        assertThrows(InvalidAmountException.class, () -> soundCarrier.retrieve(-1));
     }
 
 
-
-/*
-
-
-
-
-
-    @Test
-    void getTotalResultsByArtistName() {
-        //given
-        String artistName = "Diskobitch";
-        Long expectedTotResultsByArtistName = Long.valueOf(2);
-
-        //when
-        Long actualTotResultsByArtistName = soundCarrierRepository.totResultsByArtistName(artistName);
-
-        //then
-        assertEquals(actualTotResultsByArtistName, expectedTotResultsByArtistName);
-        assertNotNull(expectedTotResultsByArtistName);
-
-
-    }
-    @Test
-    void getTotalResultsBySongs() {
-        //given
-        String songName = "Los amos del desorden";
-        Long expectedTotResultsBySongName = Long.valueOf(2);
-
-        //when
-        Long actualTotResultsBySongName = soundCarrierRepository.totResultsBySongName(songName);
-
-        //then
-        assertEquals(actualTotResultsBySongName, expectedTotResultsBySongName);
-        assertNotNull(expectedTotResultsBySongName);
-
-
-    }
-
-    @Test
-    void getTotalResultsByAlbumName() {
-        //given
-        String albumName = "Love Me Crazy";
-        Long expectedTotResultsByAlbumName = Long.valueOf(2);
-
-        //when
-        Long actualTotResultsByAlbumName = soundCarrierRepository.totResultsByAlbumName(albumName);
-
-        //then
-        assertEquals(actualTotResultsByAlbumName, expectedTotResultsByAlbumName);
-        assertNotNull(expectedTotResultsByAlbumName);
-
-
-    }
-
+//    @Test
+//    void getTotalResultsByArtistName() {
+//        //given
+//        String artistName = "Diskobitch";
+//        Long expectedTotResultsByArtistName = Long.valueOf(2);
+//
+//        //when
+//        Long actualTotResultsByArtistName = soundCarrierRepository.totResultsByArtistName(artistName);
+//
+//        //then
+//        assertEquals(actualTotResultsByArtistName, expectedTotResultsByArtistName);
+//        assertNotNull(expectedTotResultsByArtistName);
+//
+//
+//    }
+//    @Test
+//    void getTotalResultsBySongs() {
+//        //given
+//        String songName = "Los amos del desorden";
+//        Long expectedTotResultsBySongName = Long.valueOf(2);
+//
+//        //when
+//        Long actualTotResultsBySongName = soundCarrierRepository.totResultsBySongName(songName);
+//
+//        //then
+//        assertEquals(actualTotResultsBySongName, expectedTotResultsBySongName);
+//        assertNotNull(expectedTotResultsBySongName);
+//
+//
+//    }
+//
+//    @Test
+//    void getTotalResultsByAlbumName() {
+//        //given
+//        String albumName = "Love Me Crazy";
+//        Long expectedTotResultsByAlbumName = Long.valueOf(2);
+//
+//        //when
+//        Long actualTotResultsByAlbumName = soundCarrierRepository.totResultsByAlbumName(albumName);
+//
+//        //then
+//        assertEquals(actualTotResultsByAlbumName, expectedTotResultsByAlbumName);
+//        assertNotNull(expectedTotResultsByAlbumName);
+//
+//
+//    }
 
     //SoundCarrier
-    @Test
+      @Test
     void getSoundCarrierDetails() {
         //given
-        String expectedSoundCarrierArticleId = "1015";
-        String expectedAlbum = "Brothers In Arms";
-        String expectedMedium = "VINYL";
-        String expectedAlbumLabel = "Mercury Records Limited";
+        List<Song> songs = new ArrayList<>();
+        Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
+        songs.add(song1);
+
+        Album album = new Album("Testname", "TestLabel",
+                LocalDate.of(1985,1,1),
+                songs, "Rock", "TestArtist");
+
+        SoundCarrier soundCarrier = new SoundCarrier("295748", album, Medium.CD, new BigDecimal("31.69"), 1);
+
+        String expectedSoundCarrierArticleId = "295748";
+        String expectedAlbum = "Testname";
+        Medium expectedMedium = Medium.CD;
+        String expectedAlbumLabel = "TestLabel";
         String expectedGenre = "Rock";
-        String expectedArtistName = "Dire Straits";
-        BigDecimal expectedPrice = new BigDecimal(5.99).setScale(2, RoundingMode.HALF_UP);
+        String expectedArtistName = "TestArtist";
+        BigDecimal expectedPrice = new BigDecimal("31.69").setScale(2, RoundingMode.HALF_UP);
         int expectedStock = 1;
         List<Song> expectedSongs = new ArrayList<>();
-        Song song1 = new Song("Money For Nothing", LocalDate.of(1985, 1, 1), "03:41");
-        Song song2 = new Song("Walk of Life", LocalDate.of(1985,1,1), "03:21");
-        Song song3 = new Song("Brothers in Arms", LocalDate.of(1985,1,1), "04:22");
         expectedSongs.add(song1);
-        expectedSongs.add(song2);
-        expectedSongs.add(song3);
 
         //when
-        SoundCarrier soundCarrier = soundCarrierRepository.soundCarrierByArticleId(expectedSoundCarrierArticleId);
         String actualSoundCarrierArticleId = soundCarrier.getArticleId();
         String actualSoundCarrierAlbum = soundCarrier.getAlbum().getName();
         String actualAlbumName = soundCarrier.getAlbumName();
@@ -169,7 +183,7 @@ class SoundCarrierTest {
         String actualAlbumLabel = soundCarrier.getAlbumLabel();
         String actualGenre = soundCarrier.getAlbumGenre();
         String actualArtistName = soundCarrier.getAlbumArtist();
-        String actualMedium = soundCarrier.getMedium();
+        Medium actualMedium = Medium.valueOf(soundCarrier.getMedium());
         int actualStock = soundCarrier.getStock();
         List<Song> actualSongs = new ArrayList<>();
         //actualSongs.add(soundCarrier.getAlbumSongs().get(0).getId(7));
@@ -187,10 +201,7 @@ class SoundCarrierTest {
         assertEquals(actualPrice, expectedPrice);
         //assertEquals(expectedSongs, actualSongs);
 
-    }*/
-
-
-
+    }
 
 
 }
