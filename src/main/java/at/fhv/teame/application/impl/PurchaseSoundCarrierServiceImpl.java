@@ -7,8 +7,6 @@ import at.fhv.teame.domain.model.invoice.PaymentMethod;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
-import at.fhv.teame.infrastructure.HibernateInvoiceRepository;
-import at.fhv.teame.infrastructure.HibernateSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import at.fhv.teame.sharedlib.ejb.PurchaseSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
@@ -30,7 +28,6 @@ public class PurchaseSoundCarrierServiceImpl implements PurchaseSoundCarrierServ
     @EJB
     private InvoiceRepository invoiceRepository;
 
-    // default constructor with hibernate
     public PurchaseSoundCarrierServiceImpl() { }
 
     // for mocking

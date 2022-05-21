@@ -17,8 +17,7 @@ public class WithdrawalSoundCarrierServiceImpl implements WithdrawSoundCarrierSe
     @EJB
     private InvoiceRepository invoiceRepository;
 
-    //default constructor with hibernate
-    public WithdrawalSoundCarrierServiceImpl() { }
+    public WithdrawalSoundCarrierServiceImpl() {}
 
     //for mocking
     public WithdrawalSoundCarrierServiceImpl(SoundCarrierRepository soundCarrierRepository, InvoiceRepository invoiceRepository) {
@@ -28,21 +27,14 @@ public class WithdrawalSoundCarrierServiceImpl implements WithdrawSoundCarrierSe
 
     @Override
     public void withdrawSoundCarrier(String invoiceId, Map<String, Integer> soundCarrierReturnAmountMap) throws WithdrawalFailedException {
-        if (soundCarrierReturnAmountMap.isEmpty()) {
-            throw new WithdrawalFailedException();
-        }
+        if (soundCarrierReturnAmountMap.isEmpty()) throw new WithdrawalFailedException();
 
-        try {
-            for (Map.Entry<String, Integer> entry : soundCarrierReturnAmountMap.entrySet()) {
-                //If article has returned items
-                if (entry.getValue() > 0) {
-                    soundCarrierRepository.fillStock(entry.getKey(), entry.getValue());
-                    invoiceRepository.updateInvoiceLine(invoiceId, entry.getKey(), entry.getValue());
-                }
+        for (Map.Entry<String, Integer> entry : soundCarrierReturnAmountMap.entrySet()) {
+            //If article has returned items
+            if (entry.getValue() > 0) {
+                soundCarrierRepository.fillStock(entry.getKey(), entry.getValue());
+                invoiceRepository.updateInvoiceLine(invoiceId, entry.getKey(), entry.getValue());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new WithdrawalFailedException();
         }
     }
 }
