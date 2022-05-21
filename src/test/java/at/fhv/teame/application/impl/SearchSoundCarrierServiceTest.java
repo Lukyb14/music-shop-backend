@@ -57,7 +57,6 @@ class SearchSoundCarrierServiceTest {
     }
 
 
-
     @Test
     void given_totResultsExpected_when_totResultsByAlbumName_then_totResultsequals() {
         //given

@@ -15,7 +15,7 @@ import java.util.Properties;
 @Stateless
 public class SearchCustomerServiceImpl implements SearchCustomerServiceRemote {
 
-    private final CustomerServiceRemote searchCustomerServiceRemoteStub;
+    private CustomerServiceRemote searchCustomerServiceRemote;
 
     public SearchCustomerServiceImpl(){
         Object obj = null;
@@ -28,31 +28,27 @@ public class SearchCustomerServiceImpl implements SearchCustomerServiceRemote {
         } catch (NamingException e) {
             e.printStackTrace();
         } finally {
-            searchCustomerServiceRemoteStub = (CustomerServiceRemote) obj;
+            searchCustomerServiceRemote = (CustomerServiceRemote) obj;
         }
-    }
-
-    public SearchCustomerServiceImpl(CustomerServiceRemote customerService){
-        this.searchCustomerServiceRemoteStub = customerService;
     }
 
     @Override
     public List<CustomerDTO> getCustomerByFullName(String givenName, String familyName, int pageNr) {
-        return searchCustomerServiceRemoteStub.getCustomerByFullName(givenName, familyName, pageNr);
+        return searchCustomerServiceRemote.getCustomerByFullName(givenName, familyName, pageNr);
     }
 
     @Override
     public List<CustomerDTO> getCustomerByFamilyName(String familyName, int pageNr) {
-        return searchCustomerServiceRemoteStub.getCustomerByFamilyName(familyName, pageNr);
+        return searchCustomerServiceRemote.getCustomerByFamilyName(familyName, pageNr);
     }
 
     @Override
     public int totResultsByFullName(String givenName, String familyName) {
-        return searchCustomerServiceRemoteStub.totResultsByFullName(givenName, familyName);
+        return searchCustomerServiceRemote.totResultsByFullName(givenName, familyName);
     }
 
     @Override
     public int totResultsByFamilyName(String familyName) {
-        return searchCustomerServiceRemoteStub.totResultsByFamilyName(familyName);
+        return searchCustomerServiceRemote.totResultsByFamilyName(familyName);
     }
 }

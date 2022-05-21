@@ -24,10 +24,5 @@ public class SongTest {
         assertEquals(songTitle, song.getTitle());
         assertEquals(releaseDate, song.getRelease());
         assertEquals(songDuration, song.getDuration());
-
-
-
     }
-
-
 }

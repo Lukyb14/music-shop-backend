@@ -23,7 +23,8 @@ public class WithdrawalSoundCarrierServiceTest {
     }
 
     @Test
-    void withdrawSoundCarrier() throws WithdrawalFailedException {
+    void given_soundcarriertoreturn_and_invoiceId_when_withdrawSoundCarrier_then_withdrawn() throws WithdrawalFailedException {
+        //given
         String invoiceId = "20000";
         Map<String, Integer> returnedSoundCarriers = Map.of(
                 "1000", 2,
@@ -31,7 +32,11 @@ public class WithdrawalSoundCarrierServiceTest {
                 "7381", 3
         );
 
+        //when
         withdrawSoundCarrierService.withdrawSoundCarrier(invoiceId, returnedSoundCarriers);
+
+        //then
+
     }
 
     @Test

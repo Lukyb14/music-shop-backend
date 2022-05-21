@@ -23,15 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SoundCarrierTest {
 
-    private HibernateSoundCarrierRepository soundCarrierRepository;
-
-
-    @BeforeEach
-    void setup()  {
-
-        soundCarrierRepository = new HibernateSoundCarrierRepository();
-    }
-
     @Test
     void testSoundCarrierConstructor () {
         //given
@@ -61,7 +52,7 @@ class SoundCarrierTest {
     }
 
     @Test
-    void given_article_out_of_stock_when_retrieve_then_out_of_stock_exception() throws OutOfStockException, InvalidAmountException {
+    void given_article_out_of_stock_when_retrieve_then_out_of_stock_exception() {
         //given
         List<Song> songs = new ArrayList<>();
         Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
@@ -103,54 +94,6 @@ class SoundCarrierTest {
     }
 
 
-//    @Test
-//    void getTotalResultsByArtistName() {
-//        //given
-//        String artistName = "Diskobitch";
-//        Long expectedTotResultsByArtistName = Long.valueOf(2);
-//
-//        //when
-//        Long actualTotResultsByArtistName = soundCarrierRepository.totResultsByArtistName(artistName);
-//
-//        //then
-//        assertEquals(actualTotResultsByArtistName, expectedTotResultsByArtistName);
-//        assertNotNull(expectedTotResultsByArtistName);
-//
-//
-//    }
-//    @Test
-//    void getTotalResultsBySongs() {
-//        //given
-//        String songName = "Los amos del desorden";
-//        Long expectedTotResultsBySongName = Long.valueOf(2);
-//
-//        //when
-//        Long actualTotResultsBySongName = soundCarrierRepository.totResultsBySongName(songName);
-//
-//        //then
-//        assertEquals(actualTotResultsBySongName, expectedTotResultsBySongName);
-//        assertNotNull(expectedTotResultsBySongName);
-//
-//
-//    }
-//
-//    @Test
-//    void getTotalResultsByAlbumName() {
-//        //given
-//        String albumName = "Love Me Crazy";
-//        Long expectedTotResultsByAlbumName = Long.valueOf(2);
-//
-//        //when
-//        Long actualTotResultsByAlbumName = soundCarrierRepository.totResultsByAlbumName(albumName);
-//
-//        //then
-//        assertEquals(actualTotResultsByAlbumName, expectedTotResultsByAlbumName);
-//        assertNotNull(expectedTotResultsByAlbumName);
-//
-//
-//    }
-
-    //SoundCarrier
       @Test
     void getSoundCarrierDetails() {
         //given
@@ -200,8 +143,5 @@ class SoundCarrierTest {
         assertEquals(expectedArtistName, actualArtistName);
         assertEquals(actualPrice, expectedPrice);
         //assertEquals(expectedSongs, actualSongs);
-
     }
-
-
 }

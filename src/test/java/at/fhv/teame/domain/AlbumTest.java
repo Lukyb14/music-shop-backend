@@ -22,10 +22,6 @@ public class AlbumTest {
                 LocalDate.of(1985,1,1),
                 expectedSongs, "Rock", "TestArtist");
 
-
-
-
-
         //when...then
         assertEquals(LocalDate.of(1985,1,1), album.getRelease());
         assertEquals(expectedSongs, album.getSongs());
@@ -34,8 +30,4 @@ public class AlbumTest {
         assertEquals("Rock", album.getGenre());
         assertEquals("TestArtist", album.getArtist());
     }
-
-
-
-
 }

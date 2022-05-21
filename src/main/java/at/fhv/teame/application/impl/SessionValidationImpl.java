@@ -1,6 +1,5 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.application.exceptions.SessionNotFoundException;
 import at.fhv.teame.domain.model.session.Session;
 import at.fhv.teame.domain.repositories.SessionRepository;
 import at.fhv.teame.sharedlib.ejb.SessionValidationRemote;
@@ -18,11 +17,17 @@ public class SessionValidationImpl implements SessionValidationRemote {
 
     public SessionValidationImpl() { }
 
+    //for mocking
+    public SessionValidationImpl(SessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
+    }
+
     @Override
     public void validateAny(String sessionId) throws InvalidSessionException {
         try {
-            sessionRepository.sessionById(UUID.fromString(sessionId));
-        } catch (SessionNotFoundException ignored) {
+            Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
+            if(session.isExpired()) throw new InvalidSessionException();
+        } catch (Exception ignored) {
             throw new InvalidSessionException();
         }
     }
@@ -31,8 +36,8 @@ public class SessionValidationImpl implements SessionValidationRemote {
     public void validateSeller(String sessionId) throws InvalidSessionException {
         try {
             Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isSeller()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
+            if (!session.isSeller() || session.isExpired()) throw new InvalidSessionException();
+        } catch (Exception ignored) {
             throw new InvalidSessionException();
         }
     }
@@ -41,8 +46,8 @@ public class SessionValidationImpl implements SessionValidationRemote {
     public void validateOperator(String sessionId) throws InvalidSessionException {
         try {
             Session session = sessionRepository.sessionById(UUID.fromString(sessionId));
-            if (!session.isOperator()) throw new InvalidSessionException();
-        } catch (SessionNotFoundException ignored) {
+            if (!session.isOperator() || session.isExpired()) throw new InvalidSessionException();
+        } catch (Exception ignored) {
             throw new InvalidSessionException();
         }
     }

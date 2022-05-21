@@ -46,7 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
 
             String uid = searchUserInBase(ctx, username, base);
 
-            if(uid == null) throw new LoginFailedException();
+            if(uid == null) throw new NamingException();
 
             properties.put(Context.SECURITY_PRINCIPAL, uid);
             properties.put(Context.SECURITY_CREDENTIALS, password);
@@ -88,7 +88,7 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
                 if (uid != null) break;
             }
 
-            if(uid == null) throw new LoginFailedException();
+            if(uid == null) throw new NamingException();
 
             properties.put(Context.SECURITY_PRINCIPAL, uid);
             properties.put(Context.SECURITY_CREDENTIALS, password);
