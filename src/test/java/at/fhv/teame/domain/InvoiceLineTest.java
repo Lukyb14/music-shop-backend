@@ -8,7 +8,6 @@ import at.fhv.teame.domain.model.soundcarrier.Medium;
 import at.fhv.teame.domain.model.soundcarrier.Song;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import org.junit.jupiter.api.Test;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,10 +38,7 @@ public class InvoiceLineTest {
         assertEquals(invoice, invoiceLine.getInvoice());
         assertEquals(soundCarrier, invoiceLine.getSoundCarrier());
         assertEquals(quantity, invoiceLine.getQuantity());
-
-
     }
-
 
 
     @Test
@@ -65,7 +61,5 @@ public class InvoiceLineTest {
         invoiceLine.updateAmountOfReturnedItems(amountOfReturnedItems);
 
         assertEquals(amountOfReturnedItems, invoiceLine.getAmountOfReturnedItems());
-
-
     }
 }

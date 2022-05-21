@@ -18,7 +18,6 @@ public class SearchSoundCarrierServiceImpl implements SearchSoundCarrierServiceR
     @EJB
     private SoundCarrierRepository soundCarrierRepository;
 
-    //default constructor with hibernate
     public SearchSoundCarrierServiceImpl() { }
 
     //for mocking

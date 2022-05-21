@@ -1,5 +1,5 @@
 {
   "resourcePackages": [
-    "at.fhv.teame.application.rest", "at.fhv.teame.application.rest.schema"
+    "at.fhv.teame.rest", "at.fhv.teame.rest.schema"
   ]
 }

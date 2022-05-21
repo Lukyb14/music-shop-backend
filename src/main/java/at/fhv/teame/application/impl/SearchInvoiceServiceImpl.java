@@ -19,7 +19,6 @@ public class SearchInvoiceServiceImpl implements SearchInvoiceServiceRemote {
     @EJB
     private InvoiceRepository invoiceRepository;
 
-    // default constructor with hibernate
     public SearchInvoiceServiceImpl() {}
 
     //for mocking
