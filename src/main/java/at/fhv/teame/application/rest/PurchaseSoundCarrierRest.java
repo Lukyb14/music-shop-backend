@@ -1,5 +1,6 @@
 package at.fhv.teame.application.rest;
 
+import at.fhv.teame.application.rest.schema.ShoppingCartSchema;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import at.fhv.teame.sharedlib.ejb.PurchaseSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
@@ -28,12 +29,19 @@ public class PurchaseSoundCarrierRest {
     @ApiResponse(responseCode = "401", description = "Token verification failed")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
-    public Response purchaseSoundCarrier(ShoppingCartDTO shoppingCartDTO, @CookieParam("token") String token) {
+    public Response purchaseSoundCarrier(final ShoppingCartSchema shoppingCart) {
         try {
-            if (shoppingCartDTO == null) return Response.status(Response.Status.BAD_REQUEST).build();
-            JaxRsApplication.verifyToken(token);
+            if (shoppingCart == null) return Response.status(Response.Status.BAD_REQUEST).build();
+            JaxRsApplication.verifyToken(shoppingCart.token);
 
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
+            purchaseSoundCarrierService.confirmPurchase(ShoppingCartDTO.builder().withShoppingCartEntity(
+                    shoppingCart.purchasedItems,
+                    shoppingCart.paymentMethod,
+                    shoppingCart.customerFirstName,
+                    shoppingCart.customerLastName,
+                    shoppingCart.customerAddress
+            ).build());
+
             return Response.status(Response.Status.NO_CONTENT).build();
         } catch (JWTVerificationException e) {
             return Response.status(Response.Status.UNAUTHORIZED).build();

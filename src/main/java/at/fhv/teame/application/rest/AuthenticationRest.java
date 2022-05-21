@@ -67,15 +67,15 @@ public class AuthenticationRest {
 
     @DELETE
     @Path("/logout")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Logout by deleting the cookie")
-    @ApiResponse(responseCode = "200", description = "Logout successful")
+    @ApiResponse(responseCode = "204", description = "Logout successful")
     @ApiResponse(responseCode = "400", description = "Bad Request")
-    public Response logout(@CookieParam("token") Cookie cookie) {
-        if (cookie == null) return Response.status(Response.Status.BAD_REQUEST).build();
+    public Response logout(final TokenSchema token) {
+        if (token == null) return Response.status(Response.Status.BAD_REQUEST).build();
 
         return Response
-                .ok()
-                .cookie(new NewCookie(cookie, "delete cookie", 0, false))
+                .status(Response.Status.NO_CONTENT)
                 .build();
     }
 }
