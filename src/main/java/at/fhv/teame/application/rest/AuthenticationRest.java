@@ -22,13 +22,13 @@ import java.util.Date;
 
 import static at.fhv.teame.application.rest.JaxRsApplication.algorithm;
 
-@Path("/")
+@Path("/v1")
 public class AuthenticationRest {
     @EJB
     private AuthenticationServiceLocal authenticationService;
 
     @POST
-    @Path("/v1/login")
+    @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Login with username and password, returns token as cookie")

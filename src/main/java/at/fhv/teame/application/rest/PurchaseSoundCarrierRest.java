@@ -14,14 +14,14 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
-@Path("/soundCarrier/purchase")
+@Path("/v1/soundCarrier/purchase")
 public class PurchaseSoundCarrierRest {
 
     @EJB
     private PurchaseSoundCarrierServiceRemote purchaseSoundCarrierService;
 
     @POST
-    @Path("/v1")
+    @Path("/")
     @Consumes("application/json")
     @Operation(summary = "Make a purchase with the given Sound Carriers")
     @ApiResponse(responseCode = "204", description = "Purchase successfully completed")

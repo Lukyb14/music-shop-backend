@@ -26,18 +26,6 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
     private SessionRepository sessionRepository;
     private static final String PROVIDER_URL = "ldap://10.0.40.169:389";
 
-    public SessionDTO backdoorLogin(String username) {
-        // TODO remove in production
-        try {
-            ClientUser clientUser = userRepository.userByCn(username);
-            Session session = sessionRepository.createSession(clientUser);
-
-            return new SessionDTO(session.getSessionId().toString(), clientUser.getRole().toString());
-        } catch (UserNotFoundException e) {
-            return null;
-        }
-    }
-
     @Override
     public SessionDTO login(String username, String password) throws LoginFailedException {
         Properties properties = new Properties();

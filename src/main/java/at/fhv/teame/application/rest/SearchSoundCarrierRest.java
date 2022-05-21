@@ -14,14 +14,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/soundCarrier/search")
+@Path("/v1/soundCarrier/search")
 public class SearchSoundCarrierRest {
 
     @EJB
     private SearchSoundCarrierServiceRemote searchSoundCarrierService;
 
     @GET
-    @Path("/v1/artist/{artist}")
+    @Path("/artist/{artist}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Operation(summary = "Get Sound Carriers by artist name")
@@ -57,7 +57,7 @@ public class SearchSoundCarrierRest {
     }
 
     @GET
-    @Path("/v1/album/{album}")
+    @Path("/album/{album}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Operation(summary = "Get Sound Carriers by album name")
@@ -92,7 +92,7 @@ public class SearchSoundCarrierRest {
     }
 
     @GET
-    @Path("/v1/song/{song}")
+    @Path("/song/{song}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Operation(summary = "Get Sound Carriers by song name")
