@@ -1,4 +1,4 @@
-package at.fhv.teame.application.impl;
+package at.fhv.teame.application.impl.digitalsong;
 
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
 import at.fhv.teame.domain.repositories.DigitalSongRepository;

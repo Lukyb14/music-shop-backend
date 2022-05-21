@@ -1,5 +1,6 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.application.impl.digitalsong.SearchDigitalSongServiceImpl;
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
 import at.fhv.teame.mocks.MockDigitalSongRepository;
 import at.fhv.teame.sharedlib.dto.DigitalSongDTO;
@@ -35,7 +36,7 @@ class SearchDigitalSongServiceTest {
             digitalSongDtosExpected.add(digitalSongDTO);
         }
         // when
-        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByArtist("Eminem");
+        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByArtist("Eminem", 1);
 
         // then
         for (DigitalSongDTO ds : digitalSongDtosActual) {
@@ -56,7 +57,7 @@ class SearchDigitalSongServiceTest {
             digitalSongDtosExpected.add(digitalSongDTO);
         }
         // when
-        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByGenre("Hip-Hop");
+        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByGenre("Hip-Hop",1);
 
         // then
         for (DigitalSongDTO ds : digitalSongDtosActual) {
@@ -77,7 +78,7 @@ class SearchDigitalSongServiceTest {
             digitalSongDtosExpected.add(digitalSongDTO);
         }
         // when
-        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByTitle("8 Mile");
+        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByTitle("8 Mile", 1);
 
         // then
         for (DigitalSongDTO ds : digitalSongDtosActual) {

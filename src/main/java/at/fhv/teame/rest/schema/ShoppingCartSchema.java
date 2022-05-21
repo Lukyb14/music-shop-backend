@@ -7,15 +7,11 @@ import java.util.Map;
 @XmlRootElement
 public class ShoppingCartSchema {
     @XmlElement
-    public Map<String, Integer> purchasedItems;
+    public Map<String, Integer> cartSongs;
     @XmlElement
-    public String paymentMethod;
+    public String email;
     @XmlElement
-    public String customerFirstName;
-    @XmlElement
-    public String customerLastName;
-    @XmlElement
-    public String customerAddress;
+    public String cvc;
     @XmlElement
     public String token;
 }

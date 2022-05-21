@@ -13,7 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/v1/soundCarrier/search")
+@Path("/v1/song/search")
 public class SearchDigitalSongRest {
 
     @EJB

@@ -9,17 +9,17 @@ import java.util.List;
 
 public class MockDigitalSongRepository implements DigitalSongRepository {
     @Override
-    public List<DigitalSong> digitalSongByTitle(String title) {
+    public List<DigitalSong> digitalSongByTitle(String title, int pageNr) {
         return createDigitalSongLstDummy();
     }
 
     @Override
-    public List<DigitalSong> digitalSongByArtist(String artist) {
+    public List<DigitalSong> digitalSongByArtist(String artist, int pageNr) {
         return createDigitalSongLstDummy();
     }
 
     @Override
-    public List<DigitalSong> digitalSongByGenre(String genre) {
+    public List<DigitalSong> digitalSongByGenre(String genre, int pageNr) {
         return createDigitalSongLstDummy();
     }
 

@@ -1,4 +1,4 @@
-package at.fhv.teame.application.impl;
+package at.fhv.teame.application.impl.soundcarrier;
 
 import at.fhv.teame.domain.repositories.InvoiceRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
