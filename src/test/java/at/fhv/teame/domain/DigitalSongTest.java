@@ -3,6 +3,7 @@ package at.fhv.teame.domain;
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,7 +29,8 @@ public class DigitalSongTest {
                 "5:30",
                 LocalDate.of(2000, 1, 1),
                 "/songs/8 Mile.mp3",
-                "/covers/8 Mile.jpg"
+                "/covers/8 Mile.jpg",
+                BigDecimal.valueOf(2.99f)
         );
 
         // then

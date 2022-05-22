@@ -46,7 +46,7 @@ public class SearchDigitalSongServiceImpl implements SearchDigitalSongServiceRem
         for (DigitalSong ds : digitalSongs) {
             digitalSongDTOS.add(
                     DigitalSongDTO.builder()
-                            .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString())
+                            .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString())
                             .build()
             );
         }

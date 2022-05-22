@@ -8,6 +8,7 @@ import at.fhv.teame.sharedlib.ejb.SearchDigitalSongServiceRemote;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +32,7 @@ class SearchDigitalSongServiceTest {
         List<DigitalSongDTO> digitalSongDtosExpected = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {
             DigitalSongDTO digitalSongDTO = DigitalSongDTO.builder()
-                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString())
+                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString())
                     .build();
             digitalSongDtosExpected.add(digitalSongDTO);
         }
@@ -52,7 +53,7 @@ class SearchDigitalSongServiceTest {
         List<DigitalSongDTO> digitalSongDtosExpected = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {
             DigitalSongDTO digitalSongDTO = DigitalSongDTO.builder()
-                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString())
+                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString())
                     .build();
             digitalSongDtosExpected.add(digitalSongDTO);
         }
@@ -73,7 +74,7 @@ class SearchDigitalSongServiceTest {
         List<DigitalSongDTO> digitalSongDtosExpected = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {
             DigitalSongDTO digitalSongDTO = DigitalSongDTO.builder()
-                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString())
+                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString())
                     .build();
             digitalSongDtosExpected.add(digitalSongDTO);
         }
@@ -94,7 +95,8 @@ class SearchDigitalSongServiceTest {
                         "5:30",
                         LocalDate.of(2000, 1, 1),
                         "/songs/8 Mile.mp3",
-                        "/covers/8 Mile.jpg"
+                        "/covers/8 Mile.jpg",
+                        BigDecimal.valueOf(2.99f)
                 ),
                 new DigitalSong("Eminem",
                         "Not Afraid",
@@ -102,14 +104,16 @@ class SearchDigitalSongServiceTest {
                         "6:30",
                         LocalDate.of(2011, 3, 1),
                         "/songs/Not Afraid.mp3",
-                        "/covers/Not Afraid.jpg"
+                        "/covers/Not Afraid.jpg",
+                        BigDecimal.valueOf(2.99f)
                 ),new DigitalSong("Eminem",
                         "Till I Collapse",
                         "Hip-Hop",
                         "5:50",
                         LocalDate.of(2003, 4, 1),
                         "/songs/Till I Collapse.mp3",
-                        "/covers/Till I Collapse.jpg"
+                        "/covers/Till I Collapse.jpg",
+                        BigDecimal.valueOf(2.99f)
                 )
         );
     }
