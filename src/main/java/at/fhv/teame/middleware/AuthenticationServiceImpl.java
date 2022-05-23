@@ -15,8 +15,11 @@ import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
+import javax.ws.rs.NotFoundException;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Stateless
 public class AuthenticationServiceImpl implements AuthenticationServiceRemote, AuthenticationServiceLocal {
@@ -44,11 +47,11 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
             InitialDirContext ctx = new InitialDirContext(properties);
             String base = "ou=employees,dc=ad,dc=teame,dc=net";
 
-            String uid = searchUserInBase(ctx, username, base);
+            String dn = searchUserInBase(ctx, username, base, "uid");
 
-            if(uid == null) throw new NamingException();
+            if(dn == null) throw new NamingException();
 
-            properties.put(Context.SECURITY_PRINCIPAL, uid);
+            properties.put(Context.SECURITY_PRINCIPAL, dn);
             properties.put(Context.SECURITY_CREDENTIALS, password);
             try {
                 ctx = new InitialDirContext(properties);
@@ -71,7 +74,7 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
     }
 
     @Override
-    public String loginCustomer(String username, String password) throws LoginFailedException {
+    public String loginCustomer(String givenMail, String password) throws LoginFailedException {
         Properties properties = new Properties();
         properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         properties.put(Context.PROVIDER_URL, PROVIDER_URL);
@@ -82,20 +85,30 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
 
             //Search in different ous for user
             String[] ous = {"ou=customer", "ou=licensee"};
-            String uid = null;
+            String dn = null;
+            String ou = null;
             for (int i = 0; i < ous.length; i++) {
-                uid = searchUserInBase(ctx, username, ous[i] + base);
-                if (uid != null) break;
+                ou = ous[i];
+                dn = searchUserInBase(ctx, givenMail, ou + base, "mail");
+                if (dn != null) break;
             }
 
-            if(uid == null) throw new NamingException();
+            if(dn == null) throw new NamingException();
 
-            properties.put(Context.SECURITY_PRINCIPAL, uid);
+            properties.put(Context.SECURITY_PRINCIPAL, dn);
             properties.put(Context.SECURITY_CREDENTIALS, password);
             try {
                 ctx = new InitialDirContext(properties);
                 System.out.println("Connection to LDAP System successful");
-                return username;
+                System.out.println("dn: "+ dn);
+
+                Pattern mailPattern = Pattern.compile("\\w+@email\\.test"); //regex to extract mail from dn
+                Matcher matcher = mailPattern.matcher(dn);
+
+                if (matcher.find()) {
+                    return matcher.group();
+                }
+                throw new NotFoundException();
             } catch (Exception e) {
                 // invalid password
                 throw new LoginFailedException();
@@ -117,18 +130,34 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
         }
     }
 
-    private String searchUserInBase(InitialDirContext ctx, String username, String base) throws NamingException {
+    private String searchUserInBase(InitialDirContext ctx, String username, String base, String attribute) throws NamingException {
         Attributes match = new BasicAttributes();
-        match.put(new BasicAttribute("uid", username));
+        match.put(new BasicAttribute(attribute, username));
         NamingEnumeration<SearchResult> searchResults = ctx.search(base, match);
 
-        String uid;
+        String dn;
         if (searchResults.hasMore()) {
             SearchResult result = searchResults.next();
-            uid = result.getNameInNamespace();
-            return uid;
+            dn = result.getNameInNamespace();
+            return dn;
         } else {
             System.out.println("no such user");
+            return null;
+        }
+    }
+
+    private String searchMailInBase(InitialDirContext ctx, String mail, String base, String attributeToSearch) throws NamingException {
+        Attributes match = new BasicAttributes();
+        match.put(new BasicAttribute(attributeToSearch, mail));
+        NamingEnumeration<SearchResult> searchResults = ctx.search(base, match);
+
+        Attribute attribute;
+        if (searchResults.hasMore()) {
+            SearchResult result = searchResults.next();
+            attribute = result.getAttributes().get(attributeToSearch);
+            return attribute.toString();
+        } else {
+            System.out.println("no such attribute");
             return null;
         }
     }

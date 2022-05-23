@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -74,6 +75,10 @@ public class DigitalSong {
 
     public String getMp3File() {
         return mp3File;
+    }
+
+    public BigDecimal getPrice() {
+        return null;
     }
 
     public String getCoverFile() {

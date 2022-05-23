@@ -1,4 +1,4 @@
-package at.fhv.teame.rest;
+package at.fhv.teame.rest.digitalsong;
 
 import at.fhv.teame.rest.schema.DigitalSongListSchema;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
@@ -22,7 +22,7 @@ public class SearchDigitalSongRest {
     @GET
     @Path("/artist/{artist}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get Sound Carriers by artist name")
+    @Operation(summary = "Get digital song by artist name")
     @ApiResponse(
             responseCode = "200",
             description = "List of SoundCarrierDTOs",
@@ -53,7 +53,7 @@ public class SearchDigitalSongRest {
     @GET
     @Path("/album/{album}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get Sound Carriers by album name")
+    @Operation(summary = "Get digital song by album name")
     @ApiResponse(
             responseCode = "200",
             description = "List of SoundCarrierDTOs",
@@ -83,7 +83,7 @@ public class SearchDigitalSongRest {
     @GET
     @Path("/song/{song}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get Sound Carriers by song name")
+    @Operation(summary = "Get digital song by song name")
     @ApiResponse(
             responseCode = "200",
             description = "List of SoundCarrierDTOs",

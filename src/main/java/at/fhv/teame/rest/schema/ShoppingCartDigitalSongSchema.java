@@ -5,9 +5,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Map;
 
 @XmlRootElement
-public class ShoppingCartSchema {
+public class ShoppingCartDigitalSongSchema {
     @XmlElement
-    public Map<String, Integer> cartSongs;
+    public Map<String, Integer> cartSongIds;
     @XmlElement
     public String email;
     @XmlElement

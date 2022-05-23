@@ -16,6 +16,15 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
 
     private static final int ROWS_PER_PAGE = 10;
 
+
+    @Override
+    public DigitalSong digitalSongByArticleId(String articleId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        TypedQuery<DigitalSong> query = entityManager.createQuery("FROM DigitalSong d WHERE d.id = :articleId", DigitalSong.class);
+        query.setParameter(articleId, articleId);
+        return query.getSingleResult();
+    }
+
     @Override
     public List<DigitalSong> digitalSongByTitle(String title, int pageNr) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
