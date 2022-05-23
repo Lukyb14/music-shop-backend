@@ -1,7 +1,6 @@
 package at.fhv.teame.rest.digitalsong;
 
 import at.fhv.teame.rest.schema.DigitalSongListSchema;
-import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.ejb.SearchDigitalSongServiceRemote;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,10 +21,10 @@ public class SearchDigitalSongRest {
     @GET
     @Path("/artist/{artist}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get digital song by artist name")
+    @Operation(summary = "Get songs by artist name")
     @ApiResponse(
             responseCode = "200",
-            description = "List of SoundCarrierDTOs",
+            description = "List of songs",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = DigitalSongListSchema.class)
@@ -53,10 +52,10 @@ public class SearchDigitalSongRest {
     @GET
     @Path("/album/{album}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get digital song by album name")
+    @Operation(summary = "Get songs by album name")
     @ApiResponse(
             responseCode = "200",
-            description = "List of SoundCarrierDTOs",
+            description = "List of songs",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = DigitalSongListSchema.class)
@@ -83,13 +82,13 @@ public class SearchDigitalSongRest {
     @GET
     @Path("/song/{song}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get digital song by song name")
+    @Operation(summary = "Get songs by song title")
     @ApiResponse(
             responseCode = "200",
-            description = "List of SoundCarrierDTOs",
+            description = "List of songs",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = SoundCarrierDTO.class)
+                    schema = @Schema(implementation = DigitalSongListSchema.class)
             )
     )
     @ApiResponse(responseCode = "400", description = "Bad Request")

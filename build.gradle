@@ -40,9 +40,6 @@ dependencies {
     implementation 'io.swagger.codegen.v3:swagger-codegen-generators:1.0.34'
     // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-jaxrs2
     implementation 'io.swagger.core.v3:swagger-jaxrs2:2.2.0'
-
-    // implementation files('libs/music-shop-sharedlib.jar')
-
 }
 
 test {

@@ -3,6 +3,7 @@ package at.fhv.teame.mocks;
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
 import at.fhv.teame.domain.repositories.DigitalSongRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +32,8 @@ public class MockDigitalSongRepository implements DigitalSongRepository {
                         "5:30",
                         LocalDate.of(2000, 1, 1),
                         "/songs/8 Mile.mp3",
-                        "/covers/8 Mile.jpg"
+                        "/covers/8 Mile.jpg",
+                        BigDecimal.valueOf(2.99f)
                 ),
                 new DigitalSong("Eminem",
                         "Not Afraid",
@@ -39,14 +41,16 @@ public class MockDigitalSongRepository implements DigitalSongRepository {
                         "6:30",
                         LocalDate.of(2011, 3, 1),
                         "/songs/Not Afraid.mp3",
-                        "/covers/Not Afraid.jpg"
+                        "/covers/Not Afraid.jpg",
+                        BigDecimal.valueOf(1.99f)
                 ),new DigitalSong("Eminem",
                         "Till I Collapse",
                         "Hip-Hop",
                         "5:50",
                         LocalDate.of(2003, 4, 1),
                         "/songs/Till I Collapse.mp3",
-                        "/covers/Till I Collapse.jpg"
+                        "/covers/Till I Collapse.jpg",
+                        BigDecimal.valueOf(3.99f)
                 )
         );
     }
