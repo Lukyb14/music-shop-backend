@@ -18,10 +18,10 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
 
 
     @Override
-    public DigitalSong digitalSongByArticleId(String articleId) {
+    public DigitalSong digitalSongByArticleId(Long articleId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<DigitalSong> query = entityManager.createQuery("FROM DigitalSong d WHERE d.id = :articleId", DigitalSong.class);
-        query.setParameter(articleId, articleId);
+        query.setParameter("articleId", articleId);
         return query.getSingleResult();
     }
 

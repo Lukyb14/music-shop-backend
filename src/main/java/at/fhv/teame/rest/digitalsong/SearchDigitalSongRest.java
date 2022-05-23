@@ -50,9 +50,9 @@ public class SearchDigitalSongRest {
     }
 
     @GET
-    @Path("/album/{album}")
+    @Path("/genre/{genre}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get songs by album name")
+    @Operation(summary = "Get songs by genre")
     @ApiResponse(
             responseCode = "200",
             description = "List of songs",
@@ -63,7 +63,7 @@ public class SearchDigitalSongRest {
     )
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
-    public Response searchByGenre(@PathParam("album") String genre, @QueryParam("pageNr") String pageNrStr) {
+    public Response searchByGenre(@PathParam("genre") String genre, @QueryParam("pageNr") String pageNrStr) {
         try {
             if (genre == null || pageNrStr == null)
                 return Response.status(Response.Status.BAD_REQUEST).build();

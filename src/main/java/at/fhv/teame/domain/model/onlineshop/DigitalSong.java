@@ -73,10 +73,6 @@ public class DigitalSong {
         return mp3File;
     }
 
-    public BigDecimal getPrice() {
-        return null;
-    }
-
     public String getCoverFile() {
         return coverFile;
     }

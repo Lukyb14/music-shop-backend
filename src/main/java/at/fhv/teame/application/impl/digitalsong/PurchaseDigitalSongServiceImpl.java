@@ -43,7 +43,7 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
         HashMap<DigitalSong, Integer> digitalSongList = new HashMap<>();
 
         for(Map.Entry<String, Integer> entry : purchasedSongIds.entrySet()) {
-            DigitalSong digitalSong = digitalSongRepository.digitalSongByArticleId(entry.getKey());
+            DigitalSong digitalSong = digitalSongRepository.digitalSongByArticleId(Long.valueOf(entry.getKey()));
             digitalSongList.put(digitalSong, entry.getValue());
         }
 
