@@ -145,20 +145,4 @@ public class AuthenticationServiceImpl implements AuthenticationServiceRemote, A
             return null;
         }
     }
-
-    private String searchMailInBase(InitialDirContext ctx, String mail, String base, String attributeToSearch) throws NamingException {
-        Attributes match = new BasicAttributes();
-        match.put(new BasicAttribute(attributeToSearch, mail));
-        NamingEnumeration<SearchResult> searchResults = ctx.search(base, match);
-
-        Attribute attribute;
-        if (searchResults.hasMore()) {
-            SearchResult result = searchResults.next();
-            attribute = result.getAttributes().get(attributeToSearch);
-            return attribute.toString();
-        } else {
-            System.out.println("no such attribute");
-            return null;
-        }
-    }
 }
