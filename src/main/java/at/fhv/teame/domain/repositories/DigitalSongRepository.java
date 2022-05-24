@@ -1,5 +1,6 @@
 package at.fhv.teame.domain.repositories;
 
+import at.fhv.teame.domain.model.onlineshop.DigitalInvoice;
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
 
 import javax.ejb.Local;

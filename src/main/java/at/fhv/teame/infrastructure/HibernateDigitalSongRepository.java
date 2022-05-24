@@ -1,5 +1,8 @@
 package at.fhv.teame.infrastructure;
 
+import at.fhv.teame.domain.model.invoice.InvoiceLine;
+import at.fhv.teame.domain.model.onlineshop.DigitalInvoice;
+import at.fhv.teame.domain.model.onlineshop.DigitalInvoiceLine;
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
 import at.fhv.teame.domain.repositories.DigitalSongRepository;
 

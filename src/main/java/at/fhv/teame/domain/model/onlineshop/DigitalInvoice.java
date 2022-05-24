@@ -25,25 +25,18 @@ public class DigitalInvoice {
     @Column
     private LocalDate date;
 
-    @OneToMany
+    @OneToMany(mappedBy = "digitalInvoice")
     private List<DigitalInvoiceLine> purchasedItems;
 
     // required by hibernate
     protected DigitalInvoice() {
     }
 
-    public DigitalInvoice(String email, HashMap<DigitalSong, Integer> digitalSongList) {
+    public DigitalInvoice(String email) {
         this.email = email;
         this.date = LocalDate.now();
         this.purchasedItems = new ArrayList<>();
-        generateInvoiceLines(digitalSongList);
         calcTotalPrice();
-    }
-
-    private void generateInvoiceLines(HashMap<DigitalSong, Integer> digitalSongList) {
-        for (Map.Entry<DigitalSong, Integer> entry : digitalSongList.entrySet()) {
-            purchasedItems.add(new DigitalInvoiceLine(entry.getKey(), entry.getValue(), entry.getKey().getPrice()));
-        }
     }
 
     private void calcTotalPrice() {
@@ -53,6 +46,9 @@ public class DigitalInvoice {
         }
     }
 
+    public void setPurchasedItems(List<DigitalInvoiceLine> purchasedItems) {
+        this.purchasedItems = purchasedItems;
+    }
 
     public String getEmail() {
         return email;
