@@ -9,11 +9,11 @@ import java.util.List;
 @XmlRootElement
 public class DigitalSongListSchema {
 
-    public DigitalSongListSchema(List<DigitalSongDTO> soundCarrierDTOS) {
-        this.soundCarrierDTOS = soundCarrierDTOS;
+    public DigitalSongListSchema(List<DigitalSongDTO> digitalSongDTOs) {
+        this.digitalSongDTOs = digitalSongDTOs;
     }
 
     @XmlElement
-    public List<DigitalSongDTO> soundCarrierDTOS;
+    public List<DigitalSongDTO> digitalSongDTOs;
 
 }
