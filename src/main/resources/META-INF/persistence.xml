@@ -13,6 +13,8 @@
         <class>at.fhv.teame.domain.model.onlineshop.DigitalSong</class>
         <class>at.fhv.teame.domain.model.invoice.Invoice</class>
         <class>at.fhv.teame.domain.model.invoice.InvoiceLine</class>
+        <class>at.fhv.teame.domain.model.onlineshop.DigitalInvoice</class>
+        <class>at.fhv.teame.domain.model.onlineshop.DigitalInvoiceLine</class>
         <class>at.fhv.teame.domain.model.user.ClientUser</class>
 
         <properties>
@@ -23,7 +25,7 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
             <property name="show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-<!--            <property name="hibernate.hbm2ddl.auto" value="create-drop" />-->
+            <!-- <property name="hibernate.hbm2ddl.auto" value="update" /> -->
         </properties>
     </persistence-unit>
 </persistence>

@@ -7,7 +7,7 @@ import java.util.List;
 @XmlRootElement
 public class ShoppingCartDigitalSongSchema {
     @XmlElement
-    public Map<String, Integer> cartSongIds;
+    public List<String> cartSongIds;
     @XmlElement
     public String email;
     @XmlElement

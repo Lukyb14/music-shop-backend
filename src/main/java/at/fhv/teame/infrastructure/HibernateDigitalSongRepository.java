@@ -19,7 +19,6 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
 
     private static final int ROWS_PER_PAGE = 10;
 
-
     @Override
     public DigitalSong digitalSongByArticleId(Long articleId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();

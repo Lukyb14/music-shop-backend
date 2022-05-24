@@ -4,6 +4,7 @@ package at.fhv.teame.application.impl.digitalsong;
 import at.fhv.teame.domain.model.onlineshop.DigitalInvoice;
 import at.fhv.teame.domain.model.onlineshop.DigitalInvoiceLine;
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
+import at.fhv.teame.domain.repositories.DigitalInvoiceRepository;
 import at.fhv.teame.domain.repositories.DigitalSongRepository;
 import at.fhv.teame.sharedlib.dto.CustomerDTO;
 import at.fhv.teame.sharedlib.ejb.PurchaseDigitalSongServiceRemote;
@@ -25,6 +26,9 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
 
     @EJB
     private DigitalSongRepository digitalSongRepository;
+
+    @EJB
+    private DigitalInvoiceRepository digitalInvoiceRepository;
 
     public PurchaseDigitalSongServiceImpl() { }
 
