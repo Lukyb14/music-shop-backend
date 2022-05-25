@@ -42,12 +42,13 @@ public class DigitalInvoice {
     private void calcTotalPrice() {
         this.totalPrice = BigDecimal.valueOf(0);
         for (DigitalInvoiceLine d : purchasedItems) {
-            this.totalPrice.add(d.getPrice());
+            this.totalPrice = this.totalPrice.add(d.getPrice());
         }
     }
 
     public void setPurchasedItems(List<DigitalInvoiceLine> purchasedItems) {
         this.purchasedItems = purchasedItems;
+        calcTotalPrice();
     }
 
     public String getEmail() {
