@@ -1,5 +1,6 @@
 package at.fhv.teame.application.impl;
 
+import at.fhv.teame.application.impl.soundcarrier.SearchSoundCarrierServiceImpl;
 import at.fhv.teame.domain.model.soundcarrier.Album;
 import at.fhv.teame.domain.model.soundcarrier.Medium;
 import at.fhv.teame.domain.model.soundcarrier.Song;
@@ -55,7 +56,6 @@ class SearchSoundCarrierServiceTest {
             assertTrue(soundCarrierDtosExpected.contains(s));
         }
     }
-
 
 
     @Test

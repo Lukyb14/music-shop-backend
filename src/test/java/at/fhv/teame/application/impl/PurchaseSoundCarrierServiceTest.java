@@ -1,13 +1,10 @@
 package at.fhv.teame.application.impl;
 
-import at.fhv.teame.domain.model.user.ClientUser;
-import at.fhv.teame.domain.model.user.Role;
+import at.fhv.teame.application.impl.soundcarrier.PurchaseSoundCarrierServiceImpl;
 import at.fhv.teame.mocks.MockInvoiceRepository;
-import at.fhv.teame.mocks.MockSessionRepository;
 import at.fhv.teame.mocks.MockSoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import at.fhv.teame.sharedlib.ejb.PurchaseSoundCarrierServiceRemote;
-import at.fhv.teame.sharedlib.exceptions.InvalidSessionException;
 import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,11 +18,8 @@ public class PurchaseSoundCarrierServiceTest {
 
     private PurchaseSoundCarrierServiceRemote purchaseSoundCarrierService;
 
-    private MockSessionRepository mockSessionRepository;
-
     @BeforeEach
     void beforeEach() {
-        mockSessionRepository = new MockSessionRepository();
         purchaseSoundCarrierService = new PurchaseSoundCarrierServiceImpl(new MockInvoiceRepository(), new MockSoundCarrierRepository());
     }
 
@@ -42,7 +36,7 @@ public class PurchaseSoundCarrierServiceTest {
                         "Hochschulstrasse 1")
                 .build();
 
-        //then
+        //when..then
         assertThrows(PurchaseFailedException.class, () -> {
             purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
         });
@@ -101,30 +95,6 @@ public class PurchaseSoundCarrierServiceTest {
         assertDoesNotThrow(PurchaseFailedException::new);
     }
 
-    @Test
-    void given_invalidsessionrole_when_soundcarriersByAlbumName_then_throws() {
-        //given
-        mockSessionRepository.createSession((new ClientUser("har9090", "Hüseyin", "Arziman", Role.OPERATOR)));
-
-        ShoppingCartDTO shoppingCartDTO = buildShoppingCartDto();
-
-        //when..then
-        assertThrows(InvalidSessionException.class, () -> {
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
-        }, "InvalidSessionException was expected");
-    }
-
-    @Test
-    void given_invalidsessionId_when_soundcarriersByAlbumName_then_throws() {
-        //when..then
-        String invalidSession = "b16c5200-bb0e-11ec-8422-0242ac120002";
-
-        ShoppingCartDTO shoppingCartDTO = buildShoppingCartDto();
-
-        assertThrows(InvalidSessionException.class, () -> {
-            purchaseSoundCarrierService.confirmPurchase(shoppingCartDTO);
-        }, "InvalidSessionException was expected");
-    }
 
     private ShoppingCartDTO buildShoppingCartDto() {
         HashMap<String, Integer> expectedPurchasedItems = new HashMap<>();

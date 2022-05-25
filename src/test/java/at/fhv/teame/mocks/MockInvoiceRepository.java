@@ -18,9 +18,7 @@ import java.util.List;
 
 public class MockInvoiceRepository implements InvoiceRepository{
     @Override
-    public void add(Invoice invoice) {
-
-    }
+    public void add(Invoice invoice) { }
 
     @Override
     public Invoice invoiceById(Long invoiceId) {
