@@ -1,5 +1,6 @@
-package at.fhv.teame.rest;
+package at.fhv.teame.rest.authentication;
 
+import at.fhv.teame.rest.authentication.AuthenticationRest;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;

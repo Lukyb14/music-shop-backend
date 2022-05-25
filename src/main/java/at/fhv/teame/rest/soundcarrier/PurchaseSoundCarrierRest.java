@@ -1,6 +1,7 @@
-package at.fhv.teame.rest;
+package at.fhv.teame.rest.soundcarrier;
 
-import at.fhv.teame.rest.schema.ShoppingCartSchema;
+import at.fhv.teame.rest.authentication.JaxRsApplication;
+import at.fhv.teame.rest.schema.ShoppingCartSoundCarrierSchema;
 import at.fhv.teame.sharedlib.dto.ShoppingCartDTO;
 import at.fhv.teame.sharedlib.ejb.PurchaseSoundCarrierServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
@@ -13,6 +14,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
+
 
 @Path("/v1/soundCarrier/purchase")
 public class PurchaseSoundCarrierRest {
@@ -28,7 +30,7 @@ public class PurchaseSoundCarrierRest {
     @ApiResponse(responseCode = "401", description = "Token verification failed")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
-    public Response purchaseSoundCarrier(final ShoppingCartSchema shoppingCart) {
+    public Response purchaseSoundCarrier(final ShoppingCartSoundCarrierSchema shoppingCart) {
         try {
             if (shoppingCart == null) return Response.status(Response.Status.BAD_REQUEST).build();
             JaxRsApplication.verifyToken(shoppingCart.token);
@@ -51,4 +53,3 @@ public class PurchaseSoundCarrierRest {
         }
     }
 }
-

@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class LoginSchema {
     @XmlElement
-    public String username;
+    public String mail;
     @XmlElement
     public String password;
 }

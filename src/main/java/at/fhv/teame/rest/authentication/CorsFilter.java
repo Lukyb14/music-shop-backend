@@ -1,4 +1,4 @@
-package at.fhv.teame.rest;
+package at.fhv.teame.rest.authentication;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;

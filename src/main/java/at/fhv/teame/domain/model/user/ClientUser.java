@@ -1,7 +1,5 @@
 package at.fhv.teame.domain.model.user;
 
-import at.fhv.teame.domain.model.invoice.Invoice;
-import at.fhv.teame.domain.model.invoice.InvoiceLine;
 
 import javax.persistence.*;
 import java.util.ArrayList;

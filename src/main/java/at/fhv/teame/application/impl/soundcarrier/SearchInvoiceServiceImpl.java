@@ -1,4 +1,4 @@
-package at.fhv.teame.application.impl;
+package at.fhv.teame.application.impl.soundcarrier;
 
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;

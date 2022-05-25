@@ -1,13 +1,13 @@
-package at.fhv.teame.application.impl;
+package at.fhv.teame.application.impl.soundcarrier;
 
 import at.fhv.teame.domain.model.soundcarrier.Song;
 import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
-import at.fhv.teame.domain.repositories.InvoiceRepository;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
 import at.fhv.teame.sharedlib.dto.SongDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDTO;
 import at.fhv.teame.sharedlib.dto.SoundCarrierDetailsDTO;
 import at.fhv.teame.sharedlib.ejb.SearchSoundCarrierServiceRemote;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.LinkedList;

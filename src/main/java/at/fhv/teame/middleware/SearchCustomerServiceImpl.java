@@ -10,12 +10,13 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 @Stateless
 public class SearchCustomerServiceImpl implements SearchCustomerServiceRemote {
 
-    private CustomerServiceRemote searchCustomerServiceRemote;
+    private CustomerServiceRemote customerServiceRemote;
 
     public SearchCustomerServiceImpl(){
         Object obj = null;
@@ -28,27 +29,32 @@ public class SearchCustomerServiceImpl implements SearchCustomerServiceRemote {
         } catch (NamingException e) {
             e.printStackTrace();
         } finally {
-            searchCustomerServiceRemote = (CustomerServiceRemote) obj;
+            customerServiceRemote = (CustomerServiceRemote) obj;
         }
     }
 
     @Override
     public List<CustomerDTO> getCustomerByFullName(String givenName, String familyName, int pageNr) {
-        return searchCustomerServiceRemote.getCustomerByFullName(givenName, familyName, pageNr);
+        return customerServiceRemote.getCustomerByFullName(givenName, familyName, pageNr);
     }
 
     @Override
     public List<CustomerDTO> getCustomerByFamilyName(String familyName, int pageNr) {
-        return searchCustomerServiceRemote.getCustomerByFamilyName(familyName, pageNr);
+        return customerServiceRemote.getCustomerByFamilyName(familyName, pageNr);
+    }
+
+    @Override
+    public CustomerDTO getCustomerByEmailAndCvc(String email, String cvc) {
+        return customerServiceRemote.getCustomerByEmailAndCvc(email, cvc);
     }
 
     @Override
     public int totResultsByFullName(String givenName, String familyName) {
-        return searchCustomerServiceRemote.totResultsByFullName(givenName, familyName);
+        return customerServiceRemote.totResultsByFullName(givenName, familyName);
     }
 
     @Override
     public int totResultsByFamilyName(String familyName) {
-        return searchCustomerServiceRemote.totResultsByFamilyName(familyName);
+        return customerServiceRemote.totResultsByFamilyName(familyName);
     }
 }

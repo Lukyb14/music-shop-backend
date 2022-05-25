@@ -1,4 +1,4 @@
-package at.fhv.teame.application.impl;
+package at.fhv.teame.application.impl.digitalsong;
 
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
 import at.fhv.teame.domain.repositories.DigitalSongRepository;
@@ -16,7 +16,6 @@ public class SearchDigitalSongServiceImpl implements SearchDigitalSongServiceRem
     @EJB
     private DigitalSongRepository digitalSongRepository;
 
-    // default constructor with hibernate
     public SearchDigitalSongServiceImpl() {}
 
     // for mocking
@@ -25,20 +24,20 @@ public class SearchDigitalSongServiceImpl implements SearchDigitalSongServiceRem
     }
 
     @Override
-    public List<DigitalSongDTO> digitalSongByTitle(String title) {
-        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByTitle(title);
+    public List<DigitalSongDTO> digitalSongByTitle(String title, int pageNr) {
+        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByTitle(title, pageNr);
         return buildDigitalSongDTOS(digitalSongs);
     }
 
     @Override
-    public List<DigitalSongDTO> digitalSongByArtist(String artist) {
-        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByArtist(artist);
+    public List<DigitalSongDTO> digitalSongByArtist(String artist, int pageNr) {
+        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByArtist(artist, pageNr);
         return buildDigitalSongDTOS(digitalSongs);
     }
 
     @Override
-    public List<DigitalSongDTO> digitalSongByGenre(String genre) {
-        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByGenre(genre);
+    public List<DigitalSongDTO> digitalSongByGenre(String genre, int pageNr) {
+        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByGenre(genre, pageNr);
         return buildDigitalSongDTOS(digitalSongs);
     }
 
@@ -47,7 +46,7 @@ public class SearchDigitalSongServiceImpl implements SearchDigitalSongServiceRem
         for (DigitalSong ds : digitalSongs) {
             digitalSongDTOS.add(
                     DigitalSongDTO.builder()
-                            .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString())
+                            .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), ds.getId().toString())
                             .build()
             );
         }

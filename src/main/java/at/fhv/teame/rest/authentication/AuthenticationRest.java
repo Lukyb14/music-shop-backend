@@ -1,4 +1,4 @@
-package at.fhv.teame.rest;
+package at.fhv.teame.rest.authentication;
 
 import at.fhv.teame.middleware.api.AuthenticationServiceLocal;
 import at.fhv.teame.rest.schema.LoginSchema;
@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -24,7 +23,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Path("/v1")
+@Path("/")
 public class AuthenticationRest {
     @EJB
     private AuthenticationServiceLocal authenticationService;
@@ -48,17 +47,19 @@ public class AuthenticationRest {
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
     public Response login(final LoginSchema login) {
         try {
-            if(login.username == null || login.password == null) return Response.status(Response.Status.BAD_REQUEST).build();
+            if(login.mail == null || login.password == null) return Response.status(Response.Status.BAD_REQUEST).build();
 
-            String userId = authenticationService.loginCustomer(login.username, login.password);
+            String mail = authenticationService.loginCustomer(login.mail, login.password);
+
+            System.out.println(mail);
 
             String token = JWT.create()
-                    .withSubject(userId)
+                    .withSubject(mail)
                     .withExpiresAt(Date.from(Instant.now().plus(12, ChronoUnit.HOURS)))
                     .sign(JaxRsApplication.algorithm);
 
             return Response
-                    .ok("{token: '" + token + "'}", MediaType.APPLICATION_JSON)
+                    .ok("{\"token\": \"" + token + "\"}", MediaType.APPLICATION_JSON)
                     .build();
 
         } catch (LoginFailedException e) {

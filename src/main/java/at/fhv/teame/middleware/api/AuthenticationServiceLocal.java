@@ -7,5 +7,5 @@ import javax.ejb.Local;
 
 @Local
 public interface AuthenticationServiceLocal {
-    String loginCustomer(String username, String password) throws LoginFailedException;
+    String loginCustomer(String mail, String password) throws LoginFailedException;
 }
