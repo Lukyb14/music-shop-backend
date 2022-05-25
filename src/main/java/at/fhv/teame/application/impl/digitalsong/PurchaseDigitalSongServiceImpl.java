@@ -42,6 +42,7 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
         CustomerDTO customerDTO = null;
         try {
             customerDTO = searchCustomerService.getCustomerByEmailAndCvc(email, cvc);
+            if (customerDTO == null) throw new InvalidCredentialsException();
         } catch (Exception e) {
             e.printStackTrace();
             throw new InvalidCredentialsException();
