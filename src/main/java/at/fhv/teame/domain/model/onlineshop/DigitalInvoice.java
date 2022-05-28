@@ -3,6 +3,7 @@ package at.fhv.teame.domain.model.onlineshop;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +24,7 @@ public class DigitalInvoice {
     private BigDecimal totalPrice;
 
     @Column
-    private LocalDate date;
+    private LocalDateTime date;
 
     @OneToMany(mappedBy = "digitalInvoice")
     private List<DigitalInvoiceLine> purchasedItems;
@@ -34,7 +35,7 @@ public class DigitalInvoice {
 
     public DigitalInvoice(String email) {
         this.email = email;
-        this.date = LocalDate.now();
+        this.date = LocalDateTime.now();
         this.purchasedItems = new ArrayList<>();
         calcTotalPrice();
     }
@@ -59,7 +60,7 @@ public class DigitalInvoice {
         return totalPrice;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 

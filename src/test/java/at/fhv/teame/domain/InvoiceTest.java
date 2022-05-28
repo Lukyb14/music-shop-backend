@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,28 +23,28 @@ class InvoiceTest {
     @Test
     void getInvoiceById() {
         Long invoiceIdExpected = null;
-        Invoice invoice = new Invoice(LocalDate.of(2022,4,16), PaymentMethod.CASH, "Hiranur", "Mueller", "Wildschwansteig 24, 13503 Berlin");
+        Invoice invoice = new Invoice(LocalDateTime.of(2022,4,16, 0, 0, 0), PaymentMethod.CASH, "Hiranur", "Mueller", "Wildschwansteig 24, 13503 Berlin");
         assertEquals(invoiceIdExpected, invoice.getInvoiceId());
     }
 
     @Test
     void testInvoiceConstructorWithoutCustomer() {
         //given
-        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
+        Invoice invoice = new Invoice(LocalDateTime.of(2022,4,4, 0, 0, 0), PaymentMethod.CASH);
 
         //when...then
 
-        assertEquals(LocalDate.of(2022,4,4), invoice.getDateOfPurchase());
+        assertEquals(LocalDateTime.of(2022,4,4, 0, 0, 0), invoice.getDateOfPurchase());
         assertEquals(PaymentMethod.CASH, invoice.getPaymentMethod());
     }
 
     @Test
     void testInvoiceConstructorWithCustomer() {
-        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH,
+        Invoice invoice = new Invoice(LocalDateTime.of(2022,4,4, 0, 0, 0), PaymentMethod.CASH,
                 "Umut", "Mueller",
                 "Kanal31, 6900 Bregenz");
         //when...then
-        assertEquals(LocalDate.of(2022,4,4), invoice.getDateOfPurchase());
+        assertEquals(LocalDateTime.of(2022,4,4, 0, 0, 0), invoice.getDateOfPurchase());
         assertEquals(PaymentMethod.CASH, invoice.getPaymentMethod());
         assertEquals("Umut", invoice.getCustomerFirstName().orElse(""));
         assertEquals("Mueller", invoice.getCustomerLastName().orElse(""));
@@ -54,7 +55,7 @@ class InvoiceTest {
     @Test
     void testPurchasedItems() {
         BigDecimal totPrice = new BigDecimal("31.31");
-        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
+        Invoice invoice = new Invoice(LocalDateTime.of(2022,4,4, 0, 0, 0), PaymentMethod.CASH);
         List<Song> songs = new ArrayList<>();
         Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
         songs.add(song1);
@@ -76,7 +77,7 @@ class InvoiceTest {
     @Test
     void testTotalPrice() {
         BigDecimal totPrice = new BigDecimal("31.31");
-        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
+        Invoice invoice = new Invoice(LocalDateTime.of(2022,4,4, 0, 0, 0), PaymentMethod.CASH);
 
         invoice.setTotalPrice(totPrice);
 

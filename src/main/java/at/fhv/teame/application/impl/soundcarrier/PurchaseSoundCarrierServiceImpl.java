@@ -15,7 +15,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,12 +54,12 @@ public class PurchaseSoundCarrierServiceImpl implements PurchaseSoundCarrierServ
         Invoice invoice;
         if (shoppingCartDTO.getCustomerLastName().equalsIgnoreCase("guest")) {
             invoice = new Invoice(
-                    LocalDate.now(),
+                    LocalDateTime.now(),
                     PaymentMethod.valueOf(shoppingCartDTO.getPaymentMethod())
             );
         } else {
             invoice = new Invoice(
-                    LocalDate.now(),
+                    LocalDateTime.now(),
                     PaymentMethod.valueOf(shoppingCartDTO.getPaymentMethod()),
                     shoppingCartDTO.getCustomerFirstName(),
                     shoppingCartDTO.getCustomerLastName(),
