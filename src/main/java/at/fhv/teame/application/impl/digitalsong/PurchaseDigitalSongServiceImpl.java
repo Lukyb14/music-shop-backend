@@ -13,9 +13,7 @@ import at.fhv.teame.sharedlib.exceptions.InvalidCredentialsException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Stateless
@@ -30,11 +28,12 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
     @EJB
     private DigitalInvoiceRepository digitalInvoiceRepository;
 
-    public PurchaseDigitalSongServiceImpl() { }
+    public PurchaseDigitalSongServiceImpl() {
+    }
 
     @Override
     public void purchaseSong(List<String> purchasedSongIds, String email, String cvc) throws InvalidCredentialsException {
-//        if (purchasedSongs.isEmpty()) {
+//        if (purchasedSongIds.isEmpty()) {
 //            throw new PurchaseFailedException();
 //        }
 
@@ -52,15 +51,12 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
 
         DigitalInvoice digitalInvoice = new DigitalInvoice(email);
 
-        for(String entry : purchasedSongIds) {
+        for (String entry : purchasedSongIds) {
             DigitalSong digitalSong = digitalSongRepository.digitalSongByArticleId(Long.valueOf(entry));
             digitalInvoiceLines.add(new DigitalInvoiceLine(digitalInvoice, digitalSong, digitalSong.getPrice()));
         }
 
         digitalInvoice.setPurchasedItems(digitalInvoiceLines);
-
-        //TODO: REFACTORING!!! make same as soundcarrier invoice
-        //Ensure Business invariants & Store Invoice
 
         digitalInvoiceRepository.add(digitalInvoice);
         System.out.println(customerDTO.getEmail());

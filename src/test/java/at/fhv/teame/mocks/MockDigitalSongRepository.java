@@ -10,6 +10,11 @@ import java.util.List;
 
 public class MockDigitalSongRepository implements DigitalSongRepository {
     @Override
+    public DigitalSong digitalSongByArticleId(Long articleId) {
+        return null;
+    }
+
+    @Override
     public List<DigitalSong> digitalSongByTitle(String title, int pageNr) {
         return createDigitalSongLstDummy();
     }

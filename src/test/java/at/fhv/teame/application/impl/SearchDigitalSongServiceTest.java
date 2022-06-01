@@ -32,7 +32,7 @@ class SearchDigitalSongServiceTest {
         List<DigitalSongDTO> digitalSongDtosExpected = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {
             DigitalSongDTO digitalSongDTO = DigitalSongDTO.builder()
-                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString())
+                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), ds.getId().toString())
                     .build();
             digitalSongDtosExpected.add(digitalSongDTO);
         }
@@ -53,7 +53,7 @@ class SearchDigitalSongServiceTest {
         List<DigitalSongDTO> digitalSongDtosExpected = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {
             DigitalSongDTO digitalSongDTO = DigitalSongDTO.builder()
-                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString())
+                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), ds.getId().toString())
                     .build();
             digitalSongDtosExpected.add(digitalSongDTO);
         }
@@ -74,7 +74,7 @@ class SearchDigitalSongServiceTest {
         List<DigitalSongDTO> digitalSongDtosExpected = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {
             DigitalSongDTO digitalSongDTO = DigitalSongDTO.builder()
-                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString())
+                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), ds.getId().toString())
                     .build();
             digitalSongDtosExpected.add(digitalSongDTO);
         }
