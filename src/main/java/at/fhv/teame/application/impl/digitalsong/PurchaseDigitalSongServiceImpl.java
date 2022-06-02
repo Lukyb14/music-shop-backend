@@ -100,7 +100,7 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
             // Get the ConnectionFactory by JNDI name
             ConnectionFactory cf = (ConnectionFactory) ctx.lookup("connectionFactory");
             // get the Destination used to send the message by JNDI name
-            Destination dest = (Destination) ctx.lookup("purchasedDigitalSongQueue");
+            Destination dest = (Destination) ctx.lookup("PurchasedDigitalSongEvent");
             // Create a connection
             Connection con = cf.createConnection();
             // create a JMS session
