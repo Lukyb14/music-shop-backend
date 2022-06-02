@@ -57,7 +57,7 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
     @Override
     public Long totResultsByTitle(String title) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Query query = entityManager.createQuery("SELECT count(ds) FROM DigitalSong ds WHERE lower(title) LIKE lower(:title)", DigitalSong.class);
+        Query query = entityManager.createQuery("SELECT count(ds) FROM DigitalSong ds WHERE lower(title) LIKE lower(:title)");
         query.setParameter("title", title);
         return (Long) query.getSingleResult();
     }
@@ -65,7 +65,7 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
     @Override
     public Long totResultsByArtistName(String artist) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Query query = entityManager.createQuery("FROM DigitalSong WHERE lower(artist) LIKE lower(:artist)", DigitalSong.class);
+        Query query = entityManager.createQuery("SELECT count(ds) FROM DigitalSong ds WHERE lower(artist) LIKE lower(:artist)");
         query.setParameter("artist", artist);
         return (Long) query.getSingleResult();
     }
@@ -73,7 +73,7 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
     @Override
     public Long totResultsByGenre(String genre) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Query query = entityManager.createQuery("FROM DigitalSong WHERE lower(genre) LIKE lower(:genre)", DigitalSong.class);
+        Query query = entityManager.createQuery("SELECT count(ds) FROM DigitalSong ds WHERE lower(genre) LIKE lower(:genre)");
         query.setParameter("genre", genre);
         return (Long) query.getSingleResult();
     }

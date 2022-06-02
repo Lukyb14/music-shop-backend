@@ -1,6 +1,7 @@
 package at.fhv.teame.rest.digitalsong;
 
 import at.fhv.teame.rest.schema.DigitalSongListSchema;
+import at.fhv.teame.rest.schema.TotalSongResultsSchema;
 import at.fhv.teame.sharedlib.ejb.SearchDigitalSongServiceRemote;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -105,6 +106,32 @@ public class SearchDigitalSongRest {
 
             DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByTitle(song, pageNr, pageSize));
             return Response.ok(digitalSongListDTOS, MediaType.APPLICATION_JSON).build();
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GET
+    @Path("/artist/total-results/{artist}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get total song results by artist name")
+    @ApiResponse(
+            responseCode = "200",
+            description = "total results of songs",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = TotalSongResultsSchema.class)
+            )
+    )
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    public Response totalResultsByArtist(@PathParam("artist") String artist) {
+        try {
+            int results = searchDigitalSongService.totResultsByArtistName(artist);
+            return Response.ok("{\"results\": " + results + "}", MediaType.APPLICATION_JSON).build();
+
         } catch (NumberFormatException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         } catch (Exception e) {
