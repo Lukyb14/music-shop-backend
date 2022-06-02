@@ -10,7 +10,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
 
 @Stateless
@@ -44,8 +43,8 @@ public class SearchCustomerServiceImpl implements SearchCustomerServiceRemote {
     }
 
     @Override
-    public CustomerDTO getCustomerByEmailAndCvc(String email, String cvc) {
-        return customerServiceRemote.getCustomerByEmailAndCvc(email, cvc);
+    public CustomerDTO getCustomerByCreditCardNumberAndCvc(String creditCardNumber, String cvc) {
+        return customerServiceRemote.getCustomerByCreditCardNumberAndCvc(creditCardNumber, cvc);
     }
 
     @Override

@@ -47,14 +47,13 @@ public class AuthenticationRest {
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
     public Response login(final LoginSchema login) {
         try {
-            if(login.mail == null || login.password == null) return Response.status(Response.Status.BAD_REQUEST).build();
+            if (login.mail == null || login.password == null)
+                return Response.status(Response.Status.BAD_REQUEST).build();
 
-            String mail = authenticationService.loginCustomer(login.mail, login.password);
-
-            System.out.println(mail);
+            String userId = authenticationService.loginCustomer(login.mail, login.password);
 
             String token = JWT.create()
-                    .withSubject(mail)
+                    .withSubject(userId)
                     .withExpiresAt(Date.from(Instant.now().plus(12, ChronoUnit.HOURS)))
                     .sign(JaxRsApplication.algorithm);
 

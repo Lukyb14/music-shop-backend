@@ -6,5 +6,5 @@ import javax.ejb.Local;
 
 @Local
 public interface DigitalInvoiceRepository {
-    void add(DigitalInvoice digitalInvoice);
+    void store(DigitalInvoice digitalInvoice);
 }
