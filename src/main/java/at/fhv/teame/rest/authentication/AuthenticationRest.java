@@ -47,10 +47,10 @@ public class AuthenticationRest {
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
     public Response login(final LoginSchema login) {
         try {
-            if (login.mail == null || login.password == null)
+            if (login.userId == null || login.password == null)
                 return Response.status(Response.Status.BAD_REQUEST).build();
 
-            String userId = authenticationService.loginCustomer(login.mail, login.password);
+            String userId = authenticationService.loginCustomer(login.userId, login.password);
 
             String token = JWT.create()
                     .withSubject(userId)
