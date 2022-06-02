@@ -12,6 +12,7 @@ import at.fhv.teame.sharedlib.ejb.SearchInvoiceServiceRemote;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Stateless
@@ -39,7 +40,7 @@ public class SearchInvoiceServiceImpl implements SearchInvoiceServiceRemote {
 
     private InvoiceDTO buildInvoiceDTO(Invoice invoice) {
         return InvoiceDTO.builder().withInvoiceEntity(invoice.getInvoiceId().toString(),
-                        invoice.getDateOfPurchase().toString(),
+                        invoice.getDateOfPurchase().toLocalDate().toString(),
                         invoice.getPaymentMethod().toString(),
                         invoice.getToRefund().toString(),
                         buildInvoiceLineDTO(invoice.getPurchasedItems()))
