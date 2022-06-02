@@ -46,11 +46,13 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
         if (purchasedSongIds.isEmpty()) throw new PurchaseFailedException();
 
         CustomerDTO customerDTO = null;
-        customerDTO = searchCustomerService.getCustomerByCreditCardNumberAndCvc(creditCardNumber, cvc);
-        if (customerDTO == null) throw new InvalidCredentialsException();
+        try {
+            customerDTO = searchCustomerService.getCustomerByCreditCardNumberAndCvc(creditCardNumber, cvc);
+        } catch (Exception e) {
+            throw new InvalidCredentialsException();
+        }
 
         if (isDigitalSongAlreadyPurchased(purchasedSongIds, customerDTO.getEmail())) throw new PurchaseFailedException();
-
 
         List<DigitalInvoiceLine> digitalInvoiceLines = new ArrayList<>();
         List<DigitalSongDTO> digitalSongDTOList = new ArrayList<>();
@@ -66,7 +68,6 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
         digitalInvoiceRepository.store(digitalInvoice);
 
         PurchasedDigitalSongEvent purchasedDigitalSongEvent = new PurchasedDigitalSongEvent(userId, digitalSongDTOList);
-
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         try {
@@ -117,6 +118,4 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
             throw new PublishingFailedException();
         }
     }
-
-
 }
