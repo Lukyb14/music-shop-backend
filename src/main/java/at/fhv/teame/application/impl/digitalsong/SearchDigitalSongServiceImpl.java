@@ -24,20 +24,20 @@ public class SearchDigitalSongServiceImpl implements SearchDigitalSongServiceRem
     }
 
     @Override
-    public List<DigitalSongDTO> digitalSongByTitle(String title, int pageNr) {
-        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByTitle(title, pageNr);
+    public List<DigitalSongDTO> digitalSongByTitle(String title, int pageNr, int pageSize) {
+        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByTitle(title, pageNr, pageSize);
         return buildDigitalSongDTOS(digitalSongs);
     }
 
     @Override
-    public List<DigitalSongDTO> digitalSongByArtist(String artist, int pageNr) {
-        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByArtist(artist, pageNr);
+    public List<DigitalSongDTO> digitalSongByArtist(String artist, int pageNr, int pageSize) {
+        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByArtist(artist, pageNr, pageSize);
         return buildDigitalSongDTOS(digitalSongs);
     }
 
     @Override
-    public List<DigitalSongDTO> digitalSongByGenre(String genre, int pageNr) {
-        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByGenre(genre, pageNr);
+    public List<DigitalSongDTO> digitalSongByGenre(String genre, int pageNr, int pageSize) {
+        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByGenre(genre, pageNr, pageSize);
         return buildDigitalSongDTOS(digitalSongs);
     }
 

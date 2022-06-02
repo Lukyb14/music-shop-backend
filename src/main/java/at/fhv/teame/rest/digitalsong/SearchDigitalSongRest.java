@@ -32,14 +32,15 @@ public class SearchDigitalSongRest {
     )
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
-    public Response searchByArtist(@PathParam("artist") String artist, @QueryParam("pageNr") String pageNrStr) {
+    public Response searchByArtist(@PathParam("artist") String artist, @QueryParam("pageNr") String pageNrStr, @QueryParam("pageSize") String pageSizeStr) {
         try {
             if (artist == null || pageNrStr == null)
                 return Response.status(Response.Status.BAD_REQUEST).build();
 
             int pageNr = Integer.parseInt(pageNrStr);
+            int pageSize = Integer.parseInt(pageSizeStr);
 
-            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByArtist(artist, pageNr));
+            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByArtist(artist, pageNr, pageSize));
             return Response.ok(digitalSongListDTOS, MediaType.APPLICATION_JSON).build();
 
         } catch (NumberFormatException e) {
@@ -63,14 +64,15 @@ public class SearchDigitalSongRest {
     )
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
-    public Response searchByGenre(@PathParam("genre") String genre, @QueryParam("pageNr") String pageNrStr) {
+    public Response searchByGenre(@PathParam("genre") String genre, @QueryParam("pageNr") String pageNrStr, @QueryParam("pageSize") String pageSizeStr) {
         try {
             if (genre == null || pageNrStr == null)
                 return Response.status(Response.Status.BAD_REQUEST).build();
 
             int pageNr = Integer.parseInt(pageNrStr);
+            int pageSize = Integer.parseInt(pageSizeStr);
 
-            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByGenre(genre, pageNr));
+            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByGenre(genre, pageNr, pageSize));
             return Response.ok(digitalSongListDTOS, MediaType.APPLICATION_JSON).build();
         } catch (NumberFormatException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -93,14 +95,15 @@ public class SearchDigitalSongRest {
     )
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
-    public Response searchBySong(@PathParam("song") String song, @QueryParam("pageNr") String pageNrStr) {
+    public Response searchBySong(@PathParam("song") String song, @QueryParam("pageNr") String pageNrStr, @QueryParam("pageSize") String pageSizeStr) {
         try {
             if (song == null || pageNrStr == null)
                 return Response.status(Response.Status.BAD_REQUEST).build();
 
             int pageNr = Integer.parseInt(pageNrStr);
+            int pageSize = Integer.parseInt(pageSizeStr);
 
-            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByTitle(song, pageNr));
+            DigitalSongListSchema digitalSongListDTOS = new DigitalSongListSchema(searchDigitalSongService.digitalSongByTitle(song, pageNr, pageSize));
             return Response.ok(digitalSongListDTOS, MediaType.APPLICATION_JSON).build();
         } catch (NumberFormatException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
