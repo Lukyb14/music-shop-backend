@@ -39,19 +39,18 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
     @EJB
     private DigitalInvoiceRepository digitalInvoiceRepository;
 
-    public PurchaseDigitalSongServiceImpl() {
-    }
-
+    public PurchaseDigitalSongServiceImpl() { }
 
     @Override
     public void purchaseDigitalSong(String userId, List<String> purchasedSongIds, String creditCardNumber, String cvc) throws InvalidCredentialsException, PurchaseFailedException {
-        if (purchasedSongIds.isEmpty()) {
-            throw new PurchaseFailedException();
-        }
+        if (purchasedSongIds.isEmpty()) throw new PurchaseFailedException();
 
         CustomerDTO customerDTO = null;
         customerDTO = searchCustomerService.getCustomerByCreditCardNumberAndCvc(creditCardNumber, cvc);
         if (customerDTO == null) throw new InvalidCredentialsException();
+
+        if (isDigitalSongAlreadyPurchased(purchasedSongIds, customerDTO.getEmail())) throw new PurchaseFailedException();
+
 
         List<DigitalInvoiceLine> digitalInvoiceLines = new ArrayList<>();
         List<DigitalSongDTO> digitalSongDTOList = new ArrayList<>();
@@ -76,6 +75,21 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
         } catch (JsonProcessingException | PublishingFailedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean isDigitalSongAlreadyPurchased(List<String> purchasedSongIds, String email) {
+        List<DigitalInvoice> digitalInvoices = digitalInvoiceRepository.digitalInvoicesByEmail(email);
+        for (DigitalInvoice d : digitalInvoices) {
+            for (DigitalInvoiceLine dil : d.getPurchasedItems()) {
+
+                for (String s : purchasedSongIds) {
+                    if (dil.getProduct().getId().toString().equals(s)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void publishPurchasedDigitalSongEvent(String purchasedDigitalSongEventJson) throws PublishingFailedException {
