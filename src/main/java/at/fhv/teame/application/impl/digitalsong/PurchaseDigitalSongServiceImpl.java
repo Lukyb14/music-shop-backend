@@ -1,6 +1,8 @@
 package at.fhv.teame.application.impl.digitalsong;
 
 
+import at.fhv.teame.application.impl.event.PurchasedDigitalSongEvent;
+import at.fhv.teame.application.impl.event.dto.DigitalSongDTO;
 import at.fhv.teame.domain.model.onlineshop.DigitalInvoice;
 import at.fhv.teame.domain.model.onlineshop.DigitalInvoiceLine;
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
@@ -10,8 +12,17 @@ import at.fhv.teame.sharedlib.dto.CustomerDTO;
 import at.fhv.teame.sharedlib.ejb.PurchaseDigitalSongServiceRemote;
 import at.fhv.teame.sharedlib.ejb.SearchCustomerServiceRemote;
 import at.fhv.teame.sharedlib.exceptions.InvalidCredentialsException;
+import at.fhv.teame.sharedlib.exceptions.PublishingFailedException;
+import at.fhv.teame.sharedlib.exceptions.PurchaseFailedException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.jms.*;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,34 +42,67 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
     public PurchaseDigitalSongServiceImpl() {
     }
 
-    @Override
-    public void purchaseSong(List<String> purchasedSongIds, String email, String cvc) throws InvalidCredentialsException {
-//        if (purchasedSongIds.isEmpty()) {
-//            throw new PurchaseFailedException();
-//        }
 
-        //check if customer credentials are valid, else throw exception
-        CustomerDTO customerDTO = null;
-        try {
-            customerDTO = searchCustomerService.getCustomerByEmailAndCvc(email, cvc);
-            if (customerDTO == null) throw new InvalidCredentialsException();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new InvalidCredentialsException();
+    @Override
+    public void purchaseDigitalSong(String userId, List<String> purchasedSongIds, String creditCardNumber, String cvc) throws InvalidCredentialsException, PurchaseFailedException {
+        if (purchasedSongIds.isEmpty()) {
+            throw new PurchaseFailedException();
         }
+
+        CustomerDTO customerDTO = null;
+        customerDTO = searchCustomerService.getCustomerByCreditCardNumberAndCvc(creditCardNumber, cvc);
+        if (customerDTO == null) throw new InvalidCredentialsException();
 
         List<DigitalInvoiceLine> digitalInvoiceLines = new ArrayList<>();
+        List<DigitalSongDTO> digitalSongDTOList = new ArrayList<>();
+        for (String songId : purchasedSongIds) {
+            DigitalSong d = digitalSongRepository.digitalSongByArticleId(Long.valueOf(songId));
 
-        DigitalInvoice digitalInvoice = new DigitalInvoice(email);
+            digitalSongDTOList.add(new DigitalSongDTO(d.getId(), d.getArtist(), d.getTitle(), d.getGenre(), d.getDuration(), d.getReleaseDate(), d.getMp3File(), d.getCoverFile(), d.getPrice()));
 
-        for (String entry : purchasedSongIds) {
-            DigitalSong digitalSong = digitalSongRepository.digitalSongByArticleId(Long.valueOf(entry));
-            digitalInvoiceLines.add(new DigitalInvoiceLine(digitalInvoice, digitalSong, digitalSong.getPrice()));
+            digitalInvoiceLines.add(new DigitalInvoiceLine(d, d.getPrice()));
         }
 
-        digitalInvoice.setPurchasedItems(digitalInvoiceLines);
+        DigitalInvoice digitalInvoice = new DigitalInvoice(customerDTO.getGivenName(), customerDTO.getFamilyName(), customerDTO.getEmail(), digitalInvoiceLines);
+        digitalInvoiceRepository.store(digitalInvoice);
 
-        digitalInvoiceRepository.add(digitalInvoice);
-        System.out.println(customerDTO.getEmail());
+        PurchasedDigitalSongEvent purchasedDigitalSongEvent = new PurchasedDigitalSongEvent(userId, digitalSongDTOList);
+
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        try {
+            String purchasedDigitalSongEventJson = ow.writeValueAsString(purchasedDigitalSongEvent);
+            publishPurchasedDigitalSongEvent(purchasedDigitalSongEventJson);
+        } catch (JsonProcessingException | PublishingFailedException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    public void publishPurchasedDigitalSongEvent(String purchasedDigitalSongEventJson) throws PublishingFailedException {
+        try {
+            // Get the JNDI Initial Context to do JNDI lookups
+            InitialContext ctx = new InitialContext();
+            // Get the ConnectionFactory by JNDI name
+            ConnectionFactory cf = (ConnectionFactory) ctx.lookup("connectionFactory");
+            // get the Destination used to send the message by JNDI name
+            Destination dest = (Destination) ctx.lookup("purchasedDigitalSongQueue");
+            // Create a connection
+            Connection con = cf.createConnection();
+            // create a JMS session
+            Session sess = con.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+            // Create some Message and a MessageProducer with the session
+            Message msg = sess.createTextMessage(purchasedDigitalSongEventJson);
+            MessageProducer prod = sess.createProducer(dest);
+            // send the message to the destination
+            prod.send(msg);
+            // Close the connection
+            con.close();
+            sess.close();
+        } catch (JMSException | NamingException e) {
+            e.printStackTrace();
+            throw new PublishingFailedException();
+        }
+    }
+
+
 }

@@ -37,7 +37,6 @@ INSERT INTO album (id, genre, label, name, release, artist) VALUES (27, 'canterb
 INSERT INTO album (id, genre, label, name, release, artist) VALUES (28, 'acid jazz', 'Certificate 18', 'Live Up', '2009-03-14', 'Aric Leavitt');
 INSERT INTO album (id, genre, label, name, release, artist) VALUES (29, 'baroque', 'Out of Print', 'The First Morning', '1980-07-14', 'Aric Leavitt');
 INSERT INTO album (id, genre, label, name, release, artist) VALUES (30, 'alternative rock', 'Fueradeserie!', 'Slow Boat to Africa', '2019-06-15', 'Aric Leavitt');
-
 INSERT INTO album (id, genre, label, name, release, artist) VALUES (31, 'Rock', 'Leidseplein Presse B.V.', 'The Razors Edge', '1990-01-01', 'AC/DC');
 INSERT INTO album (id, genre, label, name, release, artist) VALUES (32, 'Rock', 'Leidseplein Presse B.V.', 'Back In Black', '1980-01-01', 'AC/DC');
 INSERT INTO album (id, genre, label, name, release, artist) VALUES (33, 'Rock', 'Mercury Records Limited', 'Brothers In Arms', '1985-01-01', 'Dire Straits');
