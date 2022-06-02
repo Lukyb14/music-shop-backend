@@ -41,6 +41,21 @@ public class SearchDigitalSongServiceImpl implements SearchDigitalSongServiceRem
         return buildDigitalSongDTOS(digitalSongs);
     }
 
+    @Override
+    public int totResultsByTitle(String title) {
+        return digitalSongRepository.totResultsByTitle(title).intValue();
+    }
+
+    @Override
+    public int totResultsByArtistName(String artist) {
+        return digitalSongRepository.totResultsByArtistName(artist).intValue();
+    }
+
+    @Override
+    public int totResultsByGenre(String genre) {
+        return digitalSongRepository.totResultsByGenre(genre).intValue();
+    }
+
     private List<DigitalSongDTO> buildDigitalSongDTOS (List<DigitalSong> digitalSongs) {
         List<DigitalSongDTO> digitalSongDTOS = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {

@@ -7,10 +7,7 @@ import at.fhv.teame.domain.model.onlineshop.DigitalSong;
 import at.fhv.teame.domain.repositories.DigitalSongRepository;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 
 @Stateless
@@ -55,5 +52,29 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
         query.setFirstResult((pageNr - 1) * pageSize);
         query.setMaxResults(pageSize);
         return query.getResultList();
+    }
+
+    @Override
+    public Long totResultsByTitle(String title) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query query = entityManager.createQuery("SELECT count(ds) FROM DigitalSong ds WHERE lower(title) LIKE lower(:title)", DigitalSong.class);
+        query.setParameter("title", title);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public Long totResultsByArtistName(String artist) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query query = entityManager.createQuery("FROM DigitalSong WHERE lower(artist) LIKE lower(:artist)", DigitalSong.class);
+        query.setParameter("artist", artist);
+        return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public Long totResultsByGenre(String genre) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query query = entityManager.createQuery("FROM DigitalSong WHERE lower(genre) LIKE lower(:genre)", DigitalSong.class);
+        query.setParameter("genre", genre);
+        return (Long) query.getSingleResult();
     }
 }

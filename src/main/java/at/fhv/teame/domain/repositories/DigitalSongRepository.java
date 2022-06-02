@@ -13,4 +13,9 @@ public interface DigitalSongRepository {
     List<DigitalSong> digitalSongByArtist(String artist, int pageNr, int pageSize);
     List<DigitalSong> digitalSongByGenre(String genre, int pageNr, int pageSize);
 
+    Long totResultsByTitle(String title);
+
+    Long totResultsByArtistName(String artist);
+
+    Long totResultsByGenre(String genre);
 }
