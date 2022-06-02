@@ -72,7 +72,10 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         try {
             String purchasedDigitalSongEventJson = ow.writeValueAsString(purchasedDigitalSongEvent);
-            publishPurchasedDigitalSongEvent(purchasedDigitalSongEventJson);
+            String[] queues = {"PurchasedDigitalSongPlaylist", "PurchasedDigitalSongStreaming"};
+            for(int i = 0; i < queues.length; i++) {
+                publishPurchasedDigitalSongEvent(queues[i], purchasedDigitalSongEventJson);
+            }
         } catch (JsonProcessingException | PublishingFailedException e) {
             throw new RuntimeException(e);
         }
@@ -93,14 +96,14 @@ public class PurchaseDigitalSongServiceImpl implements PurchaseDigitalSongServic
         return false;
     }
 
-    public void publishPurchasedDigitalSongEvent(String purchasedDigitalSongEventJson) throws PublishingFailedException {
+    public void publishPurchasedDigitalSongEvent(String queue,String purchasedDigitalSongEventJson) throws PublishingFailedException {
         try {
             // Get the JNDI Initial Context to do JNDI lookups
             InitialContext ctx = new InitialContext();
             // Get the ConnectionFactory by JNDI name
             ConnectionFactory cf = (ConnectionFactory) ctx.lookup("connectionFactory");
             // get the Destination used to send the message by JNDI name
-            Destination dest = (Destination) ctx.lookup("purchasedDigitalSongQueue");
+            Destination dest = (Destination) ctx.lookup(queue);
             // Create a connection
             Connection con = cf.createConnection();
             // create a JMS session
