@@ -10,6 +10,7 @@ import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class InvoiceLineTest {
     @Test
     void testInvoiceLineConstructor() {
         BigDecimal totPrice = new BigDecimal("31.31");
-        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
+        Invoice invoice = new Invoice(LocalDateTime.of(2022, 4, 4, 0, 0, 0), PaymentMethod.CASH);
         List<Song> songs = new ArrayList<>();
         Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
         songs.add(song1);
@@ -45,7 +46,7 @@ public class InvoiceLineTest {
     void testUpdateAmountOfReturnedItems() {
         int amountOfReturnedItems = 2;
         BigDecimal totPrice = new BigDecimal("31.31");
-        Invoice invoice = new Invoice(LocalDate.of(2022,4,4), PaymentMethod.CASH);
+        Invoice invoice = new Invoice(LocalDateTime.of(2022,4,4, 0, 0, 0), PaymentMethod.CASH);
         List<Song> songs = new ArrayList<>();
         Song song1 = new Song("Money For All", LocalDate.of(1985, 1, 1), "03:53");
         songs.add(song1);

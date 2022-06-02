@@ -13,6 +13,7 @@ import at.fhv.teame.sharedlib.dto.InvoiceLineDTO;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class MockInvoiceRepository implements InvoiceRepository{
 
     @Override
     public Invoice invoiceById(Long invoiceId) {
-        Invoice invoice = new Invoice(LocalDate.of(2022, 04, 10), PaymentMethod.CASH, "Max", "Mustermann", "Testgasse");
+        Invoice invoice = new Invoice(LocalDateTime.of(2022, 4, 10, 0, 0, 0), PaymentMethod.CASH, "Max", "Mustermann", "Testgasse");
         Field invoiceIdField = null;
         try {
              invoiceIdField = Invoice.class.getDeclaredField("invoiceId");
@@ -53,7 +54,7 @@ public class MockInvoiceRepository implements InvoiceRepository{
     public SoundCarrier createSoundCarrierDummy() {
         return new SoundCarrier(
                 String.valueOf(100),
-                new Album("Black and White", "Black bars", LocalDate.of(2022,04,11), createSongListDummy(), "Pop", "Bob"),
+                new Album("Black and White", "Black bars", LocalDate.of(2022,4,11), createSongListDummy(), "Pop", "Bob"),
                 Medium.VINYL,
                 BigDecimal.valueOf(20),
                 3
@@ -63,9 +64,9 @@ public class MockInvoiceRepository implements InvoiceRepository{
 
     public List<Song> createSongListDummy() {
         return Arrays.asList(
-                new Song("Hello World", LocalDate.of(2022, 04, 10), "2:42"),
-                new Song("Apple M1", LocalDate.of(2022, 02, 10), "3:42"),
-                new Song("Understruck", LocalDate.of(2022, 03, 10), "4:13")
+                new Song("Hello World", LocalDate.of(2022, 4, 10), "2:42"),
+                new Song("Apple M1", LocalDate.of(2022, 2, 10), "3:42"),
+                new Song("Understruck", LocalDate.of(2022, 3, 10), "4:13")
         );
     }
 }
