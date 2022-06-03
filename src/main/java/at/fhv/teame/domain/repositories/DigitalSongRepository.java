@@ -9,8 +9,13 @@ import java.util.List;
 @Local
 public interface DigitalSongRepository {
     DigitalSong digitalSongByArticleId(Long articleId);
-    List<DigitalSong> digitalSongByTitle(String title, int pageNr);
-    List<DigitalSong> digitalSongByArtist(String artist, int pageNr);
-    List<DigitalSong> digitalSongByGenre(String genre, int pageNr);
+    List<DigitalSong> digitalSongByTitle(String title, int pageNr, int pageSize);
+    List<DigitalSong> digitalSongByArtist(String artist, int pageNr, int pageSize);
+    List<DigitalSong> digitalSongByGenre(String genre, int pageNr, int pageSize);
 
+    Long totResultsByTitle(String title);
+
+    Long totResultsByArtistName(String artist);
+
+    Long totResultsByGenre(String genre);
 }
