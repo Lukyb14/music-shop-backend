@@ -139,5 +139,57 @@ public class SearchDigitalSongRest {
         }
     }
 
+    @GET
+    @Path("/song/total-results/{song}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get total song results by song title")
+    @ApiResponse(
+            responseCode = "200",
+            description = "total results of songs",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = TotalSongResultsSchema.class)
+            )
+    )
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    public Response totalResultsBySong(@PathParam("song") String song) {
+        try {
+            int results = searchDigitalSongService.totResultsByTitle(song);
+            return Response.ok("{\"results\": " + results + "}", MediaType.APPLICATION_JSON).build();
+
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GET
+    @Path("/genre/total-results/{genre}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get total song results by genre")
+    @ApiResponse(
+            responseCode = "200",
+            description = "total results of songs",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = TotalSongResultsSchema.class)
+            )
+    )
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    public Response totalResultsByGenre(@PathParam("genre") String genre) {
+        try {
+            int results = searchDigitalSongService.totResultsByGenre(genre);
+            System.out.println(results);
+            return Response.ok("{\"results\": " + results + "}", MediaType.APPLICATION_JSON).build();
+
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
 
