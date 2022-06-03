@@ -22,12 +22,15 @@ public class JaxRsApplication extends Application {
     //'standalone.bat -c standalone-microprofile.xml'
     public static final Algorithm algorithm = Algorithm.HMAC256("XnF[>YCq_)Fn#KV7!A#C}{4Hh8b?Xz");
 
-    public static void verifyToken(String token) throws JWTVerificationException {
+    public static String verifyToken(String token) throws JWTVerificationException {
         try {
             JWTVerifier verifier = JWT.require(algorithm).build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(token);
-            if (AuthenticationRest.isTokenInBlacklist(token))
+
+            if (AuthenticationRest.isTokenInBlacklist(token)) {
                 throw new JWTVerificationException("");
+            }
+            return jwt.getSubject();
         } catch (JWTVerificationException | NullPointerException exception) {
             //Invalid signature/claims
             throw new JWTVerificationException("Verification failed");
