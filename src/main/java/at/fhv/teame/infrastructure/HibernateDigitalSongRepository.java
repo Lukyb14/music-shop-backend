@@ -1,8 +1,5 @@
 package at.fhv.teame.infrastructure;
 
-import at.fhv.teame.domain.model.invoice.InvoiceLine;
-import at.fhv.teame.domain.model.onlineshop.DigitalInvoice;
-import at.fhv.teame.domain.model.onlineshop.DigitalInvoiceLine;
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
 import at.fhv.teame.domain.repositories.DigitalSongRepository;
 
@@ -28,6 +25,7 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
     public List<DigitalSong> digitalSongByTitle(String title, int pageNr, int pageSize) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<DigitalSong> query = entityManager.createQuery("FROM DigitalSong WHERE lower(title) LIKE lower(:title)", DigitalSong.class);
+        title = "%" + title;
         query.setParameter("title", title);
         query.setFirstResult((pageNr - 1) * pageSize);
         query.setMaxResults(pageSize);
@@ -38,6 +36,7 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
     public List<DigitalSong> digitalSongByArtist(String artist, int pageNr, int pageSize) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<DigitalSong> query = entityManager.createQuery("FROM DigitalSong WHERE lower(artist) LIKE lower(:artist)", DigitalSong.class);
+        artist = "%" + artist;
         query.setParameter("artist", artist);
         query.setFirstResult((pageNr - 1) * pageSize);
         query.setMaxResults(pageSize);
@@ -48,6 +47,7 @@ public class HibernateDigitalSongRepository implements DigitalSongRepository {
     public List<DigitalSong> digitalSongByGenre(String genre, int pageNr, int pageSize) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<DigitalSong> query = entityManager.createQuery("FROM DigitalSong WHERE lower(genre) LIKE lower(:genre)", DigitalSong.class);
+        genre = "%" + genre;
         query.setParameter("genre", genre);
         query.setFirstResult((pageNr - 1) * pageSize);
         query.setMaxResults(pageSize);
