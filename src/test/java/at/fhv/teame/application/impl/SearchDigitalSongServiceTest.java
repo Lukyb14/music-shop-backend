@@ -37,7 +37,7 @@ class SearchDigitalSongServiceTest {
             digitalSongDtosExpected.add(digitalSongDTO);
         }
         // when
-        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByArtist("Eminem", 1);
+        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByArtist("Eminem", 1, 10);
 
         // then
         for (DigitalSongDTO ds : digitalSongDtosActual) {
@@ -58,7 +58,7 @@ class SearchDigitalSongServiceTest {
             digitalSongDtosExpected.add(digitalSongDTO);
         }
         // when
-        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByGenre("Hip-Hop",1);
+        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByGenre("Hip-Hop",1, 10);
 
         // then
         for (DigitalSongDTO ds : digitalSongDtosActual) {
@@ -79,7 +79,7 @@ class SearchDigitalSongServiceTest {
             digitalSongDtosExpected.add(digitalSongDTO);
         }
         // when
-        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByTitle("8 Mile", 1);
+        List<DigitalSongDTO> digitalSongDtosActual = searchDigitalSongService.digitalSongByTitle("8 Mile", 1, 10);
 
         // then
         for (DigitalSongDTO ds : digitalSongDtosActual) {
