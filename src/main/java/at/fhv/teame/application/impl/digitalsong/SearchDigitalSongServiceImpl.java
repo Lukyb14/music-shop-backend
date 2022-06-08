@@ -24,21 +24,36 @@ public class SearchDigitalSongServiceImpl implements SearchDigitalSongServiceRem
     }
 
     @Override
-    public List<DigitalSongDTO> digitalSongByTitle(String title, int pageNr) {
-        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByTitle(title, pageNr);
+    public List<DigitalSongDTO> digitalSongByTitle(String title, int pageNr, int pageSize) {
+        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByTitle(title, pageNr, pageSize);
         return buildDigitalSongDTOS(digitalSongs);
     }
 
     @Override
-    public List<DigitalSongDTO> digitalSongByArtist(String artist, int pageNr) {
-        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByArtist(artist, pageNr);
+    public List<DigitalSongDTO> digitalSongByArtist(String artist, int pageNr, int pageSize) {
+        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByArtist(artist, pageNr, pageSize);
         return buildDigitalSongDTOS(digitalSongs);
     }
 
     @Override
-    public List<DigitalSongDTO> digitalSongByGenre(String genre, int pageNr) {
-        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByGenre(genre, pageNr);
+    public List<DigitalSongDTO> digitalSongByGenre(String genre, int pageNr, int pageSize) {
+        List<DigitalSong> digitalSongs = digitalSongRepository.digitalSongByGenre(genre, pageNr, pageSize);
         return buildDigitalSongDTOS(digitalSongs);
+    }
+
+    @Override
+    public int totResultsByTitle(String title) {
+        return digitalSongRepository.totResultsByTitle(title).intValue();
+    }
+
+    @Override
+    public int totResultsByArtistName(String artist) {
+        return digitalSongRepository.totResultsByArtistName(artist).intValue();
+    }
+
+    @Override
+    public int totResultsByGenre(String genre) {
+        return digitalSongRepository.totResultsByGenre(genre).intValue();
     }
 
     private List<DigitalSongDTO> buildDigitalSongDTOS (List<DigitalSong> digitalSongs) {

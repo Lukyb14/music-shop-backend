@@ -9,7 +9,7 @@ public class ShoppingCartDigitalSongSchema {
     @XmlElement
     public List<String> cartSongIds;
     @XmlElement
-    public String email;
+    public String creditCardNumber;
     @XmlElement
     public String cvc;
     @XmlElement

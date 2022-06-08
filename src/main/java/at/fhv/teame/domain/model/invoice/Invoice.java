@@ -2,7 +2,7 @@ package at.fhv.teame.domain.model.invoice;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class Invoice {
     @Column
     private String customerAddress;
     @Column
-    private LocalDate dateOfPurchase;
+    private LocalDateTime dateOfPurchase;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     @Column
@@ -34,7 +34,7 @@ public class Invoice {
     protected Invoice() {
     }
 
-    public Invoice(LocalDate dateOfPurchase, PaymentMethod paymentMethod) {
+    public Invoice(LocalDateTime dateOfPurchase, PaymentMethod paymentMethod) {
         this.dateOfPurchase = dateOfPurchase;
         this.paymentMethod = paymentMethod;
         this.totalPrice = new BigDecimal(0);
@@ -42,7 +42,7 @@ public class Invoice {
         this.toRefund = new BigDecimal(0);
     }
 
-    public Invoice(LocalDate dateOfPurchase, PaymentMethod paymentMethod, String customerFirstName, String customerLastName, String customerAddress) {
+    public Invoice(LocalDateTime dateOfPurchase, PaymentMethod paymentMethod, String customerFirstName, String customerLastName, String customerAddress) {
         this.customerFirstName = customerFirstName;
         this.customerLastName = customerLastName;
         this.customerAddress = customerAddress;
@@ -79,7 +79,7 @@ public class Invoice {
         return Optional.ofNullable(customerAddress);
     }
 
-    public LocalDate getDateOfPurchase() {
+    public LocalDateTime getDateOfPurchase() {
         return dateOfPurchase;
     }
 

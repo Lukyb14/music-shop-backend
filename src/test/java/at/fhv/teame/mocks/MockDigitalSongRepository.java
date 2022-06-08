@@ -10,19 +10,40 @@ import java.util.List;
 
 public class MockDigitalSongRepository implements DigitalSongRepository {
     @Override
-    public List<DigitalSong> digitalSongByTitle(String title, int pageNr) {
+    public DigitalSong digitalSongByArticleId(Long articleId) {
+        return null;
+    }
+
+    @Override
+    public List<DigitalSong> digitalSongByTitle(String title, int pageNr, int pageSize) {
         return createDigitalSongLstDummy();
     }
 
     @Override
-    public List<DigitalSong> digitalSongByArtist(String artist, int pageNr) {
+    public List<DigitalSong> digitalSongByArtist(String artist, int pageNr, int pageSize) {
         return createDigitalSongLstDummy();
     }
 
     @Override
-    public List<DigitalSong> digitalSongByGenre(String genre, int pageNr) {
+    public List<DigitalSong> digitalSongByGenre(String genre, int pageNr, int pageSize) {
         return createDigitalSongLstDummy();
     }
+
+    @Override
+    public Long totResultsByTitle(String title) {
+        return null;
+    }
+
+    @Override
+    public Long totResultsByArtistName(String artist) {
+        return null;
+    }
+
+    @Override
+    public Long totResultsByGenre(String genre) {
+        return null;
+    }
+
 
     public List<DigitalSong> createDigitalSongLstDummy() {
         return Arrays.asList(
