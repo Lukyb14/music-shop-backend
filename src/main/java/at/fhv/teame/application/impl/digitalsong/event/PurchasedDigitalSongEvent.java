@@ -1,6 +1,6 @@
-package at.fhv.teame.application.impl.event;
+package at.fhv.teame.application.impl.digitalsong.event;
 
-import at.fhv.teame.application.impl.event.dto.DigitalSongDTO;
+import at.fhv.teame.application.impl.digitalsong.event.dto.DigitalSongDTO;
 
 import java.io.Serializable;
 import java.util.List;
