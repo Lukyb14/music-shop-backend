@@ -63,8 +63,8 @@ public class IntegrationTest {
 
     @Test
     void invoiceById() {
-        Invoice invoice = invoiceRepository.invoiceById(20028L);
+        Invoice invoice = invoiceRepository.invoiceById(20000L);
 
-        assertEquals(20028L, invoice.getInvoiceId());
+        assertEquals(20000L, invoice.getInvoiceId());
     }
 }
