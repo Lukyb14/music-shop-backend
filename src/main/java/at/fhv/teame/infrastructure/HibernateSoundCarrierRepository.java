@@ -14,6 +14,7 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
 
     private final EntityManager entityManager = entityManagerFactory.createEntityManager();
+
     private static final int ROWS_PER_PAGE = 10;
 
     @Override

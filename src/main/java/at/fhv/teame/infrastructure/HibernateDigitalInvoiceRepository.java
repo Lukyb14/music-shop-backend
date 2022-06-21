@@ -15,6 +15,7 @@ import java.util.List;
 public class HibernateDigitalInvoiceRepository implements DigitalInvoiceRepository {
 
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
+    private EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     private final EntityManager entityManager = entityManagerFactory.createEntityManager();
 

@@ -39,6 +39,7 @@ public class DigitalSong {
         this.id = songId;
     }
 
+
     public DigitalSong(String artist, String title, String genre, String duration,
                        LocalDate releaseDate, String mp3File, String coverFile, BigDecimal price) {
         this.artist = artist;

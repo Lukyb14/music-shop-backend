@@ -16,6 +16,7 @@ public class HibernateUserRepository implements UserRepository {
 
     private final EntityManager entityManager = entityManagerFactory.createEntityManager();
 
+
     @Override
     public ClientUser userByCn(String cn) throws UserNotFoundException {
         ClientUser clientUser = entityManager.find(ClientUser.class, cn);
