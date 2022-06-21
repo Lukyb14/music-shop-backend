@@ -17,8 +17,6 @@ public class HibernateDigitalInvoiceRepository implements DigitalInvoiceReposito
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
     private EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-    private final EntityManager entityManager = entityManagerFactory.createEntityManager();
-
     @Override
     public void store(DigitalInvoice digitalInvoice) {
         entityManager.getTransaction().begin();

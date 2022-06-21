@@ -14,7 +14,6 @@ public class HibernateInvoiceRepository implements InvoiceRepository {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
     private EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-    private final EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     @Override
     public void add(Invoice invoice) {
