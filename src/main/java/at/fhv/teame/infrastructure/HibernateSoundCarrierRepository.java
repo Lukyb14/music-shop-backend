@@ -1,10 +1,9 @@
 package at.fhv.teame.infrastructure;
 
-import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.exceptions.InvalidAmountException;
 import at.fhv.teame.domain.exceptions.OutOfStockException;
+import at.fhv.teame.domain.model.soundcarrier.SoundCarrier;
 import at.fhv.teame.domain.repositories.SoundCarrierRepository;
-
 import javax.ejb.Stateless;
 import javax.persistence.*;
 import java.util.List;
@@ -14,7 +13,8 @@ import java.util.Map;
 public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
 
-    private EntityManager entityManager = entityManagerFactory.createEntityManager();
+    private final EntityManager entityManager = entityManagerFactory.createEntityManager();
+
     private static final int ROWS_PER_PAGE = 10;
 
     @Override
@@ -37,12 +37,10 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
     @Override
     public void fillStock(String articleId, int amount) {
         entityManager.getTransaction().begin();
-
         TypedQuery<SoundCarrier> query = entityManager.createQuery("FROM SoundCarrier sc WHERE sc.articleId = :articleId", SoundCarrier.class);
         query.setParameter("articleId", articleId);
         SoundCarrier soundCarrier = query.getSingleResult();
         soundCarrier.fillStock(amount);
-
         entityManager.getTransaction().commit();
     }
 
@@ -52,6 +50,7 @@ public class HibernateSoundCarrierRepository implements SoundCarrierRepository {
         query.setParameter("albumName", albumName);
         query.setFirstResult((pageNr - 1) * ROWS_PER_PAGE);
         query.setMaxResults(ROWS_PER_PAGE);
+        entityManager.clear();
         return query.getResultList();
     }
 

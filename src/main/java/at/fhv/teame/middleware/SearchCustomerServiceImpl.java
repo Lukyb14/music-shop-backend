@@ -22,7 +22,7 @@ public class SearchCustomerServiceImpl implements SearchCustomerServiceRemote {
         try {
             final Properties jndiProperties = new Properties();
             jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
-            jndiProperties.put(Context.PROVIDER_URL, "http-remoting://localhost:8080");
+            jndiProperties.put(Context.PROVIDER_URL, "http-remoting://10.0.40.169:8080");
             InitialContext ctx = new InitialContext(jndiProperties);
             obj = ctx.lookup("ejb:/music-shop-backend-customer-1.0-SNAPSHOT/SearchCustomerServiceImpl!at.fhv.teame.sharedlib.ejb.CustomerServiceRemote");
         } catch (NamingException e) {

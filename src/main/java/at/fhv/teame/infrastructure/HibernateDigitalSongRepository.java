@@ -11,7 +11,8 @@ import java.util.List;
 public class HibernateDigitalSongRepository implements DigitalSongRepository {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
 
-    private EntityManager entityManager = entityManagerFactory.createEntityManager();
+    private final EntityManager entityManager = entityManagerFactory.createEntityManager();
+
 
     @Override
     public DigitalSong digitalSongByArticleId(Long articleId) {
