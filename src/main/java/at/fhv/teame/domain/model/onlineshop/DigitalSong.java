@@ -33,6 +33,13 @@ public class DigitalSong {
     // Required for hibernate
     protected DigitalSong() {}
 
+    public DigitalSong(Long songId, String artist, String title, String genre, String duration,
+                       LocalDate releaseDate, String mp3File, String coverFile, BigDecimal price) {
+        this(artist, title, genre, duration, releaseDate, mp3File, coverFile, price);
+        this.id = songId;
+    }
+
+
     public DigitalSong(String artist, String title, String genre, String duration,
                        LocalDate releaseDate, String mp3File, String coverFile, BigDecimal price) {
         this.artist = artist;

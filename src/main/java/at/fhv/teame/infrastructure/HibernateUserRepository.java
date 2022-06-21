@@ -16,11 +16,10 @@ public class HibernateUserRepository implements UserRepository {
 
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
 
+    private EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     @Override
     public ClientUser userByCn(String cn) throws UserNotFoundException {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-
         ClientUser clientUser = entityManager.find(ClientUser.class, cn);
 
         if (clientUser == null) {
@@ -32,7 +31,6 @@ public class HibernateUserRepository implements UserRepository {
 
     @Override
     public List<String> allTopics() {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         return entityManager.createNativeQuery("SELECT DISTINCT topics FROM clientuser_topics WHERE topics != 'Order' ORDER BY topics;").getResultList();
     }
 }
