@@ -17,10 +17,10 @@ import java.util.List;
 public class HibernateDigitalInvoiceRepository implements DigitalInvoiceRepository {
 
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
+    private EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     @Override
     public void store(DigitalInvoice digitalInvoice) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         entityManager.persist(digitalInvoice);
         for (DigitalInvoiceLine invoiceLine : digitalInvoice.getPurchasedItems()){
@@ -31,7 +31,6 @@ public class HibernateDigitalInvoiceRepository implements DigitalInvoiceReposito
 
     @Override
     public List<DigitalInvoice> digitalInvoicesByEmail(String email) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<DigitalInvoice> query = entityManager.createQuery("FROM DigitalInvoice WHERE lower(email) LIKE lower(:email)", DigitalInvoice.class);
         query.setParameter("email", email);
         return query.getResultList();
