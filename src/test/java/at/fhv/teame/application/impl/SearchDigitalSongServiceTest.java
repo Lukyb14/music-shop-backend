@@ -32,7 +32,7 @@ class SearchDigitalSongServiceTest {
         List<DigitalSongDTO> digitalSongDtosExpected = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {
             DigitalSongDTO digitalSongDTO = DigitalSongDTO.builder()
-                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), ds.getId().toString())
+                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), "1")
                     .build();
             digitalSongDtosExpected.add(digitalSongDTO);
         }
@@ -53,7 +53,7 @@ class SearchDigitalSongServiceTest {
         List<DigitalSongDTO> digitalSongDtosExpected = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {
             DigitalSongDTO digitalSongDTO = DigitalSongDTO.builder()
-                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), ds.getId().toString())
+                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), "1")
                     .build();
             digitalSongDtosExpected.add(digitalSongDTO);
         }
@@ -74,7 +74,7 @@ class SearchDigitalSongServiceTest {
         List<DigitalSongDTO> digitalSongDtosExpected = new ArrayList<>();
         for (DigitalSong ds : digitalSongs) {
             DigitalSongDTO digitalSongDTO = DigitalSongDTO.builder()
-                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), ds.getId().toString())
+                    .withDigitalSongEntity(ds.getArtist(), ds.getTitle(), ds.getGenre(), ds.getDuration(), ds.getReleaseDate().toString(), ds.getPrice().toString(), String.valueOf(ds.getId()))
                     .build();
             digitalSongDtosExpected.add(digitalSongDTO);
         }
@@ -89,7 +89,8 @@ class SearchDigitalSongServiceTest {
 
     public List<DigitalSong> createDigitalSongLstDummy() {
         return Arrays.asList(
-                new DigitalSong("Eminem",
+                new DigitalSong(1L,
+                        "Eminem",
                         "8 Mile",
                         "Hip-Hop",
                         "5:30",
@@ -98,22 +99,24 @@ class SearchDigitalSongServiceTest {
                         "/covers/8 Mile.jpg",
                         BigDecimal.valueOf(2.99f)
                 ),
-                new DigitalSong("Eminem",
+                new DigitalSong(1L,
+                        "Eminem",
                         "Not Afraid",
                         "Hip-Hop",
                         "6:30",
                         LocalDate.of(2011, 3, 1),
                         "/songs/Not Afraid.mp3",
                         "/covers/Not Afraid.jpg",
-                        BigDecimal.valueOf(2.99f)
-                ),new DigitalSong("Eminem",
+                        BigDecimal.valueOf(1.99f)
+                ),new DigitalSong(1L,
+                        "Eminem",
                         "Till I Collapse",
                         "Hip-Hop",
                         "5:50",
                         LocalDate.of(2003, 4, 1),
                         "/songs/Till I Collapse.mp3",
                         "/covers/Till I Collapse.jpg",
-                        BigDecimal.valueOf(2.99f)
+                        BigDecimal.valueOf(3.99f)
                 )
         );
     }

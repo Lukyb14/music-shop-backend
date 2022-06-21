@@ -1,4 +1,4 @@
-package at.fhv.teame.application.impl.event.dto;
+package at.fhv.teame.application.impl.digitalsong.event.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

@@ -47,7 +47,8 @@ public class MockDigitalSongRepository implements DigitalSongRepository {
 
     public List<DigitalSong> createDigitalSongLstDummy() {
         return Arrays.asList(
-                new DigitalSong("Eminem",
+                new DigitalSong(1L,
+                        "Eminem",
                         "8 Mile",
                         "Hip-Hop",
                         "5:30",
@@ -56,7 +57,8 @@ public class MockDigitalSongRepository implements DigitalSongRepository {
                         "/covers/8 Mile.jpg",
                         BigDecimal.valueOf(2.99f)
                 ),
-                new DigitalSong("Eminem",
+                new DigitalSong(1L,
+                        "Eminem",
                         "Not Afraid",
                         "Hip-Hop",
                         "6:30",
@@ -64,7 +66,8 @@ public class MockDigitalSongRepository implements DigitalSongRepository {
                         "/songs/Not Afraid.mp3",
                         "/covers/Not Afraid.jpg",
                         BigDecimal.valueOf(1.99f)
-                ),new DigitalSong("Eminem",
+                ),new DigitalSong(1L,
+                        "Eminem",
                         "Till I Collapse",
                         "Hip-Hop",
                         "5:50",
