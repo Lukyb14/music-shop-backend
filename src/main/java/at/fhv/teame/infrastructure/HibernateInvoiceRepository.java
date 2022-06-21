@@ -3,7 +3,6 @@ package at.fhv.teame.infrastructure;
 import at.fhv.teame.domain.model.invoice.Invoice;
 import at.fhv.teame.domain.model.invoice.InvoiceLine;
 import at.fhv.teame.domain.repositories.InvoiceRepository;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,11 +14,13 @@ public class HibernateInvoiceRepository implements InvoiceRepository {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("at.fhv.teame");
     private EntityManager entityManager = entityManagerFactory.createEntityManager();
 
+    private final EntityManager entityManager = entityManagerFactory.createEntityManager();
+
     @Override
     public void add(Invoice invoice) {
         entityManager.getTransaction().begin();
         entityManager.persist(invoice);
-        for (InvoiceLine invoiceLine : invoice.getPurchasedItems()){
+        for (InvoiceLine invoiceLine : invoice.getPurchasedItems()) {
             entityManager.persist(invoiceLine);
         }
         entityManager.getTransaction().commit();

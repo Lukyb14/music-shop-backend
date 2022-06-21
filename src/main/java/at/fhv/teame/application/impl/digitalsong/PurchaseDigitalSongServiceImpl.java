@@ -1,8 +1,8 @@
 package at.fhv.teame.application.impl.digitalsong;
 
 
-import at.fhv.teame.application.impl.event.PurchasedDigitalSongEvent;
-import at.fhv.teame.application.impl.event.dto.DigitalSongDTO;
+import at.fhv.teame.application.impl.digitalsong.event.PurchasedDigitalSongEvent;
+import at.fhv.teame.application.impl.digitalsong.event.dto.DigitalSongDTO;
 import at.fhv.teame.domain.model.onlineshop.DigitalInvoice;
 import at.fhv.teame.domain.model.onlineshop.DigitalInvoiceLine;
 import at.fhv.teame.domain.model.onlineshop.DigitalSong;
