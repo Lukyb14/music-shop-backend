@@ -18,3 +18,6 @@ der `.war`-Datei vom `Application-Customer-Backend` deployed werden.
 `./gradlew test`
 
 
+### SPA aufrufen
+
+`http://localhost:8080/`
